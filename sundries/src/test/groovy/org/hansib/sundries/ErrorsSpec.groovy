@@ -13,4 +13,14 @@ public class ErrorsSpec extends Specification {
 		e instanceof IllegalArgumentException
 		e.message == "Hello world"
 	}
+
+	def "can get IllegalState"() {
+
+		when:
+		def e = Errors.illegalState("Hello %s", "state")
+
+		then:
+		e instanceof IllegalStateException
+		e.message == "Hello state"
+	}
 }
