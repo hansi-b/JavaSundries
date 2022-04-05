@@ -1,4 +1,4 @@
-package org.hansib.copper_wire;
+package org.hansib.sundries;
 
 public class Errors {
 
