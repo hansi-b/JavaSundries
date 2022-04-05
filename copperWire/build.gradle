@@ -1,0 +1,6 @@
+plugins {
+	id 'java-library'
+
+	id 'org.hansib.java-common'
+	id 'org.hansib.publish'
+}
