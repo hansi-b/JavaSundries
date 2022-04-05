@@ -7,7 +7,8 @@ publishing {
 
 	publications {
 		mavenJava(MavenPublication) {
-			artifactId = 'abakusfx'
+			groupId = 'org.hansib'
+			artifactId = 'sundries'
 			from components.java
 		}
 	}
@@ -17,8 +18,8 @@ publishing {
 			name = 'GitHubPackages'
 			url = 'https://maven.pkg.github.com/hansi-b/JavaSundries'
 			credentials {
-				username = project.hasProperty("GITHUB_ACTOR") ? GITHUB_ACTOR : ""
-				password = project.hasProperty("GITHUB_REPO_PAT") ? GITHUB_REPO_PAT : ""
+				username = project.findProperty("GITHUB_ACTOR") ?: ""
+				password = project.findProperty("GITHUB_REPO_PAT_SUNDRIES") ?: ""
 			}
 		}
 	}
