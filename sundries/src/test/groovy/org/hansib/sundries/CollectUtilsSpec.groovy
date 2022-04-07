@@ -64,7 +64,9 @@ public class CollectUtilsSpec extends Specification {
 	}
 
 	def sortedTreeSets(final collOfColls) {
-		collOfColls.collect { new TreeSet(it) }
+		collOfColls.collect {
+			new TreeSet(it)
+		}
 	}
 
 	def "pair combinations"() {
@@ -135,15 +137,39 @@ public class CollectUtilsSpec extends Specification {
 
 	def "map sorted map to list"() {
 		given:
-		def addit = { Integer a, Integer b -> a + b } as BiFunction
+		def addit = { Integer a, Integer b ->
+			a + b
+		} as BiFunction
 		expect:
 		CollectUtils.mapMapToList([7: 2, 1: 2, 3 : 4] as TreeMap, addit) == [3, 7, 9]
 	}
 
 	def "invert simple numbers map"() {
 		given:
-		def newSet = { k -> new HashSet() } as Function
+		def newSet = { k ->
+			new HashSet()
+		} as Function
 		expect:
 		CollectUtils.invertMap([7: 2, 1: 2, 3 : 4], newSet, new HashMap()) == [2:[1, 7] as Set, 4:[3] as Set]
+	}
+
+	def "can use sorted set comparator"() {
+
+		given:
+		def ssc = CollectUtils.sortedSetComparator()
+
+		expect:
+		ssc.compare(soSe([2, 3]), soSe([2, 3])) == 0
+
+		ssc.compare(soSe([2, 3]), soSe([1, 3])) == 1
+
+		ssc.compare(soSe([2, 3]), soSe([3])) == -1
+		ssc.compare(soSe([3]), soSe([2, 3])) == 1
+
+		ssc.compare(soSe([2, 3]), soSe([2])) == 1
+	}
+
+	def soSe(ele) {
+		return ele as SortedSet
 	}
 }

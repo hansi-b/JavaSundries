@@ -99,7 +99,7 @@ public class CollectUtils {
 	 */
 	public static List<int[]> pairCombinations(final int max) {
 		return IntStream.range(0, max - 1).mapToObj(i -> IntStream.range(i + 1, max).mapToObj(j -> new int[] { i, j }))
-				.flatMap(i -> i).collect(Collectors.toList());
+				.flatMap(i -> i).toList();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -213,7 +213,8 @@ public class CollectUtils {
 	 */
 	public static <K, V, M extends Map<K, V>, R> List<R> mapMapToList(final M map,
 			final BiFunction<? super K, ? super V, ? extends R> keyValueFunc) {
-		return mapMap(map, keyValueFunc).collect(Collectors.toList());
+		Stream<R> mapMap = mapMap(map, keyValueFunc);
+		return mapMap.toList();
 	}
 
 	/**
