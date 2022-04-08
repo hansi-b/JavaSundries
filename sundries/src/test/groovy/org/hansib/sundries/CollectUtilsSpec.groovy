@@ -152,24 +152,4 @@ public class CollectUtilsSpec extends Specification {
 		expect:
 		CollectUtils.invertMap([7: 2, 1: 2, 3 : 4], newSet, new HashMap()) == [2:[1, 7] as Set, 4:[3] as Set]
 	}
-
-	def "can use sorted set comparator"() {
-
-		given:
-		def ssc = CollectUtils.sortedSetComparator()
-
-		expect:
-		ssc.compare(soSe([2, 3]), soSe([2, 3])) == 0
-
-		ssc.compare(soSe([2, 3]), soSe([1, 3])) == 1
-
-		ssc.compare(soSe([2, 3]), soSe([3])) == -1
-		ssc.compare(soSe([3]), soSe([2, 3])) == 1
-
-		ssc.compare(soSe([2, 3]), soSe([2])) == 1
-	}
-
-	def soSe(ele) {
-		return ele as SortedSet
-	}
 }
