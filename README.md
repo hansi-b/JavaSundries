@@ -1,2 +1,2 @@
 # JavaSundries
-Basics I need all the time
+Basics I often need in other projects
