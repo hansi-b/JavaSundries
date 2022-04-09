@@ -115,6 +115,16 @@ public class CollectUtilsSpec extends Specification {
 		CollectUtils.intersection(a, b, c) == [2] as Set
 	}
 
+	def "intersection for three collections with shortcut"() {
+		given:
+		def a = 1 .. 4 as Set
+		def b = [5, 6]
+		def c = [2, 3] as Set
+
+		expect:
+		CollectUtils.intersection(a, b, c) == Collections.emptySet()
+	}
+
 	def "union for no sets"() {
 		expect:
 		CollectUtils.union() == Collections.emptySet()
@@ -135,13 +145,36 @@ public class CollectUtilsSpec extends Specification {
 		CollectUtils.union(a, b, c) == [1, 2, 3, 4, 22] as Set
 	}
 
+	def "difference does not change argument"() {
+		given:
+		def s = [1, 2, 3] as SortedSet
+
+		expect:
+		CollectUtils.difference(s, [2, 2, 4]) == [1, 3] as SortedSet
+		s == [1, 2, 3] as SortedSet
+	}
+
 	def "map sorted map to list"() {
 		given:
 		def addit = { Integer a, Integer b ->
 			a + b
 		} as BiFunction
+
 		expect:
 		CollectUtils.mapMapToList([7: 2, 1: 2, 3 : 4] as TreeMap, addit) == [3, 7, 9]
+	}
+
+	def "simple flatten check"() {
+		given:
+		def values =  [
+			1: ["a", "b"], 2: ["x", "y"]
+		]
+		def valLookup = { k ->
+			values[k].stream()
+		} as Function
+
+		expect:
+		CollectUtils.flatten([1, 2, 1].stream(), valLookup).toList() == ["a", "b", "x", "y", "a", "b"]
 	}
 
 	def "invert simple numbers map"() {
@@ -149,6 +182,7 @@ public class CollectUtilsSpec extends Specification {
 		def newSet = { k ->
 			new HashSet()
 		} as Function
+
 		expect:
 		CollectUtils.invertMap([7: 2, 1: 2, 3 : 4], newSet, new HashMap()) == [2:[1, 7] as Set, 4:[3] as Set]
 	}

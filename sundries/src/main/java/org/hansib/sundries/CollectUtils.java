@@ -203,7 +203,7 @@ public class CollectUtils {
 	 * @param <I>     the type of elements in the streamed collection
 	 * @param <O>     the type of the resulting elements
 	 * @param in      the collection to stream, map and flatMap
-	 * @param mapFunc
+	 * @param mapFunc the output element generator
 	 * @return a Stream of the flatMapped elements
 	 */
 	public static <I, O> Stream<O> flatten(final Collection<I> in,
