@@ -23,28 +23,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries;
+package org.hansib.sundries.prefs;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.prefs.Preferences;
 
 /**
- * keeps preferences in a simple map
+ * a thin wrapper around java Preferences with typed keys
+ *
+ * @param <K> the key enum
  */
-public class InMemoryPrefs<K extends Enum<K>> implements EnumPrefs<K> {
+public class UserNodePrefs<K extends Enum<K>> implements EnumPrefs<K> {
 
-	private final Map<K, String> prefs;
+	private final Preferences node;
 
-	public InMemoryPrefs() {
-		this.prefs = new ConcurrentHashMap<>();
+	UserNodePrefs(Preferences node) {
+		this.node = node;
+	}
+
+	public static <L extends Enum<L>> UserNodePrefs<L> forApp(final Class<?> clazz) {
+		return new UserNodePrefs<>(Preferences.userNodeForPackage(clazz).node(clazz.getSimpleName()));
 	}
 
 	public void put(final K key, final String value) {
-		prefs.put(key, value);
+		node.put(key.name(), value);
 	}
 
 	public String get(final K key) {
-		return prefs.getOrDefault(key, null);
+		return node.get(key.name(), null);
 	}
 
 	public boolean contains(final K key) throws PrefsException {
@@ -52,6 +57,6 @@ public class InMemoryPrefs<K extends Enum<K>> implements EnumPrefs<K> {
 	}
 
 	public void remove(final K key) {
-		prefs.remove(key);
+		node.remove(key.name());
 	}
 }

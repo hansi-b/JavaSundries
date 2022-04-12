@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries;
+package org.hansib.sundries.prefs;
 
 /**
  * a thin wrapper around java Preferences with typed keys
