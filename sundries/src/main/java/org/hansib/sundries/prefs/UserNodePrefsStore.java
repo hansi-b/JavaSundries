@@ -25,27 +25,38 @@
  */
 package org.hansib.sundries.prefs;
 
+import java.util.prefs.Preferences;
+
 /**
  * a thin wrapper around java Preferences with typed keys
  *
  * @param <K> the key enum
  */
-public interface EnumPrefs<K extends Enum<K>> {
+public class UserNodePrefsStore<K extends Enum<K>> implements PrefsStore<K> {
 
-	static class PrefsException extends RuntimeException {
+	private final Preferences node;
 
-		private static final long serialVersionUID = -554364308103429180L;
-
-		PrefsException(final Exception cause) {
-			super(cause);
-		}
+	UserNodePrefsStore(Preferences node) {
+		this.node = node;
 	}
 
-	public void put(final K key, final String value) throws PrefsException;
+	public static <L extends Enum<L>> UserNodePrefsStore<L> forApp(final Class<?> clazz) {
+		return new UserNodePrefsStore<>(Preferences.userNodeForPackage(clazz).node(clazz.getSimpleName()));
+	}
 
-	public String get(final K key) throws PrefsException;
+	public void put(final K key, final String value) {
+		node.put(key.name(), value);
+	}
 
-	public boolean contains(final K key) throws PrefsException;
+	public String get(final K key) {
+		return node.get(key.name(), null);
+	}
 
-	public void remove(final K key) throws PrefsException;
+	public boolean contains(final K key) {
+		return get(key) != null;
+	}
+
+	public void remove(final K key) {
+		node.remove(key.name());
+	}
 }

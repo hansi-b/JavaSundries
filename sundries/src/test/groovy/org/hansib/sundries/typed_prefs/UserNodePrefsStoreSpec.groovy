@@ -1,12 +1,12 @@
-package org.hansib.sundries.prefs;
+package org.hansib.sundries.typed_prefs;
 
 import java.util.prefs.Preferences
 
-import org.hansib.sundries.prefs.UserNodePrefs
+import org.hansib.sundries.prefs.UserNodePrefsStore
 
 import spock.lang.Specification
 
-public class UserNodePrefsSpec extends Specification {
+public class UserNodePrefsStoreSpec extends Specification {
 
 	Preferences prefs = Mock()
 
@@ -16,7 +16,7 @@ public class UserNodePrefsSpec extends Specification {
 
 	def "new prefs are empty"() {
 		when:
-		new UserNodePrefs<Props>(prefs).contains(Props.bProp)
+		new UserNodePrefsStore<Props>(prefs).contains(Props.bProp)
 
 		then:
 		1 * prefs.get("bProp", null)
@@ -24,7 +24,7 @@ public class UserNodePrefsSpec extends Specification {
 
 	def "can put value"() {
 		when:
-		new UserNodePrefs<Props>(prefs).put(Props.bProp, "hello world")
+		new UserNodePrefsStore<Props>(prefs).put(Props.bProp, "hello world")
 
 		then:
 		1 * prefs.put("bProp", "hello world")
@@ -33,7 +33,7 @@ public class UserNodePrefsSpec extends Specification {
 	def "can get value"() {
 		when:
 		prefs.get("bProp", null) >> "a value"
-		def p = new UserNodePrefs<Props>(prefs)
+		def p = new UserNodePrefsStore<Props>(prefs)
 
 		then:
 		p.get(Props.bProp) == "a value"
@@ -41,7 +41,7 @@ public class UserNodePrefsSpec extends Specification {
 
 	def "can remove value"() {
 		when:
-		new UserNodePrefs<Props>(prefs).remove(Props.aProp)
+		new UserNodePrefsStore<Props>(prefs).remove(Props.aProp)
 
 		then:
 		1 * prefs.remove("aProp")

@@ -31,11 +31,11 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * keeps preferences in a simple map
  */
-public class InMemoryPrefs<K extends Enum<K>> implements EnumPrefs<K> {
+public class InMemoryPrefsStore<K extends Enum<K>> implements PrefsStore<K> {
 
 	private final Map<K, String> prefs;
 
-	public InMemoryPrefs() {
+	public InMemoryPrefsStore() {
 		this.prefs = new ConcurrentHashMap<>();
 	}
 
@@ -47,7 +47,7 @@ public class InMemoryPrefs<K extends Enum<K>> implements EnumPrefs<K> {
 		return prefs.getOrDefault(key, null);
 	}
 
-	public boolean contains(final K key) throws PrefsException {
+	public boolean contains(final K key) {
 		return get(key) != null;
 	}
 

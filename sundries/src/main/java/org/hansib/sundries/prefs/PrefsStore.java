@@ -25,38 +25,18 @@
  */
 package org.hansib.sundries.prefs;
 
-import java.util.prefs.Preferences;
-
 /**
- * a thin wrapper around java Preferences with typed keys
+ * a String-based store for enum prefs
  *
  * @param <K> the key enum
  */
-public class UserNodePrefs<K extends Enum<K>> implements EnumPrefs<K> {
+public interface PrefsStore<K extends Enum<K>> {
 
-	private final Preferences node;
+	public void put(final K key, final String value);
 
-	UserNodePrefs(Preferences node) {
-		this.node = node;
-	}
+	public String get(final K key);
 
-	public static <L extends Enum<L>> UserNodePrefs<L> forApp(final Class<?> clazz) {
-		return new UserNodePrefs<>(Preferences.userNodeForPackage(clazz).node(clazz.getSimpleName()));
-	}
+	public boolean contains(final K key);
 
-	public void put(final K key, final String value) {
-		node.put(key.name(), value);
-	}
-
-	public String get(final K key) {
-		return node.get(key.name(), null);
-	}
-
-	public boolean contains(final K key) throws PrefsException {
-		return get(key) != null;
-	}
-
-	public void remove(final K key) {
-		node.remove(key.name());
-	}
+	public void remove(final K key);
 }
