@@ -2,7 +2,7 @@ package org.hansib.sundries.typed_prefs;
 
 import spock.lang.Specification
 
-public class ConverterSpec extends Specification {
+public class ConvertersSpec extends Specification {
 
 	def 'string converter'() {
 
@@ -56,6 +56,24 @@ public class ConverterSpec extends Specification {
 		c.val2str(c.str2val('-2.1')) == '-2.1'
 		c.val2str(c.str2val('0')) == '0'
 		c.val2str(c.str2val('1100.0011')) == '1100.0011'
+	}
+
+	enum Vals {
+		X
+	}
+
+	def 'enum converter'() {
+
+		given:
+		def c = new EnumConverter() {
+					Class valueClass() {
+						return Vals.class;
+					};
+				}
+
+		expect:
+		c.str2val(c.val2str(Vals.X)) == Vals.X
+		c.val2str(c.str2val('X')) == 'X'
 	}
 
 	def 'file converter'() {

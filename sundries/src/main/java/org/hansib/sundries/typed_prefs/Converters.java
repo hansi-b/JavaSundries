@@ -36,19 +36,6 @@ interface BooleanConverter extends Converter<Boolean> {
 	}
 }
 
-interface FileConverter extends Converter<File> {
-
-	@Override
-	public default File str2val(String val) {
-		return new File(val);
-	}
-
-	@Override
-	public default String val2str(File val) {
-		return val.getPath();
-	}
-}
-
 interface IntegerConverter extends Converter<Integer> {
 
 	@Override
@@ -72,5 +59,33 @@ interface BigDecimalConverter extends Converter<BigDecimal> {
 	@Override
 	public default String val2str(BigDecimal val) {
 		return val.toString();
+	}
+}
+
+interface EnumConverter<L extends Enum<L>> extends Converter<L> {
+
+	Class<L> valueClass();
+
+	@Override
+	public default L str2val(String val) {
+		return Enum.valueOf(valueClass(), val);
+	}
+
+	@Override
+	public default String val2str(L val) {
+		return val.name();
+	}
+}
+
+interface FileConverter extends Converter<File> {
+
+	@Override
+	public default File str2val(String val) {
+		return new File(val);
+	}
+
+	@Override
+	public default String val2str(File val) {
+		return val.getPath();
 	}
 }
