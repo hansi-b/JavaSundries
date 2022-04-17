@@ -3,7 +3,7 @@ package org.hansib.sundries.prefs
 import spock.lang.Specification
 
 enum Keys {
-	oneKey,twoKey
+	oneKey
 }
 
 public class InitializerTest extends Specification {
