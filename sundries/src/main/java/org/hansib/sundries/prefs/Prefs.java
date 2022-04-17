@@ -7,9 +7,9 @@ class Initializer {
 
 	static final Initializer INSTANCE = new Initializer();
 
-	<V, K extends Enum<K>, P extends PrefClz<K, V>> P withInitial(P pref, V initialValue) {
-		if (pref.store.get(pref) == null)
-			pref.store.set(pref, initialValue);
+	<V, K extends Enum<K>, P extends Pref<K, V>> P withInitial(P pref, V initialValue) {
+		if (pref.store().get(pref) == null)
+			pref.store().set(pref, initialValue);
 		return pref;
 	}
 }

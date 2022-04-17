@@ -7,6 +7,8 @@ import java.util.Optional;
  */
 interface Pref<K extends Enum<K>, V> extends Converter<V> {
 
+	Prefs<K> store();
+
 	K key();
 
 	void set(V value);
@@ -26,11 +28,16 @@ interface OptionalPref<K extends Enum<K>, V> extends Pref<K, V> {
 abstract class PrefClz<K extends Enum<K>, V> implements Pref<K, V> {
 
 	private final K key;
-	protected final Prefs<K> store;
+	private final Prefs<K> store;
 
 	PrefClz(K key, Prefs<K> store) {
 		this.key = key;
 		this.store = store;
+	}
+
+	@Override
+	public Prefs<K> store() {
+		return store;
 	}
 
 	public K key() {
@@ -51,7 +58,7 @@ abstract class ReqPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements
 
 	@Override
 	public V get() {
-		return store.get(this);
+		return store().get(this);
 	}
 }
 
@@ -63,11 +70,11 @@ abstract class OptPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements
 
 	@Override
 	public Optional<V> get() {
-		return Optional.ofNullable(store.get(this));
+		return Optional.ofNullable(store().get(this));
 	}
 
 	@Override
 	public void remove() {
-		store.remove(this);
+		store().remove(this);
 	}
 }
