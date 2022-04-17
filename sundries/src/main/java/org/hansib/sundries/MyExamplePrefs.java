@@ -2,8 +2,8 @@ package org.hansib.sundries;
 
 import org.hansib.sundries.prefs.OptFile;
 import org.hansib.sundries.prefs.ReqBoolean;
-import org.hansib.sundries.prefs.TypedEnumPrefs;
-import org.hansib.sundries.prefs.TypedEnumPrefsWithStore;
+import org.hansib.sundries.prefs.Prefs;
+import org.hansib.sundries.prefs.PrefsWithStore;
 import org.hansib.sundries.prefs.store.UserNodePrefsStore;
 
 class MyApp {
@@ -19,7 +19,7 @@ class MyExamplePrefs {
 	private ReqBoolean<Keys> wasAccepted;
 
 	MyExamplePrefs() {
-		TypedEnumPrefs<Keys> prefs = new TypedEnumPrefsWithStore<>(UserNodePrefsStore.<Keys>forApp(MyApp.class));
+		Prefs<Keys> prefs = new PrefsWithStore<>(UserNodePrefsStore.<Keys>forApp(MyApp.class));
 		lastProject = prefs.optionalFile(Keys.lastProject);
 		wasAccepted = prefs.requiredBoolean(Keys.wasAccepted, false);
 	}

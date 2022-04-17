@@ -1,73 +1,68 @@
 package org.hansib.sundries.prefs;
 
-import java.util.Optional;
+import java.io.File;
+import java.math.BigDecimal;
 
-/**
- * a preference tied to an enum with a typed value
- */
-interface TypedPref<K extends Enum<K>, V> extends Converter<V> {
+class Initializer {
 
-	K key();
+	static final Initializer INSTANCE = new Initializer();
 
-	void set(V value);
-}
-
-interface RequiredPref<K extends Enum<K>, V> extends TypedPref<K, V> {
-	V get();
-}
-
-interface OptionalPref<K extends Enum<K>, V> extends TypedPref<K, V> {
-
-	Optional<V> get();
-
-	void remove();
-}
-
-abstract class PrefClz<K extends Enum<K>, V> implements TypedPref<K, V> {
-
-	private final K key;
-	protected final TypedEnumPrefs<K> store;
-
-	PrefClz(K key, TypedEnumPrefs<K> store) {
-		this.key = key;
-		this.store = store;
-	}
-
-	public K key() {
-		return key;
-	}
-
-	@Override
-	public void set(V value) {
-		store.set(this, value);
+	<V, K extends Enum<K>, P extends PrefClz<K, V>> P withInitial(P pref, V initialValue) {
+		if (pref.store.get(pref) == null)
+			pref.store.set(pref, initialValue);
+		return pref;
 	}
 }
 
-abstract class ReqPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements RequiredPref<K, V> {
+public interface Prefs<K extends Enum<K>> {
 
-	ReqPrefClz(K key, TypedEnumPrefs<K> store) {
-		super(key, store);
+	<V> V get(Pref<K, V> pref);
+
+	<V> void set(Pref<K, V> pref, V value);
+
+	void remove(OptionalPref<K, ?> pref);
+
+	/*
+	 * factory methods
+	 */
+
+	default OptString<K> optionalString(K key) {
+		return new OptString<>(key, this);
 	}
 
-	@Override
-	public V get() {
-		return store.get(this);
-	}
-}
-
-abstract class OptPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements OptionalPref<K, V> {
-
-	OptPrefClz(K key, TypedEnumPrefs<K> store) {
-		super(key, store);
+	default ReqString<K> requiredString(K key, String initialValue) {
+		return Initializer.INSTANCE.withInitial(new ReqString<>(key, this), initialValue);
 	}
 
-	@Override
-	public Optional<V> get() {
-		return Optional.ofNullable(store.get(this));
+	default OptBoolean<K> optionalBoolean(K key) {
+		return new OptBoolean<>(key, this);
 	}
 
-	@Override
-	public void remove() {
-		store.remove(this);
+	default ReqBoolean<K> requiredBoolean(K key, boolean initialValue) {
+		return Initializer.INSTANCE.withInitial(new ReqBoolean<>(key, this), initialValue);
+	}
+
+	default OptInteger<K> optionalInteger(K key) {
+		return new OptInteger<>(key, this);
+	}
+
+	default ReqInteger<K> requiredInteger(K key, int initialValue) {
+		return Initializer.INSTANCE.withInitial(new ReqInteger<>(key, this), initialValue);
+	}
+
+	default OptBigDecimal<K> optionalBigDecimal(K key) {
+		return new OptBigDecimal<>(key, this);
+	}
+
+	default ReqBigDecimal<K> requiredBigDecimal(K key, BigDecimal initialValue) {
+		return Initializer.INSTANCE.withInitial(new ReqBigDecimal<>(key, this), initialValue);
+	}
+
+	default OptFile<K> optionalFile(K key) {
+		return new OptFile<>(key, this);
+	}
+
+	default ReqFile<K> requiredFile(K key, File initialValue) {
+		return Initializer.INSTANCE.withInitial(new ReqFile<>(key, this), initialValue);
 	}
 }

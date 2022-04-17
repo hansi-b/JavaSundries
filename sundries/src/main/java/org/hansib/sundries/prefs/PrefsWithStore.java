@@ -2,21 +2,21 @@ package org.hansib.sundries.prefs;
 
 import org.hansib.sundries.prefs.store.PrefsStore;
 
-public class TypedEnumPrefsWithStore<K extends Enum<K>> implements TypedEnumPrefs<K> {
+public class PrefsWithStore<K extends Enum<K>> implements Prefs<K> {
 
 	private final PrefsStore<K> store;
 
-	public TypedEnumPrefsWithStore(PrefsStore<K> store) {
+	public PrefsWithStore(PrefsStore<K> store) {
 		this.store = store;
 	}
 
 	@Override
-	public <V> V get(TypedPref<K, V> pref) {
+	public <V> V get(Pref<K, V> pref) {
 		return pref.str2val(store.get(pref.key()));
 	}
 
 	@Override
-	public <V> void set(TypedPref<K, V> pref, V value) {
+	public <V> void set(Pref<K, V> pref, V value) {
 		store.put(pref.key(), pref.val2str(value));
 	}
 
