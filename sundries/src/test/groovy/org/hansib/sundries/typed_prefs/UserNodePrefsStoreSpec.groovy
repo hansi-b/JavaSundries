@@ -2,7 +2,7 @@ package org.hansib.sundries.typed_prefs;
 
 import java.util.prefs.Preferences
 
-import org.hansib.sundries.prefs.UserNodePrefsStore
+import org.hansib.sundries.store.UserNodePrefsStore
 
 import spock.lang.Specification
 

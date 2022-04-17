@@ -23,20 +23,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.prefs;
+package org.hansib.sundries.store;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * a String-based store for enum prefs
- *
- * @param <K> the key enum
+ * keeps preferences in a simple map
  */
-public interface PrefsStore<K extends Enum<K>> {
+public class InMemoryPrefsStore<K extends Enum<K>> implements PrefsStore<K> {
 
-	public void put(final K key, final String value);
+	private final Map<K, String> prefs;
 
-	public String get(final K key);
+	public InMemoryPrefsStore() {
+		this.prefs = new ConcurrentHashMap<>();
+	}
 
-	public boolean contains(final K key);
+	public void put(final K key, final String value) {
+		prefs.put(key, value);
+	}
 
-	public void remove(final K key);
+	public String get(final K key) {
+		return prefs.getOrDefault(key, null);
+	}
+
+	public boolean contains(final K key) {
+		return get(key) != null;
+	}
+
+	public void remove(final K key) {
+		prefs.remove(key);
+	}
 }
