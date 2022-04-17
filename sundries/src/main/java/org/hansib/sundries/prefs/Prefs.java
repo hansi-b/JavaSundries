@@ -58,6 +58,14 @@ public interface Prefs<K extends Enum<K>> {
 		return Initializer.INSTANCE.withInitial(new ReqBigDecimal<>(key, this), initialValue);
 	}
 
+	default <L extends Enum<L>> OptEnum<K, L> optionalEnum(K key, Class<L> valueClass) {
+		return new OptEnum<>(key, valueClass, this);
+	}
+
+	default <L extends Enum<L>> ReqEnum<K, L> requiredEnum(K key, Class<L> valueClass, L initialValue) {
+		return Initializer.INSTANCE.withInitial(new ReqEnum<>(key, valueClass, this), initialValue);
+	}
+
 	default OptFile<K> optionalFile(K key) {
 		return new OptFile<>(key, this);
 	}
