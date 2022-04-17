@@ -23,20 +23,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.store;
+package org.hansib.sundries.prefs.store;
+
+import java.util.prefs.Preferences;
 
 /**
- * a String-based store for enum prefs
+ * a thin wrapper around java Preferences with typed keys
  *
  * @param <K> the key enum
  */
-public interface PrefsStore<K extends Enum<K>> {
+public class UserNodePrefsStore<K extends Enum<K>> implements PrefsStore<K> {
 
-	public void put(final K key, final String value);
+	private final Preferences node;
 
-	public String get(final K key);
+	UserNodePrefsStore(Preferences node) {
+		this.node = node;
+	}
 
-	public boolean contains(final K key);
+	public static <L extends Enum<L>> UserNodePrefsStore<L> forApp(final Class<?> clazz) {
+		return new UserNodePrefsStore<>(Preferences.userNodeForPackage(clazz).node(clazz.getSimpleName()));
+	}
 
-	public void remove(final K key);
+	public void put(final K key, final String value) {
+		node.put(key.name(), value);
+	}
+
+	public String get(final K key) {
+		return node.get(key.name(), null);
+	}
+
+	public boolean contains(final K key) {
+		return get(key) != null;
+	}
+
+	public void remove(final K key) {
+		node.remove(key.name());
+	}
 }

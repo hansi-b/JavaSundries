@@ -1,10 +1,10 @@
 package org.hansib.sundries;
 
-import org.hansib.sundries.typed_prefs.ReqBoolean;
-import org.hansib.sundries.store.UserNodePrefsStore;
-import org.hansib.sundries.typed_prefs.OptFile;
-import org.hansib.sundries.typed_prefs.TypedEnumPrefs;
-import org.hansib.sundries.typed_prefs.TypedEnumPrefsWithStore;
+import org.hansib.sundries.prefs.OptFile;
+import org.hansib.sundries.prefs.ReqBoolean;
+import org.hansib.sundries.prefs.TypedEnumPrefs;
+import org.hansib.sundries.prefs.TypedEnumPrefsWithStore;
+import org.hansib.sundries.prefs.store.UserNodePrefsStore;
 
 class MyApp {
 

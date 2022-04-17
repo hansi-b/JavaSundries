@@ -1,4 +1,4 @@
-package org.hansib.sundries.typed_prefs;
+package org.hansib.sundries.prefs;
 
 import java.io.File;
 

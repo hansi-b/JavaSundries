@@ -1,4 +1,11 @@
-package org.hansib.sundries.typed_prefs;
+package org.hansib.sundries.prefs;
+
+import org.hansib.sundries.prefs.BigDecimalConverter
+import org.hansib.sundries.prefs.BooleanConverter
+import org.hansib.sundries.prefs.EnumConverter
+import org.hansib.sundries.prefs.FileConverter
+import org.hansib.sundries.prefs.IntegerConverter
+import org.hansib.sundries.prefs.StringConverter
 
 import spock.lang.Specification
 

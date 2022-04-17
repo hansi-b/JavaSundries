@@ -1,6 +1,6 @@
-package org.hansib.sundries.typed_prefs;
+package org.hansib.sundries.prefs;
 
-import org.hansib.sundries.store.PrefsStore;
+import org.hansib.sundries.prefs.store.PrefsStore;
 
 public class TypedEnumPrefsWithStore<K extends Enum<K>> implements TypedEnumPrefs<K> {
 

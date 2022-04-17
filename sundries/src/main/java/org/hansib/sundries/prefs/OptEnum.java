@@ -1,4 +1,4 @@
-package org.hansib.sundries.typed_prefs;
+package org.hansib.sundries.prefs;
 
 public class OptEnum<K extends Enum<K>, L extends Enum<L>> extends OptPrefClz<K, L> implements EnumConverter<L> {
 	private final Class<L> clazz;

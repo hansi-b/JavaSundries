@@ -1,8 +1,8 @@
-package org.hansib.sundries.typed_prefs;
+package org.hansib.sundries.prefs;
 
 import java.util.prefs.Preferences
 
-import org.hansib.sundries.store.UserNodePrefsStore
+import org.hansib.sundries.prefs.store.UserNodePrefsStore
 
 import spock.lang.Specification
 

@@ -23,7 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.store;
+package org.hansib.sundries.prefs.store;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

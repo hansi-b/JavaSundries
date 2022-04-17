@@ -1,4 +1,4 @@
-package org.hansib.sundries.typed_prefs;
+package org.hansib.sundries.prefs;
 
 public class ReqEnum<K extends Enum<K>, L extends Enum<L>> extends ReqPrefClz<K, L> implements EnumConverter<L> {
 	private final Class<L> clazz;
