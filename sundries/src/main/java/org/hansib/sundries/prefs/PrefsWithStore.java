@@ -50,6 +50,11 @@ public class PrefsWithStore<K extends Enum<K>> implements Prefs<K> {
 	}
 
 	@Override
+	public boolean contains(OptionalPref<K, ?> pref) {
+		return get(pref) != null;
+	}
+
+	@Override
 	public void remove(OptionalPref<K, ?> pref) {
 		store.remove(pref.key());
 	}

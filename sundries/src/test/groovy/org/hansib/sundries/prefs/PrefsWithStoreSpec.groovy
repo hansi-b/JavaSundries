@@ -1,7 +1,6 @@
 package org.hansib.sundries.prefs
 
 import org.hansib.sundries.prefs.store.InMemoryPrefsStore
-import org.hansib.sundries.prefs.store.PrefsStore
 
 import spock.lang.Specification
 
@@ -36,7 +35,7 @@ public class PrefsWithStoreSpec extends Specification {
 		then:
 		prefs.get(p) == 'xyz'
 	}
-	
+
 	def 'throws exception on setting to null'(){
 
 		when:
@@ -57,11 +56,13 @@ public class PrefsWithStoreSpec extends Specification {
 
 		then:
 		prefs.get(p) == new File('../else')
+		prefs.contains(p) == true
 
 		when:
 		prefs.remove(p)
 
 		then:
 		prefs.get(p) == null
+		prefs.contains(p) == false
 	}
 }

@@ -45,6 +45,8 @@ public interface Prefs<K extends Enum<K>> {
 
 	<V> void set(Pref<K, V> pref, V value);
 
+	boolean contains(OptionalPref<K, ?> pref);
+
 	void remove(OptionalPref<K, ?> pref);
 
 	/*
