@@ -29,6 +29,7 @@ public class OptStringSpec extends Specification {
 
 		expect:
 		p.get() == Optional.of('abc')
+		p.isSet() == true
 	}
 
 	def 'can remove value'(){
@@ -38,5 +39,6 @@ public class OptStringSpec extends Specification {
 
 		then:
 		1 * store.remove(p)
+		p.isSet() == false
 	}
 }

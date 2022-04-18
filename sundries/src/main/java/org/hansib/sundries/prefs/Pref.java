@@ -47,6 +47,8 @@ interface OptionalPref<K extends Enum<K>, V> extends Pref<K, V> {
 
 	Optional<V> get();
 
+	boolean isSet();
+
 	void remove();
 }
 
@@ -96,6 +98,11 @@ abstract class OptPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements
 	@Override
 	public Optional<V> get() {
 		return Optional.ofNullable(prefs().get(this));
+	}
+
+	@Override
+	public boolean isSet() {
+		return prefs().get(this) != null;
 	}
 
 	@Override
