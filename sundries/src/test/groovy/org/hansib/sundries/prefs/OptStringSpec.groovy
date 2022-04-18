@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class OptStringSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	OptString<TestKey> p = new OptString(TestKey.one, store)
+	OptString<TestKey> p = new OptString(TestKey.str, store)
 
 	def 'defaults to empty value'(){
 
@@ -29,5 +29,14 @@ public class OptStringSpec extends Specification {
 
 		expect:
 		p.get() == Optional.of('abc')
+	}
+
+	def 'can remove value'(){
+
+		when:
+		p.remove()
+
+		then:
+		1 * store.remove(p)
 	}
 }

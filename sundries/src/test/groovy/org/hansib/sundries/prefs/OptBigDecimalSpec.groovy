@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class OptBigDecimalSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	OptBigDecimal<TestKey> p = new OptBigDecimal(TestKey.one, store)
+	OptBigDecimal<TestKey> p = new OptBigDecimal(TestKey.big, store)
 
 	def 'defaults to empty value'(){
 

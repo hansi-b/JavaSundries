@@ -1,5 +1,6 @@
 package org.hansib.sundries.prefs;
 
+import org.hansib.sundries.Errors;
 import org.hansib.sundries.prefs.store.PrefsStore;
 
 public class PrefsWithStore<K extends Enum<K>> implements Prefs<K> {
@@ -12,12 +13,15 @@ public class PrefsWithStore<K extends Enum<K>> implements Prefs<K> {
 
 	@Override
 	public <V> V get(Pref<K, V> pref) {
-		return pref.str2val(store.get(pref.key()));
+		String val = store.get(pref.key());
+		return val == null ? null : pref.str2val(val);
 	}
 
 	@Override
-	public <V> void set(Pref<K, V> pref, V value) {
-		store.put(pref.key(), pref.val2str(value));
+	public <V> void set(Pref<K, V> pref, V val) {
+		if (val == null)
+			throw Errors.illegalArg("Cannot set null value (%s)", pref);
+		store.put(pref.key(), pref.val2str(val));
 	}
 
 	@Override

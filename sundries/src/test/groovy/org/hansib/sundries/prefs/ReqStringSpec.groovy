@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class ReqStringSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	ReqString<TestKey> p = new ReqString(TestKey.one, store)
+	ReqString<TestKey> p = new ReqString(TestKey.str, store)
 
 	def 'defaults to initial value'(){
 

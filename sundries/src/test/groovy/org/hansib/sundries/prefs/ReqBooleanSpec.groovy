@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class ReqBooleanSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	ReqBoolean<TestKey> p = new ReqBoolean(TestKey.one, store)
+	ReqBoolean<TestKey> p = new ReqBoolean(TestKey.bool, store)
 
 	def 'defaults to initial value'(){
 

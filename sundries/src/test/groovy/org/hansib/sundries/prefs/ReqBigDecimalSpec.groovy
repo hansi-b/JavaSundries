@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class ReqBigDecimalSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	ReqBigDecimal<TestKey> p = new ReqBigDecimal(TestKey.one, store)
+	ReqBigDecimal<TestKey> p = new ReqBigDecimal(TestKey.big, store)
 
 	def 'defaults to initial value'(){
 

@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class OptBooleanSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	OptBoolean<TestKey> p = new OptBoolean(TestKey.one, store)
+	OptBoolean<TestKey> p = new OptBoolean(TestKey.bool, store)
 
 	def 'defaults to empty value'(){
 

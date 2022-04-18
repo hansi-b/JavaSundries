@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class OptIntegerSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	OptInteger<TestKey> p = new OptInteger(TestKey.one, store)
+	OptInteger<TestKey> p = new OptInteger(TestKey.integer, store)
 
 	def 'defaults to empty value'(){
 

@@ -5,7 +5,7 @@ import spock.lang.Specification
 public class ReqIntegerSpec extends Specification {
 
 	Prefs<TestKey> store = Mock()
-	ReqInteger<TestKey> p = new ReqInteger(TestKey.one, store)
+	ReqInteger<TestKey> p = new ReqInteger(TestKey.integer, store)
 
 	def 'defaults to initial value'(){
 
