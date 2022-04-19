@@ -28,17 +28,6 @@ package org.hansib.sundries.prefs;
 import java.io.File;
 import java.math.BigDecimal;
 
-class Initializer {
-
-	static final Initializer INSTANCE = new Initializer();
-
-	<V, K extends Enum<K>, P extends Pref<K, V>> P withInitial(P pref, V initialValue) {
-		if (pref.prefs().get(pref) == null)
-			pref.prefs().set(pref, initialValue);
-		return pref;
-	}
-}
-
 public interface Prefs<K extends Enum<K>> {
 
 	<V> V get(Pref<K, V> pref);
@@ -58,7 +47,7 @@ public interface Prefs<K extends Enum<K>> {
 	}
 
 	default ReqString<K> requiredString(K key, String initialValue) {
-		return Initializer.INSTANCE.withInitial(new ReqString<>(key, this), initialValue);
+		return withInitial(new ReqString<>(key, this), initialValue);
 	}
 
 	default OptBoolean<K> optionalBoolean(K key) {
@@ -66,7 +55,7 @@ public interface Prefs<K extends Enum<K>> {
 	}
 
 	default ReqBoolean<K> requiredBoolean(K key, boolean initialValue) {
-		return Initializer.INSTANCE.withInitial(new ReqBoolean<>(key, this), initialValue);
+		return withInitial(new ReqBoolean<>(key, this), initialValue);
 	}
 
 	default OptInteger<K> optionalInteger(K key) {
@@ -74,7 +63,7 @@ public interface Prefs<K extends Enum<K>> {
 	}
 
 	default ReqInteger<K> requiredInteger(K key, int initialValue) {
-		return Initializer.INSTANCE.withInitial(new ReqInteger<>(key, this), initialValue);
+		return withInitial(new ReqInteger<>(key, this), initialValue);
 	}
 
 	default OptBigDecimal<K> optionalBigDecimal(K key) {
@@ -82,7 +71,7 @@ public interface Prefs<K extends Enum<K>> {
 	}
 
 	default ReqBigDecimal<K> requiredBigDecimal(K key, BigDecimal initialValue) {
-		return Initializer.INSTANCE.withInitial(new ReqBigDecimal<>(key, this), initialValue);
+		return withInitial(new ReqBigDecimal<>(key, this), initialValue);
 	}
 
 	default <L extends Enum<L>> OptEnum<K, L> optionalEnum(K key, Class<L> valueClass) {
@@ -90,7 +79,7 @@ public interface Prefs<K extends Enum<K>> {
 	}
 
 	default <L extends Enum<L>> ReqEnum<K, L> requiredEnum(K key, Class<L> valueClass, L initialValue) {
-		return Initializer.INSTANCE.withInitial(new ReqEnum<>(key, valueClass, this), initialValue);
+		return withInitial(new ReqEnum<>(key, valueClass, this), initialValue);
 	}
 
 	default OptFile<K> optionalFile(K key) {
@@ -98,6 +87,16 @@ public interface Prefs<K extends Enum<K>> {
 	}
 
 	default ReqFile<K> requiredFile(K key, File initialValue) {
-		return Initializer.INSTANCE.withInitial(new ReqFile<>(key, this), initialValue);
+		return withInitial(new ReqFile<>(key, this), initialValue);
+	}
+
+	/*
+	 * helpers
+	 */
+
+	default <V, P extends Pref<K, V>> P withInitial(P pref, V initialValue) {
+		if (pref.prefs().get(pref) == null)
+			pref.prefs().set(pref, initialValue);
+		return pref;
 	}
 }
