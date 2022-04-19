@@ -25,6 +25,7 @@
  */
 package org.hansib.sundries.prefs;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -36,20 +37,60 @@ interface Pref<K extends Enum<K>, V> extends Converter<V> {
 
 	K key();
 
-	void set(V value);
+	default void set(V value) {
+		prefs().set(this, value);
+	}
 }
 
 interface RequiredPref<K extends Enum<K>, V> extends Pref<K, V> {
-	V get();
+	default V get() {
+		return prefs().get(this);
+	}
 }
 
 interface OptionalPref<K extends Enum<K>, V> extends Pref<K, V> {
 
-	Optional<V> get();
+	default Optional<V> get() {
+		return Optional.ofNullable(prefs().get(this));
+	}
 
-	boolean isSet();
+	/**
+	 * @return whether this preference is currently set (to a non-null value); same
+	 *         as {@code get().isPresent()}
+	 */
+	default boolean isSet() {
+		return prefs().get(this) != null;
+	}
 
-	void remove();
+	/**
+	 * Unsets this preference
+	 */
+	default void unset() {
+		prefs().remove(this);
+	}
+}
+
+interface PrimitiveBooleanPref<K extends Enum<K>> extends Pref<K, Boolean> {
+
+	default boolean isTrue() {
+		return Boolean.TRUE.equals(prefs().get(this));
+	}
+
+	default boolean isFalse() {
+		return Boolean.FALSE.equals(prefs().get(this));
+	}
+}
+
+interface PrimitiveIntegerPref<K extends Enum<K>> extends Pref<K, Integer> {
+
+	/**
+	 * @return the auto-unboxed value of this preference
+	 * @throws NullPointerException is this preference is not set (can only happen
+	 *                              for optional preferences)
+	 */
+	default int intValue() {
+		return prefs().get(this);
+	}
 }
 
 abstract class PrefClz<K extends Enum<K>, V> implements Pref<K, V> {
@@ -58,6 +99,9 @@ abstract class PrefClz<K extends Enum<K>, V> implements Pref<K, V> {
 	private final Prefs<K> prefs;
 
 	PrefClz(K key, Prefs<K> prefs) {
+		Objects.requireNonNull(key);
+		Objects.requireNonNull(prefs);
+
 		this.key = key;
 		this.prefs = prefs;
 	}
@@ -67,13 +111,9 @@ abstract class PrefClz<K extends Enum<K>, V> implements Pref<K, V> {
 		return prefs;
 	}
 
+	@Override
 	public K key() {
 		return key;
-	}
-
-	@Override
-	public void set(V value) {
-		prefs.set(this, value);
 	}
 }
 
@@ -82,31 +122,11 @@ abstract class ReqPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements
 	ReqPrefClz(K key, Prefs<K> prefs) {
 		super(key, prefs);
 	}
-
-	@Override
-	public V get() {
-		return prefs().get(this);
-	}
 }
 
 abstract class OptPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements OptionalPref<K, V> {
 
 	OptPrefClz(K key, Prefs<K> prefs) {
 		super(key, prefs);
-	}
-
-	@Override
-	public Optional<V> get() {
-		return Optional.ofNullable(prefs().get(this));
-	}
-
-	@Override
-	public boolean isSet() {
-		return prefs().get(this) != null;
-	}
-
-	@Override
-	public void remove() {
-		prefs().remove(this);
 	}
 }

@@ -30,4 +30,13 @@ public class OptBooleanSpec extends Specification {
 		expect:
 		p.get() == Optional.of(false)
 	}
+
+	def 'primitive access'() {
+		given:
+		store.get(p) >> false
+
+		expect:
+		p.isFalse() == true
+		p.isTrue() == false
+	}
 }

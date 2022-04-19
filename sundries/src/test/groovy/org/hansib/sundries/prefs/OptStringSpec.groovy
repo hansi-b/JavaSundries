@@ -35,7 +35,7 @@ public class OptStringSpec extends Specification {
 	def 'can remove value'(){
 
 		when:
-		p.remove()
+		p.unset()
 
 		then:
 		1 * store.remove(p)
