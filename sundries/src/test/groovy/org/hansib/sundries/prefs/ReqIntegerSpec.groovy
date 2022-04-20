@@ -29,5 +29,6 @@ public class ReqIntegerSpec extends Specification {
 
 		expect:
 		p.get() == 321
+		p.intValue() == 321
 	}
 }

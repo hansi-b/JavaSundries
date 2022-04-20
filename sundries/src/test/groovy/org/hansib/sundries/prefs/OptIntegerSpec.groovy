@@ -13,6 +13,14 @@ public class OptIntegerSpec extends Specification {
 		p.get() == Optional.empty()
 	}
 
+	def 'empty value throws NPE for intValue'(){
+
+		when:
+		p.intValue()
+		then:
+		thrown NullPointerException
+	}
+
 	def 'can set value'(){
 
 		when:
@@ -29,5 +37,6 @@ public class OptIntegerSpec extends Specification {
 
 		expect:
 		p.get() == Optional.of(78)
+		p.intValue() == 78
 	}
 }
