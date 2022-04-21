@@ -26,12 +26,11 @@
 package org.hansib.sundries.prefs;
 
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * a preference tied to an enum with a typed value
  */
-interface Pref<K extends Enum<K>, V> extends Converter<V> {
+public interface Pref<K extends Enum<K>, V> extends Converter<V> {
 
 	Prefs<K> prefs();
 
@@ -39,57 +38,6 @@ interface Pref<K extends Enum<K>, V> extends Converter<V> {
 
 	default void set(V value) {
 		prefs().set(this, value);
-	}
-}
-
-interface RequiredPref<K extends Enum<K>, V> extends Pref<K, V> {
-	default V get() {
-		return prefs().get(this);
-	}
-}
-
-interface OptionalPref<K extends Enum<K>, V> extends Pref<K, V> {
-
-	default Optional<V> get() {
-		return Optional.ofNullable(prefs().get(this));
-	}
-
-	/**
-	 * @return whether this preference is currently set (to a non-null value); same
-	 *         as {@code get().isPresent()}
-	 */
-	default boolean isSet() {
-		return prefs().get(this) != null;
-	}
-
-	/**
-	 * Unsets this preference
-	 */
-	default void unset() {
-		prefs().remove(this);
-	}
-}
-
-interface PrimitiveBooleanPref<K extends Enum<K>> extends Pref<K, Boolean> {
-
-	default boolean isTrue() {
-		return Boolean.TRUE.equals(prefs().get(this));
-	}
-
-	default boolean isFalse() {
-		return Boolean.FALSE.equals(prefs().get(this));
-	}
-}
-
-interface PrimitiveIntegerPref<K extends Enum<K>> extends Pref<K, Integer> {
-
-	/**
-	 * @return the auto-unboxed value of this preference
-	 * @throws NullPointerException is this preference is not set (can only happen
-	 *                              for optional preferences)
-	 */
-	default int intValue() {
-		return prefs().get(this);
 	}
 }
 
