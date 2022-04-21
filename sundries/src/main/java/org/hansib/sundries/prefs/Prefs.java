@@ -28,65 +28,85 @@ package org.hansib.sundries.prefs;
 import java.io.File;
 import java.math.BigDecimal;
 
-public interface Prefs<K extends Enum<K>> {
+import org.hansib.sundries.Errors;
+import org.hansib.sundries.prefs.store.PrefsStore;
 
-	<V> V get(Pref<K, V> pref);
+public class Prefs<K extends Enum<K>> {
 
-	<V> void set(Pref<K, V> pref, V value);
+	private final PrefsStore<K> store;
 
-	boolean contains(OptionalPref<K, ?> pref);
+	public Prefs(PrefsStore<K> store) {
+		this.store = store;
+	}
 
-	void remove(OptionalPref<K, ?> pref);
+	<V> V get(Pref<K, V> pref) {
+		String val = store.get(pref.key());
+		return val == null ? null : pref.str2val(val);
+	}
+
+	<V> void set(Pref<K, V> pref, V val) {
+		if (val == null)
+			throw Errors.illegalArg("Cannot set null value (%s)", pref);
+		store.put(pref.key(), pref.val2str(val));
+	}
+
+	boolean contains(OptionalPref<K, ?> pref) {
+		return get(pref) != null;
+	}
+
+	void remove(OptionalPref<K, ?> pref) {
+		store.remove(pref.key());
+	}
 
 	/*
 	 * factory methods
 	 */
 
-	default OptString<K> optionalString(K key) {
+	public OptString<K> optionalString(K key) {
 		return new OptString<>(key, this);
 	}
 
-	default ReqString<K> requiredString(K key, String initialValue) {
+	public ReqString<K> requiredString(K key, String initialValue) {
 		return withInitial(new ReqString<>(key, this), initialValue);
 	}
 
-	default OptBoolean<K> optionalBoolean(K key) {
+	public OptBoolean<K> optionalBoolean(K key) {
 		return new OptBoolean<>(key, this);
 	}
 
-	default ReqBoolean<K> requiredBoolean(K key, boolean initialValue) {
+	public ReqBoolean<K> requiredBoolean(K key, boolean initialValue) {
 		return withInitial(new ReqBoolean<>(key, this), initialValue);
 	}
 
-	default OptInteger<K> optionalInteger(K key) {
+	public OptInteger<K> optionalInteger(K key) {
 		return new OptInteger<>(key, this);
 	}
 
-	default ReqInteger<K> requiredInteger(K key, int initialValue) {
+	public ReqInteger<K> requiredInteger(K key, int initialValue) {
 		return withInitial(new ReqInteger<>(key, this), initialValue);
 	}
 
-	default OptBigDecimal<K> optionalBigDecimal(K key) {
+	public OptBigDecimal<K> optionalBigDecimal(K key) {
 		return new OptBigDecimal<>(key, this);
 	}
 
-	default ReqBigDecimal<K> requiredBigDecimal(K key, BigDecimal initialValue) {
+	public ReqBigDecimal<K> requiredBigDecimal(K key, BigDecimal initialValue) {
 		return withInitial(new ReqBigDecimal<>(key, this), initialValue);
 	}
 
-	default <L extends Enum<L>> OptEnum<K, L> optionalEnum(K key, Class<L> valueClass) {
+	public <L extends Enum<L>> OptEnum<K, L> optionalEnum(K key, Class<L> valueClass) {
 		return new OptEnum<>(key, valueClass, this);
 	}
 
-	default <L extends Enum<L>> ReqEnum<K, L> requiredEnum(K key, Class<L> valueClass, L initialValue) {
+	public <L extends Enum<L>> ReqEnum<K, L> requiredEnum(K key, Class<L> valueClass, L initialValue) {
 		return withInitial(new ReqEnum<>(key, valueClass, this), initialValue);
 	}
 
-	default OptFile<K> optionalFile(K key) {
+	public OptFile<K> optionalFile(K key) {
 		return new OptFile<>(key, this);
 	}
 
-	default ReqFile<K> requiredFile(K key, File initialValue) {
+	public ReqFile<K> requiredFile(K key, File initialValue) {
 		return withInitial(new ReqFile<>(key, this), initialValue);
 	}
 
@@ -94,7 +114,7 @@ public interface Prefs<K extends Enum<K>> {
 	 * helpers
 	 */
 
-	default <V, P extends Pref<K, V>> P withInitial(P pref, V initialValue) {
+	<V, P extends Pref<K, V>> P withInitial(P pref, V initialValue) {
 		if (pref.prefs().get(pref) == null)
 			pref.prefs().set(pref, initialValue);
 		return pref;
