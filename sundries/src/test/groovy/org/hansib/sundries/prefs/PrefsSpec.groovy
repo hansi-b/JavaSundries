@@ -16,7 +16,7 @@ public class PrefsSpec extends Specification {
 		ReqInteger p = prefs.requiredInteger(TestKey.integer, 78)
 
 		then:
-		prefs.get(p) == 78
+		prefs.get(TestKey.integer) == '78'
 	}
 
 	def 'can get not-set val'(){
@@ -25,7 +25,7 @@ public class PrefsSpec extends Specification {
 		OptBoolean p = prefs.optionalBoolean(TestKey.bool)
 
 		then:
-		prefs.get(p) == null
+		prefs.get(TestKey.bool) == null
 	}
 
 	def 'can set val'(){
@@ -35,27 +35,7 @@ public class PrefsSpec extends Specification {
 		p.set('xyz')
 
 		then:
-		prefs.get(p) == 'xyz'
-	}
-
-	def 'can set and remove optional val'(){
-
-		given:
-		OptFile p = prefs.optionalFile(TestKey.file)
-
-		when:
-		p.set(new File('../else'))
-
-		then:
-		prefs.get(p) == new File('../else')
-		prefs.contains(p) == true
-
-		when:
-		prefs.remove(p)
-
-		then:
-		prefs.get(p) == null
-		prefs.contains(p) == false
+		prefs.get(TestKey.str) == 'xyz'
 	}
 
 	def 'factory methods return correct opt types'() {
@@ -72,11 +52,11 @@ public class PrefsSpec extends Specification {
 	def 'factory methods return correct req types with initial values'() {
 
 		expect:
-		val.getClass() == clazz
-		val.get() == iniVal
+		pref.getClass() == clazz
+		pref.get() == iniVal
 
 		where:
-		val | clazz | iniVal
+		pref | clazz | iniVal
 		sharedPrefs.requiredString(TestKey.str, 'azz') | ReqString | 'azz'
 		sharedPrefs.requiredBoolean(TestKey.bool, true) | ReqBoolean | true
 		sharedPrefs.requiredInteger(TestKey.integer, 123) | ReqInteger | 123

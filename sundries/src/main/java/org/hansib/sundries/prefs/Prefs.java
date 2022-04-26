@@ -38,21 +38,15 @@ public class Prefs<K extends Enum<K>> {
 		this.store = store;
 	}
 
-	<V> V get(Pref<V> pref) {
-		String val = store.get(pref.key());
-		return val == null ? null : pref.str2val(val);
+	/**
+	 * @return the stored String value, possibly null
+	 */
+	public String get(K key) {
+		return store.get(key.name());
 	}
 
-	<V> void set(Pref<V> pref, V val) {
-		store.put(pref.key(), pref.val2str(val));
-	}
-
-	<V> boolean contains(OptionalPref<V> pref) {
-		return get(pref) != null;
-	}
-
-	<V> void remove(OptionalPref<V> pref) {
-		store.remove(pref.key());
+	public <V> void set(K key, String val) {
+		store.put(key.name(), val);
 	}
 
 	/*
