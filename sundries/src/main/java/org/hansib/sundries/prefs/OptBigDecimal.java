@@ -27,8 +27,10 @@ package org.hansib.sundries.prefs;
 
 import java.math.BigDecimal;
 
-public class OptBigDecimal<K extends Enum<K>> extends OptPrefClz<K, BigDecimal> implements BigDecimalConverter {
-	OptBigDecimal(K key, Prefs<K> store) {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class OptBigDecimal extends OptPrefClz<BigDecimal> implements BigDecimalConverter {
+	OptBigDecimal(String key, PrefsStore store) {
 		super(key, store);
 	}
 }

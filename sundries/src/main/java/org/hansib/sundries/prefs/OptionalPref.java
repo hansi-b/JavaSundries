@@ -27,10 +27,11 @@ package org.hansib.sundries.prefs;
 
 import java.util.Optional;
 
-public interface OptionalPref<K extends Enum<K>, V> extends Pref<K, V> {
+public interface OptionalPref<V> extends Pref<V> {
 
 	default Optional<V> get() {
-		return Optional.ofNullable(prefs().get(this));
+		String strVal = store().get(key());
+		return strVal == null ? Optional.empty() : Optional.of(str2val(strVal));
 	}
 
 	/**
@@ -38,13 +39,13 @@ public interface OptionalPref<K extends Enum<K>, V> extends Pref<K, V> {
 	 *         as {@code get().isPresent()}
 	 */
 	default boolean isSet() {
-		return prefs().get(this) != null;
+		return store().get(key()) != null;
 	}
 
 	/**
 	 * Unsets this preference
 	 */
 	default void unset() {
-		prefs().remove(this);
+		store().remove(key());
 	}
 }

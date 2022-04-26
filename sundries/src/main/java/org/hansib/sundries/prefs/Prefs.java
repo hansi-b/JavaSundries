@@ -33,28 +33,28 @@ import org.hansib.sundries.prefs.store.PrefsStore;
 
 public class Prefs<K extends Enum<K>> {
 
-	private final PrefsStore<K> store;
+	private final PrefsStore store;
 
-	public Prefs(PrefsStore<K> store) {
+	public Prefs(PrefsStore store) {
 		this.store = store;
 	}
 
-	<V> V get(Pref<K, V> pref) {
+	<V> V get(Pref<V> pref) {
 		String val = store.get(pref.key());
 		return val == null ? null : pref.str2val(val);
 	}
 
-	<V> void set(Pref<K, V> pref, V val) {
+	<V> void set(Pref<V> pref, V val) {
 		if (val == null)
 			throw Errors.illegalArg("Cannot set null value (%s)", pref);
 		store.put(pref.key(), pref.val2str(val));
 	}
 
-	boolean contains(OptionalPref<K, ?> pref) {
+	<V> boolean contains(OptionalPref<V> pref) {
 		return get(pref) != null;
 	}
 
-	void remove(OptionalPref<K, ?> pref) {
+	<V> void remove(OptionalPref<V> pref) {
 		store.remove(pref.key());
 	}
 
@@ -62,61 +62,61 @@ public class Prefs<K extends Enum<K>> {
 	 * factory methods
 	 */
 
-	public OptString<K> optionalString(K key) {
-		return new OptString<>(key, this);
+	public OptString optionalString(String key) {
+		return new OptString(key, store);
 	}
 
-	public ReqString<K> requiredString(K key, String initialValue) {
-		return withInitial(new ReqString<>(key, this), initialValue);
+	public ReqString requiredString(String key, String initialValue) {
+		return withInitial(new ReqString(key, store), initialValue);
 	}
 
-	public OptBoolean<K> optionalBoolean(K key) {
-		return new OptBoolean<>(key, this);
+	public OptBoolean optionalBoolean(String key) {
+		return new OptBoolean(key, store);
 	}
 
-	public ReqBoolean<K> requiredBoolean(K key, boolean initialValue) {
-		return withInitial(new ReqBoolean<>(key, this), initialValue);
+	public ReqBoolean requiredBoolean(String key, boolean initialValue) {
+		return withInitial(new ReqBoolean(key, store), initialValue);
 	}
 
-	public OptInteger<K> optionalInteger(K key) {
-		return new OptInteger<>(key, this);
+	public OptInteger optionalInteger(String key) {
+		return new OptInteger(key, store);
 	}
 
-	public ReqInteger<K> requiredInteger(K key, int initialValue) {
-		return withInitial(new ReqInteger<>(key, this), initialValue);
+	public ReqInteger requiredInteger(String key, int initialValue) {
+		return withInitial(new ReqInteger(key, store), initialValue);
 	}
 
-	public OptBigDecimal<K> optionalBigDecimal(K key) {
-		return new OptBigDecimal<>(key, this);
+	public OptBigDecimal optionalBigDecimal(String key) {
+		return new OptBigDecimal(key, store);
 	}
 
-	public ReqBigDecimal<K> requiredBigDecimal(K key, BigDecimal initialValue) {
-		return withInitial(new ReqBigDecimal<>(key, this), initialValue);
+	public ReqBigDecimal requiredBigDecimal(String key, BigDecimal initialValue) {
+		return withInitial(new ReqBigDecimal(key, store), initialValue);
 	}
 
-	public <L extends Enum<L>> OptEnum<K, L> optionalEnum(K key, Class<L> valueClass) {
-		return new OptEnum<>(key, valueClass, this);
+	public <L extends Enum<L>> OptEnum<L> optionalEnum(String key, Class<L> valueClass) {
+		return new OptEnum<>(key, valueClass, store);
 	}
 
-	public <L extends Enum<L>> ReqEnum<K, L> requiredEnum(K key, Class<L> valueClass, L initialValue) {
-		return withInitial(new ReqEnum<>(key, valueClass, this), initialValue);
+	public <L extends Enum<L>> ReqEnum<L> requiredEnum(String key, Class<L> valueClass, L initialValue) {
+		return withInitial(new ReqEnum<>(key, valueClass, store), initialValue);
 	}
 
-	public OptFile<K> optionalFile(K key) {
-		return new OptFile<>(key, this);
+	public OptFile optionalFile(String key) {
+		return new OptFile(key, store);
 	}
 
-	public ReqFile<K> requiredFile(K key, File initialValue) {
-		return withInitial(new ReqFile<>(key, this), initialValue);
+	public ReqFile requiredFile(String key, File initialValue) {
+		return withInitial(new ReqFile(key, store), initialValue);
 	}
 
 	/*
 	 * helpers
 	 */
 
-	<V, P extends Pref<K, V>> P withInitial(P pref, V initialValue) {
-		if (pref.prefs().get(pref) == null)
-			pref.prefs().set(pref, initialValue);
+	<V, P extends Pref<V>> P withInitial(P pref, V initialValue) {
+		if (!pref.store().contains(pref.key()))
+			pref.set(initialValue);
 		return pref;
 	}
 }

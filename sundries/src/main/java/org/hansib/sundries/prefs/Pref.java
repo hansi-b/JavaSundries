@@ -27,54 +27,56 @@ package org.hansib.sundries.prefs;
 
 import java.util.Objects;
 
+import org.hansib.sundries.prefs.store.PrefsStore;
+
 /**
  * a preference tied to an enum with a typed value
  */
-public interface Pref<K extends Enum<K>, V> extends Converter<V> {
+public interface Pref<V> extends Converter<V> {
 
-	Prefs<K> prefs();
+	PrefsStore store();
 
-	K key();
+	String key();
 
 	default void set(V value) {
-		prefs().set(this, value);
+		store().put(key(), val2str(value));
 	}
 }
 
-abstract class PrefClz<K extends Enum<K>, V> implements Pref<K, V> {
+abstract class PrefClz<V> implements Pref<V> {
 
-	private final K key;
-	private final Prefs<K> prefs;
+	private final String key;
+	private final PrefsStore store;
 
-	PrefClz(K key, Prefs<K> prefs) {
+	PrefClz(String key, PrefsStore store) {
 		Objects.requireNonNull(key);
-		Objects.requireNonNull(prefs);
+		Objects.requireNonNull(store);
 
 		this.key = key;
-		this.prefs = prefs;
+		this.store = store;
 	}
 
 	@Override
-	public Prefs<K> prefs() {
-		return prefs;
+	public PrefsStore store() {
+		return store;
 	}
 
 	@Override
-	public K key() {
+	public String key() {
 		return key;
 	}
 }
 
-abstract class ReqPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements RequiredPref<K, V> {
+abstract class ReqPrefClz<V> extends PrefClz<V> implements RequiredPref<V> {
 
-	ReqPrefClz(K key, Prefs<K> prefs) {
-		super(key, prefs);
+	ReqPrefClz(String key, PrefsStore store) {
+		super(key, store);
 	}
 }
 
-abstract class OptPrefClz<K extends Enum<K>, V> extends PrefClz<K, V> implements OptionalPref<K, V> {
+abstract class OptPrefClz<V> extends PrefClz<V> implements OptionalPref<V> {
 
-	OptPrefClz(K key, Prefs<K> prefs) {
-		super(key, prefs);
+	OptPrefClz(String key, PrefsStore store) {
+		super(key, store);
 	}
 }

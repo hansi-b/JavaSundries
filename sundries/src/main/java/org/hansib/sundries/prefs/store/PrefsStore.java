@@ -30,13 +30,13 @@ package org.hansib.sundries.prefs.store;
  *
  * @param <K> the key enum
  */
-public interface PrefsStore<K extends Enum<K>> {
+public interface PrefsStore {
 
-	public void put(final K key, final String value);
+	public void put(final String key, final String value);
 
-	public String get(final K key);
+	public String get(final String key);
 
-	public boolean contains(final K key);
+	public boolean contains(final String key);
 
-	public void remove(final K key);
+	public void remove(final String key);
 }

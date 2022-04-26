@@ -27,8 +27,10 @@ package org.hansib.sundries.prefs;
 
 import java.io.File;
 
-public class ReqFile<K extends Enum<K>> extends ReqPrefClz<K, File> implements FileConverter {
-	ReqFile(K key, Prefs<K> store) {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class ReqFile extends ReqPrefClz<File> implements FileConverter {
+	ReqFile(String key, PrefsStore store) {
 		super(key, store);
 	}
 }

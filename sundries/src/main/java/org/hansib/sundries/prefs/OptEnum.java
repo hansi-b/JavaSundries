@@ -25,10 +25,12 @@
  */
 package org.hansib.sundries.prefs;
 
-public class OptEnum<K extends Enum<K>, L extends Enum<L>> extends OptPrefClz<K, L> implements EnumConverter<L> {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class OptEnum<L extends Enum<L>> extends OptPrefClz<L> implements EnumConverter<L> {
 	private final Class<L> clazz;
 
-	OptEnum(K key, Class<L> clazz, Prefs<K> store) {
+	OptEnum(String key, Class<L> clazz, PrefsStore store) {
 		super(key, store);
 		this.clazz = clazz;
 	}

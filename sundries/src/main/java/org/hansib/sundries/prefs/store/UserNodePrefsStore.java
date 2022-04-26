@@ -32,7 +32,7 @@ import java.util.prefs.Preferences;
  *
  * @param <K> the key enum
  */
-public class UserNodePrefsStore<K extends Enum<K>> implements PrefsStore<K> {
+public class UserNodePrefsStore implements PrefsStore {
 
 	private final Preferences node;
 
@@ -40,23 +40,23 @@ public class UserNodePrefsStore<K extends Enum<K>> implements PrefsStore<K> {
 		this.node = node;
 	}
 
-	public static <L extends Enum<L>> UserNodePrefsStore<L> forApp(final Class<?> clazz) {
-		return new UserNodePrefsStore<>(Preferences.userNodeForPackage(clazz).node(clazz.getSimpleName()));
+	public static UserNodePrefsStore forApp(final Class<?> clazz) {
+		return new UserNodePrefsStore(Preferences.userNodeForPackage(clazz).node(clazz.getSimpleName()));
 	}
 
-	public void put(final K key, final String value) {
-		node.put(key.name(), value);
+	public void put(final String key, final String value) {
+		node.put(key, value);
 	}
 
-	public String get(final K key) {
-		return node.get(key.name(), null);
+	public String get(final String key) {
+		return node.get(key, null);
 	}
 
-	public boolean contains(final K key) {
+	public boolean contains(final String key) {
 		return get(key) != null;
 	}
 
-	public void remove(final K key) {
-		node.remove(key.name());
+	public void remove(final String key) {
+		node.remove(key);
 	}
 }

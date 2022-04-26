@@ -25,8 +25,10 @@
  */
 package org.hansib.sundries.prefs;
 
-public class ReqString<K extends Enum<K>> extends ReqPrefClz<K, String> implements StringConverter {
-	ReqString(K key, Prefs<K> store) {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class ReqString extends ReqPrefClz<String> implements StringConverter {
+	ReqString(String key, PrefsStore store) {
 		super(key, store);
 	}
 }

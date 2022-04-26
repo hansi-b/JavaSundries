@@ -25,9 +25,10 @@
  */
 package org.hansib.sundries.prefs;
 
-public class OptInteger<K extends Enum<K>> extends OptPrefClz<K, Integer>
-		implements PrimitiveIntegerPref<K>, IntegerConverter {
-	OptInteger(K key, Prefs<K> store) {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class OptInteger extends OptPrefClz<Integer> implements PrimitiveIntegerPref, IntegerConverter {
+	OptInteger(String key, PrefsStore store) {
 		super(key, store);
 	}
 }

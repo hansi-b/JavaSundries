@@ -25,13 +25,13 @@
  */
 package org.hansib.sundries.prefs;
 
-public interface PrimitiveBooleanPref<K extends Enum<K>> extends Pref<K, Boolean> {
+public interface PrimitiveBooleanPref extends Pref<Boolean> {
 
 	default boolean isTrue() {
-		return Boolean.TRUE.equals(prefs().get(this));
+		return Boolean.valueOf(store().get(key()));
 	}
 
 	default boolean isFalse() {
-		return Boolean.FALSE.equals(prefs().get(this));
+		return !isTrue();
 	}
 }

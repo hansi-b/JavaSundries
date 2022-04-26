@@ -25,10 +25,12 @@
  */
 package org.hansib.sundries.prefs;
 
-public class ReqEnum<K extends Enum<K>, L extends Enum<L>> extends ReqPrefClz<K, L> implements EnumConverter<L> {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class ReqEnum<L extends Enum<L>> extends ReqPrefClz<L> implements EnumConverter<L> {
 	private final Class<L> clazz;
 
-	ReqEnum(K key, Class<L> clazz, Prefs<K> store) {
+	ReqEnum(String key, Class<L> clazz, PrefsStore store) {
 		super(key, store);
 		this.clazz = clazz;
 	}

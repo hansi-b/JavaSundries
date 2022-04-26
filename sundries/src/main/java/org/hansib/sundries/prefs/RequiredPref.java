@@ -25,8 +25,8 @@
  */
 package org.hansib.sundries.prefs;
 
-public interface RequiredPref<K extends Enum<K>, V> extends Pref<K, V> {
+public interface RequiredPref<V> extends Pref<V> {
 	default V get() {
-		return prefs().get(this);
+		return str2val(store().get(key()));
 	}
 }

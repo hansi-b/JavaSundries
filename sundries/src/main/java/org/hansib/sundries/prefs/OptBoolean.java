@@ -25,9 +25,11 @@
  */
 package org.hansib.sundries.prefs;
 
-public class OptBoolean<K extends Enum<K>> extends OptPrefClz<K, Boolean>
-		implements PrimitiveBooleanPref<K>, BooleanConverter {
-	OptBoolean(K key, Prefs<K> store) {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class OptBoolean extends OptPrefClz<Boolean>
+		implements PrimitiveBooleanPref, BooleanConverter {
+	OptBoolean(String key, PrefsStore store) {
 		super(key, store);
 	}
 }

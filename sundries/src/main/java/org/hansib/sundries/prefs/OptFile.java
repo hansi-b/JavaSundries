@@ -27,8 +27,10 @@ package org.hansib.sundries.prefs;
 
 import java.io.File;
 
-public class OptFile<K extends Enum<K>> extends OptPrefClz<K, File> implements FileConverter {
-	OptFile(K key, Prefs<K> store) {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class OptFile extends OptPrefClz<File> implements FileConverter {
+	OptFile(String key, PrefsStore store) {
 		super(key, store);
 	}
 }

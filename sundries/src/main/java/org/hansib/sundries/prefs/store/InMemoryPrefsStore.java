@@ -31,27 +31,27 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * keeps preferences in a simple map
  */
-public class InMemoryPrefsStore<K extends Enum<K>> implements PrefsStore<K> {
+public class InMemoryPrefsStore implements PrefsStore {
 
-	private final Map<K, String> prefs;
+	private final Map<String, String> prefs;
 
 	public InMemoryPrefsStore() {
 		this.prefs = new ConcurrentHashMap<>();
 	}
 
-	public void put(final K key, final String value) {
+	public void put(final String key, final String value) {
 		prefs.put(key, value);
 	}
 
-	public String get(final K key) {
+	public String get(final String key) {
 		return prefs.getOrDefault(key, null);
 	}
 
-	public boolean contains(final K key) {
+	public boolean contains(final String key) {
 		return get(key) != null;
 	}
 
-	public void remove(final K key) {
+	public void remove(final String key) {
 		prefs.remove(key);
 	}
 }

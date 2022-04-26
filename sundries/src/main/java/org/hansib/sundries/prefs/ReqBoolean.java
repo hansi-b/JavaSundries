@@ -25,9 +25,10 @@
  */
 package org.hansib.sundries.prefs;
 
-public class ReqBoolean<K extends Enum<K>> extends ReqPrefClz<K, Boolean>
-		implements PrimitiveBooleanPref<K>, BooleanConverter {
-	ReqBoolean(K key, Prefs<K> store) {
+import org.hansib.sundries.prefs.store.PrefsStore;
+
+public class ReqBoolean extends ReqPrefClz<Boolean> implements PrimitiveBooleanPref, BooleanConverter {
+	ReqBoolean(String key, PrefsStore store) {
 		super(key, store);
 	}
 }

@@ -25,7 +25,7 @@
  */
 package org.hansib.sundries.prefs;
 
-public interface PrimitiveIntegerPref<K extends Enum<K>> extends Pref<K, Integer> {
+public interface PrimitiveIntegerPref extends Pref<Integer> {
 
 	/**
 	 * @return the auto-unboxed value of this preference
@@ -33,6 +33,9 @@ public interface PrimitiveIntegerPref<K extends Enum<K>> extends Pref<K, Integer
 	 *                              for optional preferences)
 	 */
 	default int intValue() {
-		return prefs().get(this);
+		String s = store().get(key());
+		if (s == null)
+			throw new NullPointerException(String.format("Pref %s is not set", key()));
+		return Integer.parseInt(s);
 	}
 }
