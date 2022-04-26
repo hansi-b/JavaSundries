@@ -1,11 +1,13 @@
 package org.hansib.sundries.prefs
 
+import org.hansib.sundries.prefs.store.PrefsStore
+
 import spock.lang.Specification
 
 public class ReqBigDecimalSpec extends Specification {
 
-	Prefs<TestKey> store = Mock()
-	ReqBigDecimal<TestKey> p = new ReqBigDecimal(TestKey.big, store)
+	PrefsStore store = Mock()
+	ReqBigDecimal p = new ReqBigDecimal('big', store)
 
 	def 'defaults to initial value'(){
 
@@ -19,13 +21,13 @@ public class ReqBigDecimalSpec extends Specification {
 		p.set(new BigDecimal('6.78'))
 
 		then:
-		1 * store.set(p, new BigDecimal('6.78'))
+		1 * store.put(p.key(), '6.78')
 	}
 
 	def 'can get given value'(){
 
 		given:
-		store.get(p) >> new BigDecimal('9.12')
+		store.get(p.key()) >> '9.12'
 
 		expect:
 		p.get() == new BigDecimal('9.12')

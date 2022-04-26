@@ -1,11 +1,13 @@
 package org.hansib.sundries.prefs
 
+import org.hansib.sundries.prefs.store.PrefsStore
+
 import spock.lang.Specification
 
 public class OptBooleanSpec extends Specification {
 
-	Prefs<TestKey> store = Mock()
-	OptBoolean<TestKey> p = new OptBoolean(TestKey.bool, store)
+	PrefsStore store = Mock()
+	OptBoolean p = new OptBoolean('bool', store)
 
 	def 'defaults to empty value'(){
 
@@ -19,13 +21,13 @@ public class OptBooleanSpec extends Specification {
 		p.set(true)
 
 		then:
-		1 * store.set(p, true)
+		1 * store.put(p.key(), 'true')
 	}
 
 	def 'can get given value'(){
 
 		given:
-		store.get(p) >> false
+		store.get(p.key()) >> 'false'
 
 		expect:
 		p.get() == Optional.of(false)
@@ -33,7 +35,7 @@ public class OptBooleanSpec extends Specification {
 
 	def 'primitive access'() {
 		given:
-		store.get(p) >> false
+		store.get(p.key()) >> 'false'
 
 		expect:
 		p.isFalse() == true

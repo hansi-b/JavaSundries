@@ -1,11 +1,13 @@
 package org.hansib.sundries.prefs
 
+import org.hansib.sundries.prefs.store.PrefsStore
+
 import spock.lang.Specification
 
 public class ReqBooleanSpec extends Specification {
 
-	Prefs<TestKey> store = Mock()
-	ReqBoolean<TestKey> p = new ReqBoolean(TestKey.bool, store)
+	PrefsStore store = Mock()
+	ReqBoolean p = new ReqBoolean('bool', store)
 
 	def 'defaults to initial value'() {
 
@@ -19,13 +21,13 @@ public class ReqBooleanSpec extends Specification {
 		p.set(true)
 
 		then:
-		1 * store.set(p, true)
+		1 * store.put(p.key(), 'true')
 	}
 
 	def 'can get given value'() {
 
 		given:
-		store.get(p) >> false
+		store.get(p.key()) >> 'false'
 
 		expect:
 		p.get() == false
@@ -33,7 +35,7 @@ public class ReqBooleanSpec extends Specification {
 
 	def 'primitive access'() {
 		given:
-		store.get(p) >> false
+		store.get(p.key()) >> false
 
 		expect:
 		p.isFalse() == true

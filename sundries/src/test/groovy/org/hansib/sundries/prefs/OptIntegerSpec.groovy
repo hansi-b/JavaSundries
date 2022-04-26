@@ -1,11 +1,13 @@
 package org.hansib.sundries.prefs
 
+import org.hansib.sundries.prefs.store.PrefsStore
+
 import spock.lang.Specification
 
 public class OptIntegerSpec extends Specification {
 
-	Prefs<TestKey> store = Mock()
-	OptInteger<TestKey> p = new OptInteger(TestKey.integer, store)
+	PrefsStore store = Mock()
+	OptInteger p = new OptInteger('integer', store)
 
 	def 'defaults to empty value'(){
 
@@ -27,13 +29,13 @@ public class OptIntegerSpec extends Specification {
 		p.set(34)
 
 		then:
-		1 * store.set(p, 34)
+		1 * store.put(p.key(), '34')
 	}
 
 	def 'can get given value'(){
 
 		given:
-		store.get(p) >> 78
+		store.get(p.key()) >> '78'
 
 		expect:
 		p.get() == Optional.of(78)

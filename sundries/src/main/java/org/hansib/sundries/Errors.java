@@ -42,4 +42,8 @@ public class Errors {
 	public static IllegalStateException illegalState(final Throwable cause, final String fmt, final Object... args) {
 		return new IllegalStateException(String.format(fmt, args), cause);
 	}
+
+	public static NullPointerException nullPointer(final String fmt, final Object... args) {
+		return new NullPointerException(String.format(fmt, args));
+	}
 }

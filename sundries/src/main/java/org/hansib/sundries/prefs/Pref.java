@@ -27,6 +27,7 @@ package org.hansib.sundries.prefs;
 
 import java.util.Objects;
 
+import org.hansib.sundries.Errors;
 import org.hansib.sundries.prefs.store.PrefsStore;
 
 /**
@@ -38,7 +39,12 @@ public interface Pref<V> extends Converter<V> {
 
 	String key();
 
+	/**
+	 * @throws IllegalArgumentException on null argument
+	 */
 	default void set(V value) {
+		if (value == null)
+			throw Errors.illegalArg("Cannot set null value on %s", key());
 		store().put(key(), val2str(value));
 	}
 }

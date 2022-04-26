@@ -28,7 +28,6 @@ package org.hansib.sundries.prefs;
 import java.io.File;
 import java.math.BigDecimal;
 
-import org.hansib.sundries.Errors;
 import org.hansib.sundries.prefs.store.PrefsStore;
 
 public class Prefs<K extends Enum<K>> {
@@ -45,8 +44,6 @@ public class Prefs<K extends Enum<K>> {
 	}
 
 	<V> void set(Pref<V> pref, V val) {
-		if (val == null)
-			throw Errors.illegalArg("Cannot set null value (%s)", pref);
 		store.put(pref.key(), pref.val2str(val));
 	}
 
@@ -62,52 +59,52 @@ public class Prefs<K extends Enum<K>> {
 	 * factory methods
 	 */
 
-	public OptString optionalString(String key) {
-		return new OptString(key, store);
+	public OptString optionalString(K key) {
+		return new OptString(key.name(), store);
 	}
 
-	public ReqString requiredString(String key, String initialValue) {
-		return withInitial(new ReqString(key, store), initialValue);
+	public ReqString requiredString(K key, String initialValue) {
+		return withInitial(new ReqString(key.name(), store), initialValue);
 	}
 
-	public OptBoolean optionalBoolean(String key) {
-		return new OptBoolean(key, store);
+	public OptBoolean optionalBoolean(K key) {
+		return new OptBoolean(key.name(), store);
 	}
 
-	public ReqBoolean requiredBoolean(String key, boolean initialValue) {
-		return withInitial(new ReqBoolean(key, store), initialValue);
+	public ReqBoolean requiredBoolean(K key, boolean initialValue) {
+		return withInitial(new ReqBoolean(key.name(), store), initialValue);
 	}
 
-	public OptInteger optionalInteger(String key) {
-		return new OptInteger(key, store);
+	public OptInteger optionalInteger(K key) {
+		return new OptInteger(key.name(), store);
 	}
 
-	public ReqInteger requiredInteger(String key, int initialValue) {
-		return withInitial(new ReqInteger(key, store), initialValue);
+	public ReqInteger requiredInteger(K key, int initialValue) {
+		return withInitial(new ReqInteger(key.name(), store), initialValue);
 	}
 
-	public OptBigDecimal optionalBigDecimal(String key) {
-		return new OptBigDecimal(key, store);
+	public OptBigDecimal optionalBigDecimal(K key) {
+		return new OptBigDecimal(key.name(), store);
 	}
 
-	public ReqBigDecimal requiredBigDecimal(String key, BigDecimal initialValue) {
-		return withInitial(new ReqBigDecimal(key, store), initialValue);
+	public ReqBigDecimal requiredBigDecimal(K key, BigDecimal initialValue) {
+		return withInitial(new ReqBigDecimal(key.name(), store), initialValue);
 	}
 
-	public <L extends Enum<L>> OptEnum<L> optionalEnum(String key, Class<L> valueClass) {
-		return new OptEnum<>(key, valueClass, store);
+	public <L extends Enum<L>> OptEnum<L> optionalEnum(K key, Class<L> valueClass) {
+		return new OptEnum<>(key.name(), valueClass, store);
 	}
 
-	public <L extends Enum<L>> ReqEnum<L> requiredEnum(String key, Class<L> valueClass, L initialValue) {
-		return withInitial(new ReqEnum<>(key, valueClass, store), initialValue);
+	public <L extends Enum<L>> ReqEnum<L> requiredEnum(K key, Class<L> valueClass, L initialValue) {
+		return withInitial(new ReqEnum<>(key.name(), valueClass, store), initialValue);
 	}
 
-	public OptFile optionalFile(String key) {
-		return new OptFile(key, store);
+	public OptFile optionalFile(K key) {
+		return new OptFile(key.name(), store);
 	}
 
-	public ReqFile requiredFile(String key, File initialValue) {
-		return withInitial(new ReqFile(key, store), initialValue);
+	public ReqFile requiredFile(K key, File initialValue) {
+		return withInitial(new ReqFile(key.name(), store), initialValue);
 	}
 
 	/*

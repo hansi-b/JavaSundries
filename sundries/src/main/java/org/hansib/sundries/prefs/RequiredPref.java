@@ -27,6 +27,7 @@ package org.hansib.sundries.prefs;
 
 public interface RequiredPref<V> extends Pref<V> {
 	default V get() {
-		return str2val(store().get(key()));
+		String strVal = store().get(key());
+		return strVal != null ? str2val(strVal) : null;
 	}
 }

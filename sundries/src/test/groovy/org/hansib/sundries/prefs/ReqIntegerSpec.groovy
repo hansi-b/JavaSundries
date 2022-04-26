@@ -1,11 +1,13 @@
 package org.hansib.sundries.prefs
 
+import org.hansib.sundries.prefs.store.PrefsStore
+
 import spock.lang.Specification
 
 public class ReqIntegerSpec extends Specification {
 
-	Prefs<TestKey> store = Mock()
-	ReqInteger<TestKey> p = new ReqInteger(TestKey.integer, store)
+	PrefsStore store = Mock()
+	ReqInteger p = new ReqInteger('integer', store)
 
 	def 'defaults to initial value'(){
 
@@ -19,13 +21,13 @@ public class ReqIntegerSpec extends Specification {
 		p.set(987)
 
 		then:
-		1 * store.set(p, 987)
+		1 * store.put(p.key(), '987')
 	}
 
 	def 'can get given value'(){
 
 		given:
-		store.get(p) >> 321
+		store.get(p.key()) >> 321
 
 		expect:
 		p.get() == 321

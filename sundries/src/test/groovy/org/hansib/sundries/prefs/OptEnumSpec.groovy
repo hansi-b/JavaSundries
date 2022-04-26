@@ -1,11 +1,13 @@
 package org.hansib.sundries.prefs
 
+import org.hansib.sundries.prefs.store.PrefsStore
+
 import spock.lang.Specification
 
 public class OptEnumSpec extends Specification {
 
-	Prefs<TestKey> prefs = Mock()
-	OptEnum<TestKey, TestValues> p = new OptEnum(TestKey.enumval, TestValues.class, prefs)
+	PrefsStore store = Mock()
+	OptEnum<TestValues> p = new OptEnum('enumval', TestValues.class, store)
 
 	def 'defaults to empty value'(){
 
@@ -19,13 +21,13 @@ public class OptEnumSpec extends Specification {
 		p.set(TestValues.two)
 
 		then:
-		1 * prefs.set(p, TestValues.two)
+		1 * store.put(p.key(), 'two')
 	}
 
 	def 'can get given value'(){
 
 		given:
-		prefs.get(p) >> TestValues.one
+		store.get(p.key()) >> TestValues.one
 
 		expect:
 		p.get() == Optional.of(TestValues.one)
