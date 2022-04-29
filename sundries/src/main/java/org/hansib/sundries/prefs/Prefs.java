@@ -27,87 +27,108 @@ package org.hansib.sundries.prefs;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.EnumMap;
+import java.util.EnumSet;
 
+import org.hansib.sundries.Errors;
 import org.hansib.sundries.prefs.store.PrefsStore;
 
 public class Prefs<K extends Enum<K>> {
 
-	private final PrefsStore store;
+	public static class Builder<K extends Enum<K>> {
 
-	public Prefs(PrefsStore store) {
-		this.store = store;
+		private PrefsStore store;
+		private EnumMap<K, Pref<?>> mapped;
+		private EnumSet<K> required;
+
+		public Builder(Class<K> keysClass, PrefsStore store) {
+			this.store = store;
+			this.mapped = new EnumMap<>(keysClass);
+			this.required = EnumSet.allOf(keysClass);
+		}
+
+		public Builder<K> optionalString(K key) {
+			return mapped(key, new OptString(key.name(), store));
+		}
+
+		public Builder<K> requiredString(K key, String initialValue) {
+			return mapped(key, withInitial(new ReqString(key.name(), store), initialValue));
+		}
+
+		public Builder<K> optionalBoolean(K key) {
+			return mapped(key, new OptBoolean(key.name(), store));
+		}
+
+		public Builder<K> requiredBoolean(K key, boolean initialValue) {
+			return mapped(key, withInitial(new ReqBoolean(key.name(), store), initialValue));
+		}
+
+		public Builder<K> optionalInteger(K key) {
+			return mapped(key, new OptInteger(key.name(), store));
+		}
+
+		public Builder<K> requiredInteger(K key, int initialValue) {
+			return mapped(key, withInitial(new ReqInteger(key.name(), store), initialValue));
+		}
+
+		public Builder<K> optionalBigDecimal(K key) {
+			return mapped(key, new OptBigDecimal(key.name(), store));
+		}
+
+		public Builder<K> requiredBigDecimal(K key, BigDecimal initialValue) {
+			return mapped(key, withInitial(new ReqBigDecimal(key.name(), store), initialValue));
+		}
+
+		public <L extends Enum<L>> Builder<K> optionalEnum(K key, Class<L> valueClass) {
+			return mapped(key, new OptEnum<>(key.name(), valueClass, store));
+		}
+
+		public <L extends Enum<L>> Builder<K> requiredEnum(K key, Class<L> valueClass, L initialValue) {
+			return mapped(key, withInitial(new ReqEnum<>(key.name(), valueClass, store), initialValue));
+		}
+
+		public Builder<K> optionalFile(K key) {
+			return mapped(key, new OptFile(key.name(), store));
+		}
+
+		public Builder<K> requiredFile(K key, File initialValue) {
+			return mapped(key, withInitial(new ReqFile(key.name(), store), initialValue));
+		}
+
+		public Prefs<K> build() {
+			required.removeAll(mapped.keySet());
+			if (!required.isEmpty())
+				throw Errors.illegalState("Missing preference mapping(s) for %s", required);
+			return new Prefs<>(mapped);
+		}
+
+		/*
+		 * helpers
+		 */
+
+		private <X extends Pref<?>> Builder<K> mapped(K key, X pref) {
+			if (mapped.containsKey(key))
+				throw Errors.illegalArg("Cannot set existing preference %s to new %s (is: %s)", key, pref,
+						mapped.get(key));
+			mapped.put(key, pref);
+			return this;
+		}
+
+		private <V, P extends Pref<V>> P withInitial(P pref, V initialValue) {
+			if (!pref.store().contains(pref.key()))
+				pref.set(initialValue);
+			return pref;
+		}
 	}
 
-	/**
-	 * @return the stored String value, possibly null
-	 */
-	public String get(K key) {
-		return store.get(key.name());
+	private final EnumMap<K, Pref<?>> map;
+
+	private Prefs(EnumMap<K, Pref<?>> map) {
+		this.map = map;
 	}
 
-	public <V> void set(K key, String val) {
-		store.put(key.name(), val);
-	}
-
-	/*
-	 * factory methods
-	 */
-
-	public OptString optionalString(K key) {
-		return new OptString(key.name(), store);
-	}
-
-	public ReqString requiredString(K key, String initialValue) {
-		return withInitial(new ReqString(key.name(), store), initialValue);
-	}
-
-	public OptBoolean optionalBoolean(K key) {
-		return new OptBoolean(key.name(), store);
-	}
-
-	public ReqBoolean requiredBoolean(K key, boolean initialValue) {
-		return withInitial(new ReqBoolean(key.name(), store), initialValue);
-	}
-
-	public OptInteger optionalInteger(K key) {
-		return new OptInteger(key.name(), store);
-	}
-
-	public ReqInteger requiredInteger(K key, int initialValue) {
-		return withInitial(new ReqInteger(key.name(), store), initialValue);
-	}
-
-	public OptBigDecimal optionalBigDecimal(K key) {
-		return new OptBigDecimal(key.name(), store);
-	}
-
-	public ReqBigDecimal requiredBigDecimal(K key, BigDecimal initialValue) {
-		return withInitial(new ReqBigDecimal(key.name(), store), initialValue);
-	}
-
-	public <L extends Enum<L>> OptEnum<L> optionalEnum(K key, Class<L> valueClass) {
-		return new OptEnum<>(key.name(), valueClass, store);
-	}
-
-	public <L extends Enum<L>> ReqEnum<L> requiredEnum(K key, Class<L> valueClass, L initialValue) {
-		return withInitial(new ReqEnum<>(key.name(), valueClass, store), initialValue);
-	}
-
-	public OptFile optionalFile(K key) {
-		return new OptFile(key.name(), store);
-	}
-
-	public ReqFile requiredFile(K key, File initialValue) {
-		return withInitial(new ReqFile(key.name(), store), initialValue);
-	}
-
-	/*
-	 * helpers
-	 */
-
-	<V, P extends Pref<V>> P withInitial(P pref, V initialValue) {
-		if (!pref.store().contains(pref.key()))
-			pref.set(initialValue);
-		return pref;
+	@SuppressWarnings("unchecked")
+	public <P extends Pref<?>> P getPref(K key) {
+		return (P) map.get(key);
 	}
 }

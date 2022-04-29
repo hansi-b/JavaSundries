@@ -2,66 +2,109 @@ package org.hansib.sundries.prefs
 
 import org.hansib.sundries.prefs.store.InMemoryPrefsStore
 
-import spock.lang.Shared
 import spock.lang.Specification
 
 public class PrefsSpec extends Specification {
 
-	Prefs<TestKey> prefs = new Prefs(new InMemoryPrefsStore())
-	@Shared Prefs<TestKey> sharedPrefs = new Prefs(new InMemoryPrefsStore())
+	def 'can build with strings'() {
 
-	def 'can get initialised val'(){
-
-		when:
-		ReqInteger p = prefs.requiredInteger(TestKey.integer, 78)
-
-		then:
-		prefs.get(TestKey.integer) == '78'
-	}
-
-	def 'can get not-set val'(){
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
 
 		when:
-		OptBoolean p = prefs.optionalBoolean(TestKey.bool)
+		def prefs = builder.optionalString(TestKeys.opt).requiredString(TestKeys.req, 'abc').build()
 
 		then:
-		prefs.get(TestKey.bool) == null
+		prefs.getPref(TestKeys.opt) instanceof OptString
+		prefs.getPref(TestKeys.req) instanceof ReqString
 	}
 
-	def 'can set val'(){
+	def 'throws exception on duplicate key'() {
+
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
 
 		when:
-		ReqString p = prefs.requiredString(TestKey.str, 'abc')
-		p.set('xyz')
+		def prefs = builder.optionalString(TestKeys.opt).requiredString(TestKeys.opt, 'abc').build()
 
 		then:
-		prefs.get(TestKey.str) == 'xyz'
+		thrown IllegalArgumentException
 	}
 
-	def 'factory methods return correct opt types'() {
+	def 'throws exception on missing key'() {
 
-		expect:
-		prefs.optionalString(TestKey.str) instanceof OptString
-		prefs.optionalBoolean(TestKey.bool) instanceof OptBoolean
-		prefs.optionalInteger(TestKey.integer) instanceof OptInteger
-		prefs.optionalBigDecimal(TestKey.big) instanceof OptBigDecimal
-		prefs.optionalEnum(TestKey.enumval, TestValues.class) instanceof OptEnum
-		prefs.optionalFile(TestKey.file) instanceof OptFile
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
+
+		when:
+		def prefs = builder.optionalString(TestKeys.opt).build()
+
+		then:
+		thrown IllegalStateException
 	}
 
-	def 'factory methods return correct req types with initial values'() {
+	def 'can build with integers'() {
 
-		expect:
-		pref.getClass() == clazz
-		pref.get() == iniVal
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
 
-		where:
-		pref | clazz | iniVal
-		sharedPrefs.requiredString(TestKey.str, 'azz') | ReqString | 'azz'
-		sharedPrefs.requiredBoolean(TestKey.bool, true) | ReqBoolean | true
-		sharedPrefs.requiredInteger(TestKey.integer, 123) | ReqInteger | 123
-		sharedPrefs.requiredBigDecimal(TestKey.big, new BigDecimal(1233)) | ReqBigDecimal | new BigDecimal(1233)
-		sharedPrefs.requiredEnum(TestKey.enumval, TestValues.class, TestValues.one) | ReqEnum | TestValues.one
-		sharedPrefs.requiredFile(TestKey.file, new File('file')) | ReqFile | new File('file')
+		when:
+		def prefs = builder.optionalInteger(TestKeys.opt).requiredInteger(TestKeys.req, 24).build()
+
+		then:
+		prefs.getPref(TestKeys.opt) instanceof OptInteger
+		prefs.getPref(TestKeys.req) instanceof ReqInteger
+	}
+
+	def 'can build with bools'() {
+
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
+
+		when:
+		def prefs = builder.optionalBoolean(TestKeys.opt).requiredBoolean(TestKeys.req, true).build()
+
+		then:
+		prefs.getPref(TestKeys.opt) instanceof OptBoolean
+		prefs.getPref(TestKeys.req) instanceof ReqBoolean
+	}
+
+	def 'can build with BigDecimals'() {
+
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
+
+		when:
+		def prefs = builder.optionalBigDecimal(TestKeys.opt).requiredBigDecimal(TestKeys.req, new BigDecimal('123')).build()
+
+		then:
+		prefs.getPref(TestKeys.opt) instanceof OptBigDecimal
+		prefs.getPref(TestKeys.req) instanceof ReqBigDecimal
+	}
+
+	def 'can build with enum'() {
+
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
+
+		when:
+		def prefs = builder.optionalEnum(TestKeys.opt, TestValues.class).requiredEnum(TestKeys.req, TestValues.class, TestValues.one).build()
+
+		then:
+		prefs.getPref(TestKeys.opt) instanceof OptEnum
+		prefs.getPref(TestKeys.req) instanceof ReqEnum
+	}
+
+	def 'can build with files'() {
+
+		given:
+		def builder = new Prefs.Builder<>(TestKeys.class, new InMemoryPrefsStore())
+
+		when:
+		def prefs = builder.optionalFile(TestKeys.opt).requiredFile(TestKeys.req, new File('abc.txt')).build()
+
+		then:
+		prefs.getPref(TestKeys.opt) instanceof OptFile
+		prefs.getPref(TestKeys.req) instanceof ReqFile
 	}
 }

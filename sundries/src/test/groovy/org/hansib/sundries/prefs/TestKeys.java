@@ -25,8 +25,8 @@
  */
 package org.hansib.sundries.prefs;
 
-enum TestKey {
-	str, bool, integer, big, enumval, file 
+enum TestKeys {
+	opt, req
 }
 
 enum TestValues {
