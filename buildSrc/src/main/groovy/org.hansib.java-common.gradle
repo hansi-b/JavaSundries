@@ -19,7 +19,3 @@ java {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
 }
-
-jar {
-	from "LICENSE"
-}
