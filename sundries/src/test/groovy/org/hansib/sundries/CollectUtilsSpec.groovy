@@ -1,6 +1,5 @@
 package org.hansib.sundries;
 
-import java.util.function.BiFunction
 import java.util.function.Function
 
 import spock.lang.Specification
@@ -152,16 +151,6 @@ public class CollectUtilsSpec extends Specification {
 		expect:
 		CollectUtils.difference(s, [2, 2, 4]) == [1, 3] as SortedSet
 		s == [1, 2, 3] as SortedSet
-	}
-
-	def "map sorted map to list"() {
-		given:
-		def addit = { Integer a, Integer b ->
-			a + b
-		} as BiFunction
-
-		expect:
-		CollectUtils.mapMapToList([7: 2, 1: 2, 3 : 4] as TreeMap, addit) == [3, 7, 9]
 	}
 
 	def "simple flatten check"() {

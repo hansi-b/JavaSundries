@@ -21,7 +21,8 @@ public class ResourceLoaderSpec extends Specification {
 	def 'can get resource url'() {
 		expect:
 		URL
-		new ResourceLoader().getResourceUrl('resourceLoader_test.txt') == new URL('file:/home/cb/Projects/Java/Sundries/sundries/bin/test/resourceLoader_test.txt')
+		def resUrl = new ResourceLoader().getResourceUrl('resourceLoader_test.txt').toString()
+		resUrl.contains('file') && resUrl.contains('resourceLoader_test.txt')
 		new ResourceLoader().getResourceUrl('does_not_exist.txt') == null
 	}
 }
