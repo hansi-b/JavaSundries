@@ -1,5 +1,6 @@
 plugins {
 	id 'groovy'
+	id 'jacoco'
 }
 
 repositories {
@@ -16,5 +17,12 @@ testing {
 		test {
 			useJUnitJupiter('5.9.1')
 		}
+	}
+}
+
+jacocoTestReport {
+	reports {
+		xml.required=true
+		html.required=false
 	}
 }
