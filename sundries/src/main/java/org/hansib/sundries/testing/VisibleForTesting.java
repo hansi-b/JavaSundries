@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  * Duplicated from countless other VisibleForTesting's so I would not have to
  * drag in an extra dependency just for this.
  */
-@Target(ElementType.METHOD)
+@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR })
 @Retention(RetentionPolicy.SOURCE)
 public @interface VisibleForTesting {
 	// empty
