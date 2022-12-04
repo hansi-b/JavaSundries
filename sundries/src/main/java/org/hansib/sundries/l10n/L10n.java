@@ -35,10 +35,18 @@ public class L10n {
 	private final Domain domain;
 	private final Localiser localiser;
 
+	/**
+	 * @return an L10n for a single domain enum
+	 * 
+	 * @param formatClz the class of the domain enum for this L10n
+	 */
 	public <T extends Enum<T> & FormatKey> L10n(Class<T> formatClz) {
 		this(new Domain().with(formatClz), new Localiser());
 	}
 
+	/**
+	 * @return an L10n for the argument domain
+	 */
 	public L10n(Domain domain) {
 		this(domain, new Localiser());
 	}

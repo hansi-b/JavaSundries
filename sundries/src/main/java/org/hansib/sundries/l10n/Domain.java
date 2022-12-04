@@ -28,6 +28,8 @@ package org.hansib.sundries.l10n;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.hansib.sundries.Errors;
+
 public class Domain {
 
 	private final Set<Class<? extends Enum<?>>> mapperClasses;
@@ -37,11 +39,18 @@ public class Domain {
 	}
 
 	public <T extends Enum<T> & FormatKey> Domain with(Class<T> formatClz) {
+		if (get(formatClz.getSimpleName()) != null)
+			throw Errors.illegalArg("Duplicate mapper class name '%s': Old %s, new %s", formatClz.getSimpleName(),
+					get(formatClz.getSimpleName()), formatClz.getName());
 		mapperClasses.add(formatClz);
 		return this;
 	}
 
-	public <K extends Enum<K> & FormatKey> boolean maps(K key) {
+	<K extends Enum<K> & FormatKey> boolean maps(K key) {
 		return mapperClasses.stream().anyMatch(c -> c.isInstance(key));
+	}
+
+	Class<? extends Enum<?>> get(String name) {
+		return mapperClasses.stream().filter(c -> c.getSimpleName().equals(name)).findFirst().orElse(null);
 	}
 }

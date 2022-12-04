@@ -49,7 +49,7 @@ public class Localiser {
 		return fmt.format(args);
 	}
 
-	public <K extends FormatKey> void add(K key, String fmt) {
+	<K extends FormatKey> void add(K key, String fmt) {
 		if (formats.containsKey(key))
 			throw new IllegalArgumentException(
 					String.format("Duplicate format mapping for '%s' ('%s') in %s: new '%s', old '%s'", key,
