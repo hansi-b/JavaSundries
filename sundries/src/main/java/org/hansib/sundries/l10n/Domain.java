@@ -32,7 +32,7 @@ import org.hansib.sundries.Errors;
 
 public class Domain {
 
-	private final Set<Class<? extends Enum<?>>> mapperClasses;
+	private final Set<Class<? extends FormatKey>> mapperClasses;
 
 	public Domain() {
 		mapperClasses = new HashSet<>();
@@ -40,17 +40,19 @@ public class Domain {
 
 	public <T extends Enum<T> & FormatKey> Domain with(Class<T> formatClz) {
 		if (get(formatClz.getSimpleName()) != null)
-			throw Errors.illegalArg("Duplicate mapper class name '%s': Old %s, new %s", formatClz.getSimpleName(),
+			throw Errors.illegalArg("Duplicate mapper class name '%s': old %s, new %s", formatClz.getSimpleName(),
 					get(formatClz.getSimpleName()), formatClz.getName());
 		mapperClasses.add(formatClz);
 		return this;
 	}
 
-	<K extends Enum<K> & FormatKey> boolean maps(K key) {
-		return mapperClasses.stream().anyMatch(c -> c.isInstance(key));
+	<K extends Enum<K> & FormatKey> Class<? extends Enum<?>> get(K key) {
+		return mapperClasses.stream().filter(c -> c.isInstance(key)).findFirst().orElse(null);
 	}
 
-	Class<? extends Enum<?>> get(String name) {
-		return mapperClasses.stream().filter(c -> c.getSimpleName().equals(name)).findFirst().orElse(null);
+	@SuppressWarnings("unchecked")
+	<K extends Enum<K>> Class<K> get(String simpleName) {
+		return (Class<K>) mapperClasses.stream().filter(c -> c.getSimpleName().equals(simpleName)).findFirst()
+				.orElse(null);
 	}
 }

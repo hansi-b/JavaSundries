@@ -69,7 +69,7 @@ public class L10n {
 	}
 
 	public <K extends Enum<K> & FormatKey> L10n add(K key, String fmtString) {
-		if (!domain.maps(key))
+		if (domain.get(key) == null)
 			throw Errors.illegalArg("Domain '%s' does not map class '%s' of key '%s'", this.getClass().getSimpleName(),
 					key.getClass().getSimpleName(), key);
 		localiser.add(key, fmtString);

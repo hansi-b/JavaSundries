@@ -56,5 +56,4 @@ public class Localiser {
 							key.getClass(), this.getClass(), formats.get(key), fmt));
 		formats.put(key, new MessageFormat(fmt));
 	}
-
 }

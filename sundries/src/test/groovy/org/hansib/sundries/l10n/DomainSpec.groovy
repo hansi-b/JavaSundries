@@ -13,8 +13,8 @@ public class DomainSpec extends Specification {
 
 	def 'can determine mapping status of key'() {
 		expect:
-		new Domain().with(Buttons.class).maps(Buttons.one)
-		!new Domain().with(Buttons.class).maps(MenuItem.one)
+		new Domain().with(Buttons.class).get(Buttons.one) == Buttons
+		new Domain().with(Buttons.class).get(MenuItem.one) == null
 	}
 
 	def 'can resolve class by simple name'() {

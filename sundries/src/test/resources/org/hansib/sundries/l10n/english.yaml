@@ -1,0 +1,8 @@
+
+- MenuItems:
+    Open: "Open"
+    Exit: "Exit"
+
+- ButtonDialogues:
+    CloseOrNot: "Should we close?"
+    HideBeneathTheNextTable: "Hide under {0}"
