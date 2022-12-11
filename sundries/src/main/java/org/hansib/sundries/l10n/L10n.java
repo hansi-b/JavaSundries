@@ -25,6 +25,8 @@
  */
 package org.hansib.sundries.l10n;
 
+import java.util.EnumMap;
+
 import org.hansib.sundries.Errors;
 import org.hansib.sundries.testing.VisibleForTesting;
 
@@ -51,6 +53,10 @@ public class L10n {
 		this(domain, new Localiser());
 	}
 
+	public Domain domain() {
+		return domain;
+	}
+
 	@VisibleForTesting
 	L10n(Domain domain, Localiser Localiser) {
 		this.domain = domain;
@@ -66,6 +72,11 @@ public class L10n {
 
 	public synchronized void activate() {
 		activeLocaliser = localiser;
+	}
+
+	public <K extends Enum<K> & FormatKey> L10n addAll(EnumMap<K, String> vals) {
+		vals.entrySet().forEach(e -> add(e.getKey(), e.getValue()));
+		return this;
 	}
 
 	public <K extends Enum<K> & FormatKey> L10n add(K key, String fmtString) {

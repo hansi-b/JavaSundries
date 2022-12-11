@@ -32,7 +32,7 @@ import org.hansib.sundries.Errors;
 
 public class Domain {
 
-	private final Set<Class<? extends FormatKey>> mapperClasses;
+	private final Set<Class<? extends Enum<?>>> mapperClasses;
 
 	public Domain() {
 		mapperClasses = new HashSet<>();
@@ -51,7 +51,7 @@ public class Domain {
 	}
 
 	@SuppressWarnings("unchecked")
-	<K extends Enum<K>> Class<K> get(String simpleName) {
+	public <K extends Enum<K> & FormatKey> Class<K> get(String simpleName) {
 		return (Class<K>) mapperClasses.stream().filter(c -> c.getSimpleName().equals(simpleName)).findFirst()
 				.orElse(null);
 	}
