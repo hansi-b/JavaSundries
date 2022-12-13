@@ -1,22 +1,6 @@
 package org.hansib.sundries.l10n.yaml.errors;
 
-public final class UnknownEnumKey<C extends Enum<C>> implements L10nFormatError {
-
-	private final Class<C> enumClz;
-	private final String keyStr;
-
-	public UnknownEnumKey(Class<C> enumClz, String keyStr) {
-		this.enumClz = enumClz;
-		this.keyStr = keyStr;
-	}
-
-	public Class<C> enumClz() {
-		return enumClz;
-	}
-
-	public String keyString() {
-		return keyStr;
-	}
+public record UnknownEnumKey<C extends Enum<C>>(Class<C> enumClz, String keyStr) implements L10nFormatError {
 
 	@Override
 	public String description() {

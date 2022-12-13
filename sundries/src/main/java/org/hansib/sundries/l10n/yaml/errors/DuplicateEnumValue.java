@@ -1,28 +1,7 @@
 package org.hansib.sundries.l10n.yaml.errors;
 
-public final class DuplicateEnumValue<C extends Enum<C>> implements L10nFormatError {
-
-	private final C key;
-	private final String activeValue;
-	private final String duplicateValue;
-
-	public DuplicateEnumValue(C key, String oldValue, String newValue) {
-		this.key = key;
-		this.activeValue = oldValue;
-		this.duplicateValue = newValue;
-	}
-
-	public C key() {
-		return key;
-	}
-
-	public String activeValue() {
-		return activeValue;
-	}
-
-	public String duplicateValue() {
-		return duplicateValue;
-	}
+public record DuplicateEnumValue<C extends Enum<C>>(C key, String activeValue, String duplicateValue)
+		implements L10nFormatError {
 
 	@Override
 	public String description() {

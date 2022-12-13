@@ -1,16 +1,6 @@
 package org.hansib.sundries.l10n.yaml.errors;
 
-public final class DuplicateEnum implements L10nFormatError {
-
-	private final String enumName;
-
-	public DuplicateEnum(String enumName) {
-		this.enumName = enumName;
-	}
-	
-	public String enumName() {
-		return enumName;
-	}
+public record DuplicateEnum(String enumName) implements L10nFormatError {
 
 	@Override
 	public String description() {
