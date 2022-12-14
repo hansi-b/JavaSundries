@@ -13,6 +13,7 @@ import org.hansib.sundries.l10n.L10n;
 import org.hansib.sundries.l10n.yaml.errors.DuplicateEnum;
 import org.hansib.sundries.l10n.yaml.errors.DuplicateEnumValue;
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
+import org.hansib.sundries.l10n.yaml.errors.ParseError;
 import org.hansib.sundries.l10n.yaml.errors.UnexpectedEnumNode;
 import org.hansib.sundries.l10n.yaml.errors.UnexpectedRootNode;
 import org.hansib.sundries.l10n.yaml.errors.UnexpectedTextValueNode;
@@ -40,7 +41,13 @@ class L10nMapReader {
 			throws JsonProcessingException {
 		Objects.requireNonNull(errorHandler);
 
-		final JsonNode root = om.readTree(yaml);
+		final JsonNode root;
+		try {
+			root = om.readTree(yaml);
+		} catch (JsonProcessingException exp) {
+			errorHandler.accept(new ParseError(yaml, exp));
+			return;
+		}
 		if (!(root instanceof ObjectNode)) {
 			errorHandler.accept(new UnexpectedRootNode(root));
 			return;
@@ -48,16 +55,22 @@ class L10nMapReader {
 
 		Set<String> foundEnumNames = new HashSet<>();
 		root.fields().forEachRemaining(e -> {
-			final Class<K> enumClz = resolveEnumClz(errorHandler, foundEnumNames, e.getKey());
-			if (enumClz == null)
-				return;
-
+			String enumName = e.getKey();
 			JsonNode valueNode = e.getValue();
-			if (valueNode instanceof ObjectNode valuesNode) {
-				l10n.addAll(readEnumValues(enumClz, valuesNode, errorHandler));
-			} else
-				errorHandler.accept(new UnexpectedEnumNode(valueNode));
+			handleEnum(errorHandler, foundEnumNames, enumName, valueNode);
 		});
+	}
+
+	private <K extends Enum<K> & FormatKey> void handleEnum(Consumer<L10nFormatError> errorHandler,
+			Set<String> foundEnumNames, String enumName, JsonNode valueNode) {
+		final Class<K> enumClz = resolveEnumClz(errorHandler, foundEnumNames, enumName);
+		if (enumClz == null)
+			return;
+
+		if (valueNode instanceof ObjectNode valuesNode) {
+			l10n.addAll(readEnumValues(enumClz, valuesNode, errorHandler));
+		} else
+			errorHandler.accept(new UnexpectedEnumNode(valueNode));
 	}
 
 	private <K extends Enum<K> & FormatKey> Class<K> resolveEnumClz(Consumer<L10nFormatError> errorHandler,
@@ -82,12 +95,12 @@ class L10nMapReader {
 		final Iterator<Entry<String, JsonNode>> fields = valuesNode.fields();
 		while (fields.hasNext()) {
 			final Entry<String, JsonNode> next = fields.next();
-			final String keyStr = next.getKey();
 			final JsonNode valNode = next.getValue();
 			if (!(valNode instanceof TextNode textNode)) {
 				errorHandler.accept(new UnexpectedTextValueNode(enumClz, valNode));
 				continue;
 			}
+			final String keyStr = next.getKey();
 			try {
 				K l10nKey = Enum.valueOf(enumClz, keyStr);
 				String l10nVal = textNode.textValue();
