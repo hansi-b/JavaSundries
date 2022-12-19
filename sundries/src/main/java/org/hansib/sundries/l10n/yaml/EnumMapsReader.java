@@ -64,6 +64,11 @@ class EnumMapsReader {
 		public boolean equals(Object obj) {
 			return (obj instanceof PairList pl) && pairs.equals(pl.pairs);
 		}
+
+		@Override
+		public String toString() {
+			return String.format("PairList %s", pairs);
+		}
 	}
 
 	record EnumMapRecord(String name, PairList values) {
