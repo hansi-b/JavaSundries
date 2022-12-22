@@ -4,6 +4,8 @@ import org.hansib.sundries.l10n.yaml.EnumMapsReader.EnumMapRecord
 import org.hansib.sundries.l10n.yaml.EnumMapsReader.Pair
 import org.hansib.sundries.l10n.yaml.EnumMapsReader.PairList
 
+import com.fasterxml.jackson.core.JsonProcessingException
+
 import spock.lang.Specification
 
 public class EnumMapsReaderSpec extends Specification {
@@ -63,6 +65,21 @@ SingleItem:
 			])
 		]
 	}
+
+	def 'throws error'() {
+
+		given:
+		def reader = new EnumMapsReader()
+
+		when:
+		def res = reader.read('''
+SingleItem:
+  - xaz
+''')
+		then:
+		thrown(JsonProcessingException)
+	}
+
 	def 'can read duplicate keys'() {
 
 		given:
