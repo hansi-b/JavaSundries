@@ -13,7 +13,7 @@ import org.hansib.sundries.l10n.yaml.errors.UnknownEnumKey
 
 import spock.lang.Specification
 
-public class L10nMapReaderSpec extends Specification {
+public class L10nReaderSpec extends Specification {
 
 	enum MenuItems {
 		Open, Exit, Missing
@@ -25,7 +25,7 @@ public class L10nMapReaderSpec extends Specification {
 	def 'wrong root node creates ParseError'() {
 		given:
 		L10n l10n = Mock()
-		def lmr = new L10nMapReader(l10n)
+		def lmr = new L10nReader(l10n)
 
 		Consumer<L10nFormatError> errHandler = Mock()
 
@@ -49,7 +49,7 @@ public class L10nMapReaderSpec extends Specification {
 		given:
 		L10n l10n = Mock()
 
-		def lmr = new L10nMapReader(l10n)
+		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
 
 		when:
@@ -74,7 +74,7 @@ public class L10nMapReaderSpec extends Specification {
 		Domain domain = new Domain().with(MenuItems).with(OtherItems)
 		L10n l10n = Spy(new L10n(domain))
 
-		def lmr = new L10nMapReader(l10n)
+		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
 
 		when:
@@ -104,7 +104,7 @@ public class L10nMapReaderSpec extends Specification {
 		Domain domain = new Domain().with(MenuItems).with(OtherItems)
 		L10n l10n = Spy(new L10n(domain))
 
-		def lmr = new L10nMapReader(l10n)
+		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
 
 		when:
@@ -132,7 +132,7 @@ public class L10nMapReaderSpec extends Specification {
 		Domain domain = new Domain().with(MenuItems).with(OtherItems)
 		L10n l10n = Spy(new L10n(domain))
 
-		def lmr = new L10nMapReader(l10n)
+		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
 
 		when:
@@ -166,7 +166,7 @@ public class L10nMapReaderSpec extends Specification {
 		Domain domain = new Domain().with(MenuItems).with(OtherItems)
 		L10n l10n = Spy(new L10n(domain))
 
-		def lmr = new L10nMapReader(l10n)
+		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
 
 		when:
@@ -205,7 +205,7 @@ public class L10nMapReaderSpec extends Specification {
 		Domain domain = new Domain().with(MenuItems).with(OtherItems)
 		L10n l10n = Spy(new L10n(domain))
 
-		def lmr = new L10nMapReader(l10n)
+		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
 
 		when:

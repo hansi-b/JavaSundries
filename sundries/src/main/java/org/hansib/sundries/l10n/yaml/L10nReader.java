@@ -45,11 +45,11 @@ import org.hansib.sundries.l10n.yaml.errors.UnknownEnumKey;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-class L10nMapReader {
+class L10nReader {
 
 	private final L10n l10n;
 
-	L10nMapReader(L10n l10n) {
+	L10nReader(L10n l10n) {
 		this.l10n = l10n;
 	}
 
@@ -73,8 +73,8 @@ class L10nMapReader {
 		});
 	}
 
-	private <K extends Enum<K> & FormatKey> Class<K> resolveEnumClz(final String enumName,
-			Set<String> foundEnumNames, Consumer<L10nFormatError> errorHandler) {
+	private <K extends Enum<K> & FormatKey> Class<K> resolveEnumClz(final String enumName, Set<String> foundEnumNames,
+			Consumer<L10nFormatError> errorHandler) {
 		final Class<K> enumClz = l10n.domain().get(enumName);
 		if (enumClz == null) {
 			errorHandler.accept(new UnknownEnum(enumName));
