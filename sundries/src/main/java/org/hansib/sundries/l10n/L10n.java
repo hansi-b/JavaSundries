@@ -25,7 +25,7 @@
  */
 package org.hansib.sundries.l10n;
 
-import java.util.EnumMap;
+import java.util.Map;
 
 import org.hansib.sundries.Errors;
 import org.hansib.sundries.testing.VisibleForTesting;
@@ -74,7 +74,7 @@ public class L10n {
 		activeLocaliser = localiser;
 	}
 
-	public <K extends Enum<K> & FormatKey> L10n addAll(EnumMap<K, String> vals) {
+	public <K extends Enum<K> & FormatKey> L10n addAll(Map<K, String> vals) {
 		vals.entrySet().forEach(e -> add(e.getKey(), e.getValue()));
 		return this;
 	}

@@ -46,8 +46,9 @@ public class Domain {
 		return this;
 	}
 
-	<K extends Enum<K> & FormatKey> Class<? extends Enum<?>> get(K key) {
-		return mapperClasses.stream().filter(c -> c.isInstance(key)).findFirst().orElse(null);
+	@SuppressWarnings("unchecked")
+	<K extends Enum<K> & FormatKey> Class<K> get(K key) {
+		return (Class<K>) mapperClasses.stream().filter(c -> c.isInstance(key)).findFirst().orElse(null);
 	}
 
 	@SuppressWarnings("unchecked")
