@@ -26,8 +26,11 @@
 package org.hansib.sundries.l10n;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.hansib.sundries.Errors;
+import org.hansib.sundries.l10n.yaml.L10nReader;
+import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
 import org.hansib.sundries.testing.VisibleForTesting;
 
 public class L10n {
@@ -72,6 +75,11 @@ public class L10n {
 
 	public synchronized void activate() {
 		activeLocaliser = localiser;
+	}
+
+	public L10n load(String yaml, Consumer<L10nFormatError> errorHandler) {
+		new L10nReader(this).read(yaml, errorHandler);
+		return this;
 	}
 
 	public <K extends Enum<K> & FormatKey> L10n addAll(Map<K, String> vals) {

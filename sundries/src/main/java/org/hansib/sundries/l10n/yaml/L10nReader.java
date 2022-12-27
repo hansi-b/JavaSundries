@@ -45,15 +45,15 @@ import org.hansib.sundries.l10n.yaml.errors.UnknownEnumKey;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-class L10nReader {
+public class L10nReader {
 
 	private final L10n l10n;
 
-	L10nReader(L10n l10n) {
+	public L10nReader(L10n l10n) {
 		this.l10n = l10n;
 	}
 
-	<K extends Enum<K> & FormatKey> void read(String yaml, Consumer<L10nFormatError> errorHandler) {
+	public <K extends Enum<K> & FormatKey> void read(String yaml, Consumer<L10nFormatError> errorHandler) {
 		Objects.requireNonNull(errorHandler);
 
 		List<EnumMapRecord> records;
