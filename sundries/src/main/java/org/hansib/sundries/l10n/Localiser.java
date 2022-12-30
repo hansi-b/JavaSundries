@@ -49,8 +49,12 @@ public class Localiser {
 		return fmt.format(args);
 	}
 
+	<K extends FormatKey> boolean contains(K key) {
+		return formats.containsKey(key);
+	}
+
 	<K extends FormatKey> void add(K key, String fmt) {
-		if (formats.containsKey(key))
+		if (contains(key))
 			throw new IllegalArgumentException(
 					String.format("Duplicate format mapping for '%s' ('%s') in %s: new '%s', old '%s'", key,
 							key.getClass(), this.getClass(), formats.get(key), fmt));
