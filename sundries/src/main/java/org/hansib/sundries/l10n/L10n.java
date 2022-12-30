@@ -56,14 +56,18 @@ public class L10n {
 		this(domain, new Localiser());
 	}
 
-	public Domain domain() {
-		return domain;
-	}
-
 	@VisibleForTesting
 	L10n(Domain domain, Localiser Localiser) {
 		this.domain = domain;
 		this.localiser = Localiser;
+	}
+
+	public Domain domain() {
+		return domain;
+	}
+
+	Localiser localiser() {
+		return localiser;
 	}
 
 	static synchronized Localiser active() {
