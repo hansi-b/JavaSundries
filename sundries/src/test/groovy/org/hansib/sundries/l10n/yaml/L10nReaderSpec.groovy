@@ -124,6 +124,7 @@ public class L10nReaderSpec extends Specification {
 		1 * errHandler.accept(_) >> { L10nFormatError err ->
 			assert err instanceof UnknownEnum
 			assert ((UnknownEnum)err).enumName == 'BlubberItems'
+			err.description() == "Unknown enum name 'BlubberItems'"
 		}
 	}
 
@@ -158,6 +159,7 @@ public class L10nReaderSpec extends Specification {
 		1 * errHandler.accept(_) >> { L10nFormatError err ->
 			assert err instanceof DuplicateEnum
 			assert ((DuplicateEnum)err).enumName == 'MenuItems'
+			err.description() == "Duplicate enum name 'MenuItems'"
 		}
 	}
 
@@ -192,11 +194,13 @@ public class L10nReaderSpec extends Specification {
 			assert err instanceof UnknownEnumKey
 			assert ((UnknownEnumKey)err).enumClz == MenuItems
 			assert ((UnknownEnumKey)err).keyStr == 'Wired'
+			err.description() == "Unknown key 'Wired' for enum MenuItems"
 		}
 		1 * errHandler.accept(_) >> { L10nFormatError err ->
 			assert err instanceof UnknownEnumKey
 			assert ((UnknownEnumKey)err).enumClz == OtherItems
 			assert ((UnknownEnumKey)err).keyStr == 'Delta'
+			err.description() == "Unknown key 'Delta' for enum OtherItems"
 		}
 	}
 
@@ -231,6 +235,7 @@ public class L10nReaderSpec extends Specification {
 			assert ((DuplicateEnumValue)err).key == MenuItems.Exit
 			assert ((DuplicateEnumValue)err).activeValue == 'Sortir 1'
 			assert ((DuplicateEnumValue)err).duplicateValue == 'Sortir 2'
+			err.description() == "Ignoring duplicate value 'Sortir 2' for key Exit of enum MenuItems (keeping 'Sortir 1')"
 		}
 	}
 }
