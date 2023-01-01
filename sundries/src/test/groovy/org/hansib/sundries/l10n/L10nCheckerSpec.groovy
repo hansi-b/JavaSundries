@@ -3,6 +3,7 @@ package org.hansib.sundries.l10n;
 import java.util.function.Consumer
 
 import org.hansib.sundries.l10n.L10nChecker.MissingKeys
+import org.hansib.sundries.l10n.L10nChecker.MissingKeysHandleMode
 
 import spock.lang.Specification
 
@@ -28,13 +29,31 @@ public class L10nCheckerSpec extends Specification {
 		Consumer<MissingKeys<?>> handler = Mock()
 
 		when:
-		lmc.checkCompleteness(handler)
+		lmc.checkCompleteness(handler, MissingKeysHandleMode.AlsoWithoutMissingKeys)
 
 		then:
 		1 * handler.accept(_) >> { MissingKeys<?> m ->
 			assert m.enumClz == MenuItems
 			assert m.missing.isEmpty()
 		}
+	}
+
+	def 'can skip empty missing keys'() {
+
+		given:
+		Domain domain = new Domain().with(MenuItems.class)
+		L10n l10n = new L10n(domain)
+		def lmc = new L10nChecker(l10n)
+		l10n.add(MenuItems.Open, "Open")
+		l10n.add(MenuItems.Close, "Close")
+
+		Consumer<MissingKeys<?>> handler = Mock()
+
+		when:
+		lmc.checkCompleteness(handler, MissingKeysHandleMode.OnlyWithMissingKeys)
+
+		then:
+		0 * handler.accept(_)
 	}
 
 	def 'can get keys from multiple enums'() {
@@ -49,7 +68,7 @@ public class L10nCheckerSpec extends Specification {
 		Consumer<MissingKeys<?>> handler = Mock()
 
 		when:
-		lmc.checkCompleteness(handler)
+		lmc.checkCompleteness(handler, MissingKeysHandleMode.OnlyWithMissingKeys)
 
 		then:
 		1 * handler.accept(_) >> { MissingKeys<?> m ->

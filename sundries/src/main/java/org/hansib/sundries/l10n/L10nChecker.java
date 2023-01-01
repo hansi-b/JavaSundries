@@ -37,26 +37,33 @@ public class L10nChecker {
 		}
 	}
 
+	public enum MissingKeysHandleMode {
+		OnlyWithMissingKeys, AlsoWithoutMissingKeys
+	}
+
 	private final L10n l10n;
 
 	public L10nChecker(L10n l10n) {
 		this.l10n = l10n;
 	}
 
-	public <K extends Enum<K> & FormatKey> void checkCompleteness(Consumer<MissingKeys<K>> handler) {
+	public <K extends Enum<K> & FormatKey> void checkCompleteness(Consumer<MissingKeys<K>> handler,
+			MissingKeysHandleMode handleMode) {
 		Domain domain = l10n.domain();
 		for (String s : domain.simpleNames()) {
 			Class<K> enumClz = domain.get(s);
-			checkEnumClz(enumClz, handler);
+			checkEnumClz(enumClz, handler, handleMode);
 		}
 	}
 
-	private <K extends Enum<K> & FormatKey> void checkEnumClz(Class<K> enumClz, Consumer<MissingKeys<K>> handler) {
+	private <K extends Enum<K> & FormatKey> void checkEnumClz(Class<K> enumClz, Consumer<MissingKeys<K>> handler,
+			MissingKeysHandleMode handleMode) {
 		EnumSet<K> missing = EnumSet.allOf(enumClz);
 		for (K key : EnumSet.allOf(enumClz)) {
 			if (l10n.localiser().contains(key))
 				missing.remove(key);
 		}
-		handler.accept(new MissingKeys<>(enumClz, missing));
+		if (!missing.isEmpty() || handleMode == MissingKeysHandleMode.AlsoWithoutMissingKeys)
+			handler.accept(new MissingKeys<>(enumClz, missing));
 	}
 }
