@@ -16,6 +16,16 @@ public class LocaliserSpec extends Specification {
 		l.fmt(Buttons.one) == 'hello world'
 	}
 
+	def 'duplicate addition throws exception'() {
+		when:
+		def l = new Localiser()
+		l.add(Buttons.one, 'hi {1}')
+		l.add(Buttons.one, 'hello world')
+		then:
+		IllegalArgumentException ex = thrown()
+		ex.message == "Duplicate format mapping for 'one' ('Buttons') in class org.hansib.sundries.l10n.Localiser: new 'hi {1}', old 'hello world'"
+	}
+
 	def 'can use message format replacement'() {
 		when:
 		def l = new Localiser()

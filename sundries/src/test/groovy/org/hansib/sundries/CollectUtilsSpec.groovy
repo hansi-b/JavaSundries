@@ -1,5 +1,6 @@
 package org.hansib.sundries;
 
+import java.util.function.BiPredicate
 import java.util.function.Function
 
 import spock.lang.Specification
@@ -174,5 +175,13 @@ public class CollectUtilsSpec extends Specification {
 
 		expect:
 		CollectUtils.invertMap([7: 2, 1: 2, 3 : 4], newSet, new HashMap()) == [2:[1, 7] as Set, 4:[3] as Set]
+	}
+
+	def "filterMap"() {
+		given:
+		def keepEvenNumbers = { k, v ->	(k + v) % 2 == 0 } as BiPredicate
+
+		expect:
+		CollectUtils.filterMap([7: 7, 2: 2, 3 : 4], keepEvenNumbers, () -> new TreeMap()) == [2:2, 7:7]
 	}
 }
