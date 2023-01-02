@@ -26,37 +26,15 @@
 package org.hansib.sundries.l10n;
 
 import java.util.EnumSet;
-import java.util.function.Consumer;
+import java.util.Set;
 
-public class L10nChecker {
-
-	public enum MissingKeysHandleMode {
-		OnlyWithMissingKeys, AlsoWithoutMissingKeys
+public record MissingKeys<K extends Enum<K>> (Class<K> enumClz, Set<K> missing) {
+	public MissingKeys {
+		missing = Set.copyOf(missing);
 	}
 
-	private final L10n l10n;
-
-	public L10nChecker(L10n l10n) {
-		this.l10n = l10n;
-	}
-
-	public <K extends Enum<K> & FormatKey> void checkCompleteness(Consumer<MissingKeys<K>> handler,
-			MissingKeysHandleMode handleMode) {
-		Domain domain = l10n.domain();
-		for (String s : domain.simpleNames()) {
-			Class<K> enumClz = domain.get(s);
-			checkEnumClz(enumClz, handler, handleMode);
-		}
-	}
-
-	private <K extends Enum<K> & FormatKey> void checkEnumClz(Class<K> enumClz, Consumer<MissingKeys<K>> handler,
-			MissingKeysHandleMode handleMode) {
-		EnumSet<K> missing = EnumSet.allOf(enumClz);
-		for (K key : EnumSet.allOf(enumClz)) {
-			if (l10n.localiser().contains(key))
-				missing.remove(key);
-		}
-		if (!missing.isEmpty() || handleMode == MissingKeysHandleMode.AlsoWithoutMissingKeys)
-			handler.accept(new MissingKeys<>(enumClz, missing));
+	public String description() {
+		return String.format("%s:%n\t%s%n", enumClz.getSimpleName(), //
+				String.join("\n\t", EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
 	}
 }

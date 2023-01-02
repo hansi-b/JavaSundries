@@ -2,7 +2,6 @@ package org.hansib.sundries.l10n;
 
 import java.util.function.Consumer
 
-import org.hansib.sundries.l10n.L10nChecker.MissingKeys
 import org.hansib.sundries.l10n.L10nChecker.MissingKeysHandleMode
 
 import spock.lang.Specification
