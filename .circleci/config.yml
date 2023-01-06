@@ -9,7 +9,7 @@ orbs:
 workflows:
   check_and_coverage:
     jobs:
-      - build:
+      - build
 
 jobs:
   build:
