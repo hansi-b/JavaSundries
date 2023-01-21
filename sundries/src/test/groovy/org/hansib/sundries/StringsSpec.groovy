@@ -28,4 +28,12 @@ public class StringsSpec extends Specification {
 		then:
 		thrown ArrayIndexOutOfBoundsException
 	}
+
+	def 'can normalize EOL to system line break'() {
+		given:
+		def eol = System.lineSeparator()
+
+		expect:
+		Strings.toSystemEol('''abc\ndef\n''') == """abc${eol}def${eol}"""
+	}
 }

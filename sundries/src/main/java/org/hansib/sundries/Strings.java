@@ -45,4 +45,17 @@ public class Strings {
 	public static String join(String joiner, String[] arr, int beginIncl, int endExcl) {
 		return String.join(joiner, IntStream.range(beginIncl, endExcl).boxed().map(i -> arr[i]).toList());
 	}
+
+	/**
+	 * Canonicalises \n in the argument string to the system line separator. Needed,
+	 * e.g., for Groovy multilines which always use \n. NB: Will also replace \n
+	 * when present within a system line separator, so only use when you know your
+	 * string is not already canonicalised.
+	 * 
+	 * @return the argument string with all occurrences of \n replaced by the System
+	 *         line separator
+	 */
+	public static String toSystemEol(String str) {
+		return str.replace("\n", System.lineSeparator());
+	}
 }
