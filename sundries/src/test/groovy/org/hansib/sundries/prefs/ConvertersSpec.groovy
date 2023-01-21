@@ -85,7 +85,7 @@ public class ConvertersSpec extends Specification {
 		c.str2val('c:/abc') == new File('c:/abc')
 		c.str2val('../abc') == new File('../abc')
 
-		c.val2str(new File('../xyz')) == '../xyz'
-		c.val2str(new File('c:/xyz')) == 'c:/xyz'
+		c.val2str(new File('../xyz')) == "..${File.separator}xyz"
+		c.val2str(new File('c:/xyz')) == "c:${File.separator}xyz"
 	}
 }
