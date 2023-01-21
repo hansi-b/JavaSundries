@@ -35,6 +35,6 @@ public record MissingKeys<K extends Enum<K>> (Class<K> enumClz, Set<K> missing) 
 
 	public String description() {
 		return String.format("%s:%n\t%s%n", enumClz.getSimpleName(), //
-				String.join("\n\t", EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
+				String.join(String.format("%n\t"), EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
 	}
 }

@@ -1,5 +1,7 @@
 package org.hansib.sundries.l10n;
 
+import org.hansib.sundries.Strings
+
 import spock.lang.Specification
 
 public class MissingKeysSpec extends Specification {
@@ -15,10 +17,10 @@ public class MissingKeysSpec extends Specification {
 				Blubb.onceAgain,
 				Blubb.lastOne))
 		then:
-		mk.description() == '''Blubb:
+		mk.description() == Strings.toSystemEol('''Blubb:
 	onceAgain
 	actuallyNever
 	lastOne
-'''
+''')
 	}
 }
