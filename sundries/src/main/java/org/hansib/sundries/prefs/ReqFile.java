@@ -3,7 +3,7 @@
  *
  * for JavaSundries (https://github.com/hansi-b/JavaSundries)
  *
- * Copyright (c) 2023 Hans Bering
+ * Copyright (c) 2022-2023 Hans Bering
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
