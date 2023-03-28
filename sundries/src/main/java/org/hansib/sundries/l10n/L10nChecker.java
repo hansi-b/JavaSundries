@@ -30,6 +30,11 @@ import java.util.function.Consumer;
 
 public class L10nChecker {
 
+	/**
+	 * Whether to call the missing keys handler only when at least one missing key
+	 * has been found, or to call it also when no missing keys have been found (with
+	 * an empty set of missing keys).
+	 */
 	public enum MissingKeysHandleMode {
 		OnlyWithMissingKeys, AlsoWithoutMissingKeys
 	}
