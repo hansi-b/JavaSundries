@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.hansib.sundries.Errors;
+
 public class Localiser {
 
 	private final Map<FormatKey, MessageFormat> formats;
@@ -55,9 +57,8 @@ public class Localiser {
 
 	<K extends FormatKey> void add(K key, String fmt) {
 		if (contains(key))
-			throw new IllegalArgumentException(
-					String.format("Duplicate format mapping for '%s' ('%s') in %s: new '%s', old '%s'", key,
-							key.getClass().getSimpleName(), this.getClass(), formats.get(key).toPattern(), fmt));
+			throw Errors.illegalArg("Duplicate format mapping for '%s' ('%s') in %s: new '%s', old '%s'", key,
+					key.getClass().getSimpleName(), this.getClass(), formats.get(key).toPattern(), fmt);
 		formats.put(key, new MessageFormat(fmt));
 	}
 }
