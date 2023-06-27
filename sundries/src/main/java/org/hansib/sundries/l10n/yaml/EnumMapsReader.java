@@ -67,7 +67,7 @@ class EnumMapsReader {
 
 		@Override
 		public String toString() {
-			return String.format("PairList %s", pairs);
+			return "PairList %s".formatted(pairs);
 		}
 	}
 

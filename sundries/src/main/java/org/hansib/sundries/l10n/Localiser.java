@@ -47,7 +47,7 @@ public class Localiser {
 	public String fmt(FormatKey key, Object... args) {
 		MessageFormat fmt = formats.get(key);
 		if (fmt == null)
-			return String.format("%s%s", key, Arrays.toString(args));
+			return "%s%s".formatted(key, Arrays.toString(args));
 		return fmt.format(args);
 	}
 

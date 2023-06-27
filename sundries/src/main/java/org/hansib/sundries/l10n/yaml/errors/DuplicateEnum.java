@@ -29,6 +29,6 @@ public record DuplicateEnum(String enumName) implements L10nFormatError {
 
 	@Override
 	public String description() {
-		return String.format("Duplicate enum name '%s'", enumName);
+		return "Duplicate enum name '%s'".formatted(enumName);
 	}
 }

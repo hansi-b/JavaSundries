@@ -29,6 +29,6 @@ public record UnknownEnum(String enumName) implements L10nFormatError {
 
 	@Override
 	public String description() {
-		return String.format("Unknown enum name '%s'", enumName);
+		return "Unknown enum name '%s'".formatted(enumName);
 	}
 }

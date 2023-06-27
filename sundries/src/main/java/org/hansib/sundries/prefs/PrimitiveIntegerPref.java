@@ -35,7 +35,7 @@ public interface PrimitiveIntegerPref extends Pref<Integer> {
 	default int intValue() {
 		String s = store().get(key());
 		if (s == null)
-			throw new NullPointerException(String.format("Pref %s is not set", key()));
+			throw new NullPointerException("Pref %s is not set".formatted(key()));
 		return Integer.parseInt(s);
 	}
 }

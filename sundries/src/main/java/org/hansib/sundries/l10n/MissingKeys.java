@@ -28,13 +28,13 @@ package org.hansib.sundries.l10n;
 import java.util.EnumSet;
 import java.util.Set;
 
-public record MissingKeys<K extends Enum<K>> (Class<K> enumClz, Set<K> missing) {
+public record MissingKeys<K extends Enum<K>>(Class<K> enumClz, Set<K> missing) {
 	public MissingKeys {
 		missing = Set.copyOf(missing);
 	}
 
 	public String description() {
-		return String.format("%s:%n\t%s%n", enumClz.getSimpleName(), //
-				String.join(String.format("%n\t"), EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
+		return "%s:%n\t%s%n".formatted(enumClz.getSimpleName(), //
+				String.join("%n\t".formatted(), EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
 	}
 }

@@ -32,18 +32,18 @@ public class Errors {
 	}
 
 	public static IllegalArgumentException illegalArg(final String fmt, final Object... args) {
-		return new IllegalArgumentException(String.format(fmt, args));
+		return new IllegalArgumentException(fmt.formatted(args));
 	}
 
 	public static IllegalStateException illegalState(final String fmt, final Object... args) {
-		return new IllegalStateException(String.format(fmt, args));
+		return new IllegalStateException(fmt.formatted(args));
 	}
 
 	public static IllegalStateException illegalState(final Throwable cause, final String fmt, final Object... args) {
-		return new IllegalStateException(String.format(fmt, args), cause);
+		return new IllegalStateException(fmt.formatted(args), cause);
 	}
 
 	public static NullPointerException nullPointer(final String fmt, final Object... args) {
-		return new NullPointerException(String.format(fmt, args));
+		return new NullPointerException(fmt.formatted(args));
 	}
 }

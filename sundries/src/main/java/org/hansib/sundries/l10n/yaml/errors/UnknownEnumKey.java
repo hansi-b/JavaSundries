@@ -29,6 +29,6 @@ public record UnknownEnumKey<C extends Enum<C>>(Class<C> enumClz, String keyStr)
 
 	@Override
 	public String description() {
-		return String.format("Unknown key '%s' for enum %s", keyStr, enumClz.getName());
+		return "Unknown key '%s' for enum %s".formatted(keyStr, enumClz.getName());
 	}
 }

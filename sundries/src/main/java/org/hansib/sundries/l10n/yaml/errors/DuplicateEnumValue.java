@@ -30,7 +30,7 @@ public record DuplicateEnumValue<C extends Enum<C>>(C key, String activeValue, S
 
 	@Override
 	public String description() {
-		return String.format("Ignoring duplicate value '%s' for key %s of enum %s (keeping '%s')", duplicateValue, key,
+		return "Ignoring duplicate value '%s' for key %s of enum %s (keeping '%s')".formatted(duplicateValue, key,
 				key.getDeclaringClass().getSimpleName(), activeValue);
 	}
 }

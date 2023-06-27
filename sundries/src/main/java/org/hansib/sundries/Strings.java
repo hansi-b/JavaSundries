@@ -39,7 +39,7 @@ public class Strings {
 	 *         [className]@[objectHexHash](id)
 	 */
 	public static <T> String idStr(T o, String id) {
-		return String.format("%s@%08X(%s)", o.getClass().getSimpleName(), ((Object) o).hashCode(), id);
+		return "%s@%08X(%s)".formatted(o.getClass().getSimpleName(), ((Object) o).hashCode(), id);
 	}
 
 	public static String join(String joiner, String[] arr, int beginIncl, int endExcl) {

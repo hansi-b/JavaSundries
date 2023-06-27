@@ -34,6 +34,6 @@ public record ParseError(String input, JsonProcessingException error) implements
 
 	@Override
 	public String description() {
-		return String.format("Exception while parsing input: %s", error);
+		return "Exception while parsing input: %s".formatted(error);
 	}
 }
