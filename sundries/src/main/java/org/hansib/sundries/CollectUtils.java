@@ -96,8 +96,6 @@ public class CollectUtils {
 			return Stream.empty();
 
 		if (count == elements.size()) {
-			final SortedSet<T> res = new TreeSet<>(elements.comparator());
-			res.addAll(elements);
 			return Stream.of(new TreeSet<>(elements));
 		}
 
