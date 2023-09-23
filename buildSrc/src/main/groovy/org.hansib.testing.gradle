@@ -9,7 +9,7 @@ repositories {
 
 dependencies {
 	testImplementation 'org.objenesis:objenesis:3.3'
-	testImplementation 'net.bytebuddy:byte-buddy:1.14.6'
+	testImplementation 'net.bytebuddy:byte-buddy:1.14.8'
 	testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
 }
 
@@ -19,6 +19,9 @@ testing {
 			useJUnitJupiter('5.10.0')
 		}
 	}
+}
+jacoco {
+	toolVersion = "0.8.10"
 }
 
 jacocoTestReport {
