@@ -1,8 +1,5 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
 version: 2.1
+
 orbs:
   codecov: codecov/codecov@3.2.4
 
@@ -25,18 +22,21 @@ jobs:
     steps:
       - checkout
 
-      # Download and cache dependencies
+      - run:
+          name: Generate cache key
+          command: find -type f -name "*.gradle" | sort | xargs md5sum > "/tmp/deps_checksums.txt"
+
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "buildSrc/build.gradle" }}-{{ checksum "sundries/build.gradle" }}
-            - v1-dependencies-
+            - v01-deps-{{ checksum "/tmp/deps_checksums.txt" }}
+            - v01-deps-
 
       - run: gradle dependencies
 
       - save_cache:
+          key: v01-deps-{{ checksum "/tmp/deps_checksums.txt" }}
           paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "buildSrc/build.gradle" }}-{{ checksum "sundries/build.gradle" }}
+            - ~/.gradle/
 
       - run:
           gradle check jacocoTestReport
