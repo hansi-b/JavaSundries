@@ -2,9 +2,20 @@ JavaSundries
 ====
 
 .. image:: https://circleci.com/gh/hansi-b/JavaSundries.svg?style=svg
-    :target: https://circleci.com/gh/hansi-b/JavaSundries
+  :target: https://circleci.com/gh/hansi-b/JavaSundries
+  :alt: CircleCI
 
 .. image:: https://codecov.io/gh/hansi-b/javasundries/branch/main/graph/badge.svg
-   :target: https://codecov.io/gh/hansi-b/javasundries
+  :target: https://codecov.io/gh/hansi-b/javasundries
+  :alt: Codecov
 
-Basics I often need in other projects
+Simple stuff I often need in other projects.
+
+Release Log
+----
+
+0.5.0 (2023-10-10)
+____
+
+* added localisation (`org.hansib.sundries.l10n <https://github.com/hansi-b/JavaSundries/tree/main/sundries/src/main/java/org/hansib/sundries/l10n>`_)
+* updated various dependencies (starting with Java + Gradle)
