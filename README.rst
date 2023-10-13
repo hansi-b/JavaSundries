@@ -1,9 +1,9 @@
 JavaSundries
 ====
 
-.. image:: https://circleci.com/gh/hansi-b/JavaSundries.svg?style=svg
-  :target: https://circleci.com/gh/hansi-b/JavaSundries
-  :alt: CircleCI
+.. image:: https://github.com/hansi-b/JavaSundries/actions/workflows/gradle.yml/badge.svg
+    :target: https://github.com/hansi-b/JavaSundries/actions/workflows/gradle.yml
+    :alt: Github Workflow
 
 .. image:: https://codecov.io/gh/hansi-b/javasundries/branch/main/graph/badge.svg
   :target: https://codecov.io/gh/hansi-b/javasundries
@@ -19,3 +19,4 @@ ____
 
 * added localisation (`org.hansib.sundries.l10n <https://github.com/hansi-b/JavaSundries/tree/main/sundries/src/main/java/org/hansib/sundries/l10n>`_)
 * updated various dependencies (starting with Java + Gradle)
+
