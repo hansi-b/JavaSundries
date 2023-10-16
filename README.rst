@@ -15,7 +15,7 @@ Release Log
 ----
 
 0.5.0 (2023-10-10)
-____
+~~~~
 
 * added localisation (`org.hansib.sundries.l10n <https://github.com/hansi-b/JavaSundries/tree/main/sundries/src/main/java/org/hansib/sundries/l10n>`_)
 * updated various dependencies (starting with Java + Gradle)
