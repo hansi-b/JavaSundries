@@ -34,8 +34,8 @@ public class LocaliserSpec extends Specification {
 		l.fmt(Buttons.one, 27, 'mars') == 'hello mars - 27'
 	}
 
-	def 'without mapping default to key + args'() {
+	def 'without mapping default to class + key + args'() {
 		expect:
-		new Localiser().fmt(Buttons.one, 27, 'mars') == 'one[27, mars]'
+		new Localiser().fmt(Buttons.one, 27, 'mars') == 'Buttons:one[27, mars]'
 	}
 }

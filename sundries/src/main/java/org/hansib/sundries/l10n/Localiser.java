@@ -32,11 +32,15 @@ import java.util.Map;
 
 import org.hansib.sundries.Errors;
 
-public class Localiser {
+/**
+ * A mapping of format keys to their respective message formats. Ensures
+ * constraints such as uniqueness of keys.
+ */
+class Localiser {
 
 	private final Map<FormatKey, MessageFormat> formats;
 
-	protected Localiser() {
+	Localiser() {
 		formats = new HashMap<>();
 	}
 
@@ -44,10 +48,10 @@ public class Localiser {
 	 * Formats the argument key with the (optional arguments) according to the rules
 	 * of {@link MessageFormat}
 	 */
-	public String fmt(FormatKey key, Object... args) {
+	String fmt(FormatKey key, Object... args) {
 		MessageFormat fmt = formats.get(key);
 		if (fmt == null)
-			return "%s%s".formatted(key, Arrays.toString(args));
+			return "%s:%s%s".formatted(key.getClass().getSimpleName(), key, Arrays.toString(args));
 		return fmt.format(args);
 	}
 
