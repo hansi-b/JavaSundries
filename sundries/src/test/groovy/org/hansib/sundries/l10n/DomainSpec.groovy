@@ -13,23 +13,23 @@ public class DomainSpec extends Specification {
 
 	def 'can determine mapping status of key'() {
 		expect:
-		new Domain().with(Buttons.class).get(Buttons.one) == Buttons
-		new Domain().with(Buttons.class).get(MenuItem.one) == null
+		new Domain().add(Buttons.class).contains(Buttons.one) == true
+		new Domain().add(Buttons.class).contains(MenuItem.one) == false
 	}
 
 	def 'can resolve class by simple name'() {
 		when:
-		def d = new Domain().with(MenuItem.class)
+		def d = new Domain().add(MenuItem.class)
 		then:
-		d.get("MenuItem") == MenuItem.class
-		d.get("OtherItem") == null
+		d.getKeysClass('MenuItem') == MenuItem.class
+		d.getKeysClass('OtherItem') == null
 	}
 
 	def 'adding different class with same simple name throws exception'() {
 		given:
-		def d = new Domain().with(MenuItem.class)
+		def d = new Domain().add(MenuItem.class)
 		when:
-		d.with(org.hansib.sundries.l10n.MenuItem)
+		d.add(org.hansib.sundries.l10n.MenuItem)
 		then:
 		thrown IllegalArgumentException
 	}

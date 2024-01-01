@@ -36,25 +36,25 @@ public class Domain {
 
 	private final Map<String, Class<? extends Enum<?>>> enumClzBySimpleName;
 
-	public Domain() {
+	Domain() {
 		enumClzBySimpleName = new LinkedHashMap<>();
 	}
 
-	public <T extends Enum<T> & FormatKey> Domain with(Class<T> formatClz) {
+	<T extends Enum<T> & FormatKey> Domain add(Class<T> formatClz) {
 		String simpleName = formatClz.getSimpleName();
-		if (get(simpleName) != null)
-			throw Errors.illegalArg("Duplicate mapper class name '%s': old %s, new %s", simpleName, get(simpleName),
-					formatClz.getName());
+		if (getKeysClass(simpleName) != null)
+			throw Errors.illegalArg("Duplicate mapper class name '%s': old %s, new %s", simpleName,
+					getKeysClass(simpleName), formatClz.getName());
 		enumClzBySimpleName.put(simpleName, formatClz);
 		return this;
 	}
 
-	<K extends Enum<K> & FormatKey> Class<K> get(K key) {
-		return get(key.getClass().getSimpleName());
+	<K extends Enum<K> & FormatKey> boolean contains(K key) {
+		return enumClzBySimpleName.values().contains(key.getClass());
 	}
 
 	@SuppressWarnings("unchecked")
-	public <K extends Enum<K> & FormatKey> Class<K> get(String simpleName) {
+	public <K extends Enum<K> & FormatKey> Class<K> getKeysClass(String simpleName) {
 		return (Class<K>) enumClzBySimpleName.getOrDefault(simpleName, null);
 	}
 

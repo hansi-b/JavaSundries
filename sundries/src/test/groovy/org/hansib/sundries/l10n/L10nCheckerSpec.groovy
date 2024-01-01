@@ -19,12 +19,11 @@ public class L10nCheckerSpec extends Specification {
 	def 'can get empty missing keys'() {
 
 		given:
-		Domain domain = new Domain().with(MenuItems.class)
-		L10n l10n = new L10n(domain)
-		def lmc = new L10nChecker(l10n)
+		L10n l10n = new L10n().with(MenuItems.class)
 		l10n.add(MenuItems.Open, "Open")
 		l10n.add(MenuItems.Close, "Close")
 
+		def lmc = new L10nChecker(l10n)
 		Consumer<MissingKeys<?>> handler = Mock()
 
 		when:
@@ -40,12 +39,11 @@ public class L10nCheckerSpec extends Specification {
 	def 'can skip empty missing keys'() {
 
 		given:
-		Domain domain = new Domain().with(MenuItems.class)
-		L10n l10n = new L10n(domain)
-		def lmc = new L10nChecker(l10n)
+		L10n l10n = new L10n().with(MenuItems.class)
 		l10n.add(MenuItems.Open, "Open")
 		l10n.add(MenuItems.Close, "Close")
 
+		def lmc = new L10nChecker(l10n)
 		Consumer<MissingKeys<?>> handler = Mock()
 
 		when:
@@ -58,8 +56,7 @@ public class L10nCheckerSpec extends Specification {
 	def 'can get keys from multiple enums'() {
 
 		given:
-		Domain domain = new Domain().with(MenuItems.class).with(OtherItems.class)
-		L10n l10n = new L10n(domain)
+		L10n l10n = new L10n().with(MenuItems.class, OtherItems.class)
 		def lmc = new L10nChecker(l10n)
 		l10n.add(MenuItems.Close, "Close")
 		l10n.add(OtherItems.Gamma, "Gamma")

@@ -2,7 +2,6 @@ package org.hansib.sundries.l10n.yaml
 
 import java.util.function.Consumer
 
-import org.hansib.sundries.l10n.Domain
 import org.hansib.sundries.l10n.L10n
 import org.hansib.sundries.l10n.yaml.errors.DuplicateEnum
 import org.hansib.sundries.l10n.yaml.errors.DuplicateEnumValue
@@ -71,8 +70,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'can read multiple enums'() {
 		given:
-		Domain domain = new Domain().with(MenuItems).with(OtherItems)
-		L10n l10n = Spy(new L10n(domain))
+		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -101,8 +99,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'unknown enum creates error, and reader continues'() {
 		given:
-		Domain domain = new Domain().with(MenuItems).with(OtherItems)
-		L10n l10n = Spy(new L10n(domain))
+		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -130,8 +127,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'duplicate enum creates error, is ignored, and reader continues'() {
 		given:
-		Domain domain = new Domain().with(MenuItems).with(OtherItems)
-		L10n l10n = Spy(new L10n(domain))
+		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -165,8 +161,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'unknown enum key creates error, is ignored, and reader continues'() {
 		given:
-		Domain domain = new Domain().with(MenuItems).with(OtherItems)
-		L10n l10n = Spy(new L10n(domain))
+		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -206,8 +201,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'duplicate enum value creates error, is ignored, and reader continues'() {
 		given:
-		Domain domain = new Domain().with(MenuItems).with(OtherItems)
-		L10n l10n = Spy(new L10n(domain))
+		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()

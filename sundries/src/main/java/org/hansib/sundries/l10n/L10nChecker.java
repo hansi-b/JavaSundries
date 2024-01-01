@@ -49,7 +49,7 @@ public class L10nChecker {
 			MissingKeysHandleMode handleMode) {
 		Domain domain = l10n.domain();
 		for (String s : domain.simpleNames()) {
-			Class<K> enumClz = domain.get(s);
+			Class<K> enumClz = domain.getKeysClass(s);
 			checkEnumClz(enumClz, handler, handleMode);
 		}
 	}

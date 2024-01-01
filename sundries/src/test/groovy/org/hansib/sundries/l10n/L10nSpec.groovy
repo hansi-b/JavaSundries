@@ -12,14 +12,14 @@ public class L10nSpec extends Specification {
 		open, close
 	}
 
-	Domain buttonsDomain = new Domain().with(Buttons.class)
+	Domain buttonsDomain = new Domain()
 
 	def'can add key for domain'() {
 
 		given:
 		Localiser localiser = Mock()
 		when:
-		def l10n = new L10n(buttonsDomain, localiser).add(Buttons.open, 'ouvrir')
+		def l10n = new L10n(buttonsDomain, localiser).with(Buttons.class).add(Buttons.open, 'ouvrir')
 		then:
 		1 * localiser.add(Buttons.open, 'ouvrir')
 		0 * localiser.add(_, _)
@@ -31,7 +31,7 @@ public class L10nSpec extends Specification {
 		Localiser localiser = Mock()
 		Map maps = [ (Buttons.open): 'ouvrir',(Buttons.close): 'close' ]
 		when:
-		def l10n = new L10n(buttonsDomain, localiser).addAll(maps)
+		def l10n = new L10n(buttonsDomain, localiser).with(Buttons.class).addAll(maps)
 		then:
 		1 * localiser.add(Buttons.open, 'ouvrir')
 		1 * localiser.add(Buttons.close, 'close')
@@ -41,7 +41,7 @@ public class L10nSpec extends Specification {
 	def 'key from wrong domain is rejected' () {
 
 		when:
-		new L10n(buttonsDomain).add(Stuff.open, 'ouvrir')
+		new L10n().with(Buttons.class).add(Stuff.open, 'ouvrir')
 
 		then:
 		IllegalArgumentException ex = thrown()

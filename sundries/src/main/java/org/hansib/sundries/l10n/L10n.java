@@ -33,6 +33,9 @@ import org.hansib.sundries.l10n.yaml.L10nReader;
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
 import org.hansib.sundries.testing.VisibleForTesting;
 
+/**
+ * Bundles a domain with a specific localiser.
+ */
 public class L10n {
 
 	private static Localiser activeLocaliser;
@@ -40,26 +43,41 @@ public class L10n {
 	private final Domain domain;
 	private final Localiser localiser;
 
+	@VisibleForTesting
+	L10n(Domain domain, Localiser localiser) {
+		this.domain = domain;
+		this.localiser = localiser;
+	}
+
+	public L10n() {
+		this(new Domain(), new Localiser());
+	}
+
 	/**
+	 * Shorthand constructor for a single format class.
+	 * 
 	 * @return an L10n for a single domain enum
 	 * 
 	 * @param formatClz the class of the domain enum for this L10n
 	 */
 	public <T extends Enum<T> & FormatKey> L10n(Class<T> formatClz) {
-		this(new Domain().with(formatClz), new Localiser());
+		this();
+		with(formatClz);
 	}
 
-	/**
-	 * @return an L10n for the argument domain
-	 */
-	public L10n(Domain domain) {
-		this(domain, new Localiser());
+	<T extends Enum<T> & FormatKey> L10n with(Class<T> keysClazz) {
+		domain.add(keysClazz);
+		return this;
 	}
 
-	@VisibleForTesting
-	L10n(Domain domain, Localiser Localiser) {
-		this.domain = domain;
-		this.localiser = Localiser;
+	<T extends Enum<T> & FormatKey> L10n with(@SuppressWarnings("unchecked") Class<T>... keysClazzes) {
+		for (Class<T> clazz : keysClazzes)
+			domain.add(clazz);
+		return this;
+	}
+
+	public <K extends Enum<K> & FormatKey> Class<K> getKeysClass(String simpleName) {
+		return domain.getKeysClass(simpleName);
 	}
 
 	public Domain domain() {
@@ -92,7 +110,7 @@ public class L10n {
 	}
 
 	public <K extends Enum<K> & FormatKey> L10n add(K key, String fmtString) {
-		if (domain.get(key) == null)
+		if (!domain.contains(key))
 			throw Errors.illegalArg("Domain '%s' does not map class '%s' of key '%s'", this.getClass().getSimpleName(),
 					key.getClass().getSimpleName(), key);
 		localiser.add(key, fmtString);

@@ -75,7 +75,7 @@ public class L10nReader {
 
 	private <K extends Enum<K> & FormatKey> Class<K> resolveEnumClz(final String enumName, Set<String> foundEnumNames,
 			Consumer<L10nFormatError> errorHandler) {
-		final Class<K> enumClz = l10n.domain().get(enumName);
+		final Class<K> enumClz = l10n.getKeysClass(enumName);
 		if (enumClz == null) {
 			errorHandler.accept(new UnknownEnum(enumName));
 			return null;
