@@ -41,7 +41,7 @@ public class L10nReaderSpec extends Specification {
 			assert loc.lineNr == 2
 			assert loc.columnNr == 3
 		}
-		0 * l10n.addAll(_)
+		0 * l10n.withFormats(_)
 	}
 
 	def 'later parse exception skips all enums'() {
@@ -65,12 +65,12 @@ public class L10nReaderSpec extends Specification {
 			assert loc.lineNr == 3
 			assert loc.columnNr == 16
 		}
-		0 * l10n.addAll(_)
+		0 * l10n.withFormats(_)
 	}
 
 	def 'can read multiple enums'() {
 		given:
-		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
+		L10n l10n = Spy(new L10n().with(MenuItems).with(OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -85,12 +85,12 @@ public class L10nReaderSpec extends Specification {
 ''', errHandler)
 
 		then:
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 2
 			assert map[OtherItems.Beta] == '2nd key'
 			assert map[OtherItems.Gamma] == '3rd key'
 		}
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[MenuItems.Open] == 'Ouvrir {0}'
 		}
@@ -99,7 +99,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'unknown enum creates error, and reader continues'() {
 		given:
-		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
+		L10n l10n = Spy(new L10n().with(MenuItems).with(OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -114,7 +114,7 @@ public class L10nReaderSpec extends Specification {
 ''', errHandler)
 
 		then:
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[MenuItems.Open] == 'Ouvrir {0}'
 		}
@@ -127,7 +127,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'duplicate enum creates error, is ignored, and reader continues'() {
 		given:
-		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
+		L10n l10n = Spy(new L10n().with(MenuItems).with(OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -144,11 +144,11 @@ public class L10nReaderSpec extends Specification {
 ''', errHandler)
 
 		then:
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[MenuItems.Open] == 'First Entry'
 		}
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[OtherItems.Alpha] == '1st'
 		}
@@ -161,7 +161,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'unknown enum key creates error, is ignored, and reader continues'() {
 		given:
-		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
+		L10n l10n = Spy(new L10n().with(MenuItems).with(OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -177,11 +177,11 @@ public class L10nReaderSpec extends Specification {
 ''', errHandler)
 
 		then:
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[MenuItems.Exit] == 'Sortir'
 		}
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[OtherItems.Alpha] == '1st'
 		}
@@ -201,7 +201,7 @@ public class L10nReaderSpec extends Specification {
 
 	def 'duplicate enum value creates error, is ignored, and reader continues'() {
 		given:
-		L10n l10n = Spy(new L10n().with(MenuItems, OtherItems))
+		L10n l10n = Spy(new L10n().with(MenuItems).with(OtherItems))
 
 		def lmr = new L10nReader(l10n)
 		Consumer<L10nFormatError> errHandler = Mock()
@@ -216,11 +216,11 @@ public class L10nReaderSpec extends Specification {
 ''', errHandler)
 
 		then:
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[MenuItems.Exit] == 'Sortir 1'
 		}
-		1 * l10n.addAll(_) >> { EnumMap map ->
+		1 * l10n.withFormats(_) >> { EnumMap map ->
 			assert map.size() == 1
 			assert map[OtherItems.Alpha] == '1st'
 		}

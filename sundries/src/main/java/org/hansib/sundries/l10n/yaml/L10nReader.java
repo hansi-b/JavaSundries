@@ -69,7 +69,7 @@ public class L10nReader {
 			if (enumClz == null)
 				return;
 
-			l10n.addAll(readEnumValues(enumClz, r.values(), errorHandler));
+			l10n.withFormats(readEnumValues(enumClz, r.values(), errorHandler));
 		});
 	}
 

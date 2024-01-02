@@ -11,7 +11,7 @@ public class LocaliserSpec extends Specification {
 	def 'can add and format'() {
 		when:
 		def l = new Localiser()
-		l.add(Buttons.one, 'hello world')
+		l.setFormat(Buttons.one, 'hello world')
 		then:
 		l.fmt(Buttons.one) == 'hello world'
 	}
@@ -19,8 +19,8 @@ public class LocaliserSpec extends Specification {
 	def 'duplicate addition throws exception'() {
 		when:
 		def l = new Localiser()
-		l.add(Buttons.one, 'hi {1}')
-		l.add(Buttons.one, 'hello world')
+		l.setFormat(Buttons.one, 'hi {1}')
+		l.setFormat(Buttons.one, 'hello world')
 		then:
 		IllegalArgumentException ex = thrown()
 		ex.message == "Duplicate format mapping for 'one' ('Buttons') in class org.hansib.sundries.l10n.Localiser: new 'hi {1}', old 'hello world'"
@@ -29,7 +29,7 @@ public class LocaliserSpec extends Specification {
 	def 'can use message format replacement'() {
 		when:
 		def l = new Localiser()
-		l.add(Buttons.one, 'hello {1} - {0}')
+		l.setFormat(Buttons.one, 'hello {1} - {0}')
 		then:
 		l.fmt(Buttons.one, 27, 'mars') == 'hello mars - 27'
 	}

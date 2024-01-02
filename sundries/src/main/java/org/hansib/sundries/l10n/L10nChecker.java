@@ -64,7 +64,7 @@ public class L10nChecker {
 	public <K extends Enum<K> & FormatKey> void checkCompleteness(Consumer<MissingKeys<K>> handler,
 			MissingKeysHandleMode handleMode) {
 		Domain domain = l10n.domain();
-		for (String s : domain.simpleNames()) {
+		for (String s : domain.formatClassNames()) {
 			Class<K> enumClz = domain.getKeysClass(s);
 			checkEnumClz(enumClz, handler, handleMode);
 		}
@@ -74,7 +74,7 @@ public class L10nChecker {
 			MissingKeysHandleMode handleMode) {
 		EnumSet<K> missing = EnumSet.allOf(enumClz);
 		for (K key : EnumSet.allOf(enumClz)) {
-			if (l10n.localiser().contains(key))
+			if (l10n.hasFormat(key))
 				missing.remove(key);
 		}
 		if (!missing.isEmpty() || handleMode == MissingKeysHandleMode.AlsoWithoutMissingKeys)

@@ -22,8 +22,8 @@ public class L10nCheckerSpec extends Specification {
 
 		given:
 		L10n l10n = new L10n().with(MenuItems.class)
-		l10n.add(MenuItems.Open, "Open")
-		l10n.add(MenuItems.Close, "Close")
+		l10n.withFormat(MenuItems.Open, "Open")
+		l10n.withFormat(MenuItems.Close, "Close")
 
 		def lmc = new L10nChecker(l10n)
 		Consumer<MissingKeys<?>> handler = Mock()
@@ -42,8 +42,8 @@ public class L10nCheckerSpec extends Specification {
 
 		given:
 		L10n l10n = new L10n().with(MenuItems.class)
-		l10n.add(MenuItems.Open, "Open")
-		l10n.add(MenuItems.Close, "Close")
+		l10n.withFormat(MenuItems.Open, "Open")
+		l10n.withFormat(MenuItems.Close, "Close")
 
 		def lmc = new L10nChecker(l10n)
 		Consumer<MissingKeys<?>> handler = Mock()
@@ -58,10 +58,10 @@ public class L10nCheckerSpec extends Specification {
 	def 'can get keys from multiple enums'() {
 
 		given:
-		L10n l10n = new L10n().with(MenuItems.class, OtherItems.class)
+		L10n l10n = new L10n().with(MenuItems.class).with(OtherItems.class)
 		def lmc = new L10nChecker(l10n)
-		l10n.add(MenuItems.Close, "Close")
-		l10n.add(OtherItems.Gamma, "Gamma")
+		l10n.withFormat(MenuItems.Close, "Close")
+		l10n.withFormat(OtherItems.Gamma, "Gamma")
 
 		Consumer<MissingKeys<?>> handler = Mock()
 

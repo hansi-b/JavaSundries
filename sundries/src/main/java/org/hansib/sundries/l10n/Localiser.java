@@ -55,12 +55,12 @@ class Localiser {
 		return fmt.format(args);
 	}
 
-	<K extends FormatKey> boolean contains(K key) {
+	<K extends FormatKey> boolean hasFormat(K key) {
 		return formats.containsKey(key);
 	}
 
-	<K extends FormatKey> void add(K key, String fmt) {
-		if (contains(key))
+	<K extends FormatKey> void setFormat(K key, String fmt) {
+		if (hasFormat(key))
 			throw Errors.illegalArg("Duplicate format mapping for '%s' ('%s') in %s: new '%s', old '%s'", key,
 					key.getClass().getSimpleName(), this.getClass(), formats.get(key).toPattern(), fmt);
 		formats.put(key, new MessageFormat(fmt));

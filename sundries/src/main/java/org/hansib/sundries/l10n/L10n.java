@@ -58,21 +58,15 @@ public class L10n {
 	 * 
 	 * @return an L10n for a single domain enum
 	 * 
-	 * @param formatClz the class of the domain enum for this L10n
+	 * @param formatKeyClazz the class of the domain enum for this L10n
 	 */
-	public <T extends Enum<T> & FormatKey> L10n(Class<T> formatClz) {
+	public <T extends Enum<T> & FormatKey> L10n(Class<T> formatKeyClazz) {
 		this();
-		with(formatClz);
+		with(formatKeyClazz);
 	}
 
-	<T extends Enum<T> & FormatKey> L10n with(Class<T> keysClazz) {
-		domain.add(keysClazz);
-		return this;
-	}
-
-	<T extends Enum<T> & FormatKey> L10n with(@SuppressWarnings("unchecked") Class<T>... keysClazzes) {
-		for (Class<T> clazz : keysClazzes)
-			domain.add(clazz);
+	public <T extends Enum<T> & FormatKey> L10n with(Class<T> formatKeyClazz) {
+		domain.add(formatKeyClazz);
 		return this;
 	}
 
@@ -80,12 +74,12 @@ public class L10n {
 		return domain.getKeysClass(simpleName);
 	}
 
-	public Domain domain() {
+	Domain domain() {
 		return domain;
 	}
 
-	Localiser localiser() {
-		return localiser;
+	<K extends FormatKey> boolean hasFormat(K key) {
+		return localiser.hasFormat(key);
 	}
 
 	static synchronized Localiser active() {
@@ -104,16 +98,16 @@ public class L10n {
 		return this;
 	}
 
-	public <K extends Enum<K> & FormatKey> L10n addAll(Map<K, String> vals) {
-		vals.entrySet().forEach(e -> add(e.getKey(), e.getValue()));
+	public <K extends Enum<K> & FormatKey> L10n withFormats(Map<K, String> vals) {
+		vals.entrySet().forEach(e -> withFormat(e.getKey(), e.getValue()));
 		return this;
 	}
 
-	public <K extends Enum<K> & FormatKey> L10n add(K key, String fmtString) {
+	public <K extends Enum<K> & FormatKey> L10n withFormat(K key, String fmtString) {
 		if (!domain.contains(key))
 			throw Errors.illegalArg("Domain '%s' does not map class '%s' of key '%s'", this.getClass().getSimpleName(),
 					key.getClass().getSimpleName(), key);
-		localiser.add(key, fmtString);
+		localiser.setFormat(key, fmtString);
 		return this;
 	}
 }

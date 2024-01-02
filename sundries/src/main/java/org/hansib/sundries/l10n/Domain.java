@@ -32,33 +32,33 @@ import java.util.Set;
 
 import org.hansib.sundries.Errors;
 
-public class Domain {
+class Domain {
 
-	private final Map<String, Class<? extends Enum<?>>> enumClzBySimpleName;
+	private final Map<String, Class<? extends Enum<?>>> enumClzByName;
 
 	Domain() {
-		enumClzBySimpleName = new LinkedHashMap<>();
+		enumClzByName = new LinkedHashMap<>();
 	}
 
-	<T extends Enum<T> & FormatKey> Domain add(Class<T> formatClz) {
-		String simpleName = formatClz.getSimpleName();
-		if (getKeysClass(simpleName) != null)
-			throw Errors.illegalArg("Duplicate mapper class name '%s': old %s, new %s", simpleName,
-					getKeysClass(simpleName), formatClz.getName());
-		enumClzBySimpleName.put(simpleName, formatClz);
+	<K extends Enum<K> & FormatKey> Domain add(Class<K> formatClz) {
+		String classMapKey = formatClz.getSimpleName();
+		if (getKeysClass(classMapKey) != null)
+			throw Errors.illegalArg("Duplicate mapper class name '%s': old %s, new %s", classMapKey,
+					getKeysClass(classMapKey), formatClz.getName());
+		enumClzByName.put(classMapKey, formatClz);
 		return this;
 	}
 
 	<K extends Enum<K> & FormatKey> boolean contains(K key) {
-		return enumClzBySimpleName.values().contains(key.getClass());
+		return enumClzByName.containsValue(key.getClass());
+	}
+
+	Set<String> formatClassNames() {
+		return Collections.unmodifiableSet(enumClzByName.keySet());
 	}
 
 	@SuppressWarnings("unchecked")
-	public <K extends Enum<K> & FormatKey> Class<K> getKeysClass(String simpleName) {
-		return (Class<K>) enumClzBySimpleName.getOrDefault(simpleName, null);
-	}
-
-	Set<String> simpleNames() {
-		return Collections.unmodifiableSet(enumClzBySimpleName.keySet());
+	<K extends Enum<K> & FormatKey> Class<K> getKeysClass(String formatClassName) {
+		return (Class<K>) enumClzByName.getOrDefault(formatClassName, null);
 	}
 }
