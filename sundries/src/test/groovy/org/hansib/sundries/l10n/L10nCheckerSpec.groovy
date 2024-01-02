@@ -2,6 +2,8 @@ package org.hansib.sundries.l10n;
 
 import java.util.function.Consumer
 
+import org.hansib.sundries.Strings
+import org.hansib.sundries.l10n.L10nChecker.MissingKeys
 import org.hansib.sundries.l10n.L10nChecker.MissingKeysHandleMode
 
 import spock.lang.Specification
@@ -78,5 +80,23 @@ public class L10nCheckerSpec extends Specification {
 				OtherItems.Beta
 			] as Set
 		}
+	}
+
+	enum Blubb {
+		onceAgain, actuallyNever, lastOne
+	}
+
+	def 'getDescription'() {
+		when:
+		def mk = new MissingKeys(Blubb, EnumSet.of( //
+				Blubb.actuallyNever,
+				Blubb.onceAgain,
+				Blubb.lastOne))
+		then:
+		mk.description() == Strings.toSystemEol('''Blubb:
+	onceAgain
+	actuallyNever
+	lastOne
+''')
 	}
 }

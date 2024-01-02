@@ -26,9 +26,25 @@
 package org.hansib.sundries.l10n;
 
 import java.util.EnumSet;
+import java.util.Set;
 import java.util.function.Consumer;
 
+/**
+ * Checks whether the localiser of the given {@link L10n} has values for all
+ * format keys.
+ */
 public class L10nChecker {
+
+	public record MissingKeys<K extends Enum<K> & FormatKey>(Class<K> enumClz, Set<K> missing) {
+		public MissingKeys {
+			missing = Set.copyOf(missing);
+		}
+
+		public String description() {
+			return "%s:%n\t%s%n".formatted(enumClz.getSimpleName(), //
+					String.join("%n\t".formatted(), EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
+		}
+	}
 
 	/**
 	 * Whether to call the missing keys handler only when at least one missing key
