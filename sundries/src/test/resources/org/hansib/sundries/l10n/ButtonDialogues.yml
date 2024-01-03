@@ -1,0 +1,4 @@
+- CloseOrNot:
+   en: "Should we close?"
+- HideBeneathTheNextTable:
+   en: "Hide under {0}"
