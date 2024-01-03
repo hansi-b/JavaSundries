@@ -34,8 +34,8 @@ import java.util.function.Consumer;
 
 import org.hansib.sundries.l10n.FormatKey;
 import org.hansib.sundries.l10n.L10n;
-import org.hansib.sundries.l10n.yaml.EnumMapsReader.EnumMapRecord;
-import org.hansib.sundries.l10n.yaml.EnumMapsReader.PairList;
+import org.hansib.sundries.l10n.yaml.MappingsReader.Mapping;
+import org.hansib.sundries.l10n.yaml.MappingsReader.KeyValueList;
 import org.hansib.sundries.l10n.yaml.errors.DuplicateEnum;
 import org.hansib.sundries.l10n.yaml.errors.DuplicateEnumValue;
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
@@ -56,9 +56,9 @@ public class L10nReader {
 	public <K extends Enum<K> & FormatKey> void read(String yaml, Consumer<L10nFormatError> errorHandler) {
 		Objects.requireNonNull(errorHandler);
 
-		List<EnumMapRecord> records;
+		List<Mapping> records;
 		try {
-			records = new EnumMapsReader().read(yaml);
+			records = new MappingsReader().read(yaml);
 		} catch (JsonProcessingException ex) {
 			errorHandler.accept(new ParseError(yaml, ex));
 			return;
@@ -88,11 +88,11 @@ public class L10nReader {
 		return enumClz;
 	}
 
-	static <K extends Enum<K> & FormatKey> EnumMap<K, String> readEnumValues(Class<K> enumClz, PairList pairList,
+	static <K extends Enum<K> & FormatKey> EnumMap<K, String> readEnumValues(Class<K> enumClz, KeyValueList kvList,
 			Consumer<L10nFormatError> errorHandler) {
 		final EnumMap<K, String> result = new EnumMap<>(enumClz);
 
-		pairList.pairs.forEach(p -> {
+		kvList.elements.forEach(p -> {
 			final String keyStr = p.key();
 			try {
 				K l10nKey = Enum.valueOf(enumClz, keyStr);

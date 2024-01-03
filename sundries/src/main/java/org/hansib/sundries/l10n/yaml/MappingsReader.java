@@ -34,73 +34,76 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-class EnumMapsReader {
+/**
+ * Reads nested mappings from YAML into a data structure.
+ */
+class MappingsReader {
 
-	record Pair(String key, String value) {
+	record KeyValue(String key, String value) {
 	}
 
-	static class PairList {
-		final List<Pair> pairs;
+	static class KeyValueList {
+		final List<KeyValue> elements;
 
-		PairList() {
+		KeyValueList() {
 			this(new ArrayList<>());
 		}
 
-		PairList(List<Pair> pairs) {
-			this.pairs = pairs;
+		KeyValueList(List<KeyValue> elements) {
+			this.elements = elements;
 		}
 
 		@JsonAnySetter
 		public void pair(String key, String value) {
-			pairs.add(new Pair(key, value));
+			elements.add(new KeyValue(key, value));
 		}
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(pairs);
+			return Objects.hash(elements);
 		}
 
 		@Override
 		public boolean equals(Object obj) {
-			return (obj instanceof PairList pl) && pairs.equals(pl.pairs);
+			return (obj instanceof KeyValueList pl) && elements.equals(pl.elements);
 		}
 
 		@Override
 		public String toString() {
-			return "PairList %s".formatted(pairs);
+			return "KeyValueList %s".formatted(elements);
 		}
 	}
 
-	record EnumMapRecord(String name, PairList values) {
-		EnumMapRecord(String name, List<Pair> values) {
-			this(name, new PairList(values));
+	record Mapping(String name, KeyValueList values) {
+		Mapping(String name, List<KeyValue> elements) {
+			this(name, new KeyValueList(elements));
 		}
 	}
 
-	static class EnumMaps {
-		final List<EnumMapRecord> maps;
+	static class Mappings {
+		final List<Mapping> mappings;
 
-		EnumMaps() {
+		Mappings() {
 			this(new ArrayList<>());
 		}
 
-		EnumMaps(List<EnumMapRecord> maps) {
-			this.maps = maps;
+		Mappings(List<Mapping> maps) {
+			this.mappings = maps;
 		}
 
 		@JsonAnySetter
-		public void enumMap(String key, PairList values) {
-			maps.add(new EnumMapRecord(key, values));
+		public void mapping(String key, KeyValueList values) {
+			mappings.add(new Mapping(key, values == null ? new KeyValueList() : values));
 		}
 	}
 
 	private final ObjectMapper om;
 
-	EnumMapsReader() {
+	MappingsReader() {
 		this.om = new ObjectMapper(new YAMLFactory());
 	}
 
-	List<EnumMapRecord> read(String yaml) throws JsonProcessingException {
-		return om.readValue(yaml, EnumMaps.class).maps;
+	List<Mapping> read(String yaml) throws JsonProcessingException {
+		return om.readValue(yaml, Mappings.class).mappings;
 	}
 }
