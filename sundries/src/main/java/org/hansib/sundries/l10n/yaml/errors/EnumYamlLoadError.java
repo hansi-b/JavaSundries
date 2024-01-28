@@ -25,12 +25,12 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-@SuppressWarnings("rawtypes")
-public sealed interface L10nFormatError permits //
-		ParseError, //
-		EnumYamlNotFound, EnumYamlLoadError, //
-		UnknownEnumKey, DuplicateEnumValue, MissingEnumKey, //
-		DuplicateLocaleValue, MissingLocaleValue //
-{
-	String description();
+import java.io.IOException;
+
+public record EnumYamlLoadError(String enumName, IOException cause) implements L10nFormatError {
+
+	@Override
+	public String description() {
+		return "Could not laod yaml resource for enum '%s': %s".formatted(enumName, cause);
+	}
 }

@@ -27,7 +27,6 @@ package org.hansib.sundries.l10n.yaml;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,75 +34,48 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 /**
- * Reads nested mappings from YAML into a data structure.
+ * Reads YAML into a nested structure of two mappings.
  */
-class MappingsReader {
+class MappingReader {
+	private static class EntryList<V> {
 
-	record KeyValue(String key, String value) {
-	}
+		private List<Entry<V>> entries;
 
-	static class KeyValueList {
-		final List<KeyValue> elements;
-
-		KeyValueList() {
-			this(new ArrayList<>());
-		}
-
-		KeyValueList(List<KeyValue> elements) {
-			this.elements = elements;
+		@SuppressWarnings("unused")
+		EntryList() {
+			entries = new ArrayList<>();
 		}
 
 		@JsonAnySetter
-		public void pair(String key, String value) {
-			elements.add(new KeyValue(key, value));
-		}
-
-		@Override
-		public int hashCode() {
-			return Objects.hash(elements);
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			return (obj instanceof KeyValueList pl) && elements.equals(pl.elements);
-		}
-
-		@Override
-		public String toString() {
-			return "KeyValueList %s".formatted(elements);
+		public void entry(String key, V value) {
+			entries.add(new Entry<>(key, value));
 		}
 	}
 
-	record Mapping(String name, KeyValueList values) {
-		Mapping(String name, List<KeyValue> elements) {
-			this(name, new KeyValueList(elements));
-		}
-	}
+	private static class MappingList {
+		private List<Entry<EntryList<String>>> mappings;
 
-	static class Mappings {
-		final List<Mapping> mappings;
-
-		Mappings() {
-			this(new ArrayList<>());
-		}
-
-		Mappings(List<Mapping> maps) {
-			this.mappings = maps;
+		@SuppressWarnings("unused")
+		MappingList() {
+			mappings = new ArrayList<>();
 		}
 
 		@JsonAnySetter
-		public void mapping(String key, KeyValueList values) {
-			mappings.add(new Mapping(key, values == null ? new KeyValueList() : values));
+		public void mapping(String key, EntryList<String> entries) {
+			this.mappings.add(new Entry<>(key, entries));
 		}
 	}
 
 	private final ObjectMapper om;
 
-	MappingsReader() {
+	MappingReader() {
 		this.om = new ObjectMapper(new YAMLFactory());
 	}
 
-	List<Mapping> read(String yaml) throws JsonProcessingException {
-		return om.readValue(yaml, Mappings.class).mappings;
+	List<Entry<List<Entry<String>>>> read(String yaml) throws JsonProcessingException {
+		MappingList mappingList = om.readValue(yaml, MappingList.class);
+		List<Entry<List<Entry<String>>>> result = new ArrayList<>();
+		mappingList.mappings.forEach(e -> result.add(new Entry<>(e.key(), e.value().entries)));
+		return result;
 	}
 }

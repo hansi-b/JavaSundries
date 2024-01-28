@@ -14,6 +14,16 @@ Simple stuff I often need in other projects.
 Release Log
 ----
 
+0.5.2 (2024-02-10)
+~~~~
+
+* changed yaml data format for localisation
+
+0.5.1 (2023-11-28)
+~~~~
+
+* fixed stream handling in resource loading
+
 0.5.0 (2023-10-10)
 ~~~~
 

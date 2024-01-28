@@ -70,11 +70,7 @@ public class L10n {
 		return this;
 	}
 
-	public <K extends Enum<K> & FormatKey> Class<K> getKeysClass(String simpleName) {
-		return domain.getKeysClass(simpleName);
-	}
-
-	Domain domain() {
+	public Domain domain() {
 		return domain;
 	}
 
@@ -93,9 +89,8 @@ public class L10n {
 		activeLocaliser = localiser;
 	}
 
-	public L10n load(String yaml, Consumer<L10nFormatError> errorHandler) {
-		new L10nReader(this).read(yaml, errorHandler);
-		return this;
+	public <L extends Enum<L>> void load(String resourcesPath, L locale, Consumer<L10nFormatError> errorHandler) {
+		new L10nReader(this, locale.name(), errorHandler).loadEnums(resourcesPath);
 	}
 
 	public <K extends Enum<K> & FormatKey> L10n withFormats(Map<K, String> vals) {

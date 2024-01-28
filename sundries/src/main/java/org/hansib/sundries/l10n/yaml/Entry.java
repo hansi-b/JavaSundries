@@ -3,7 +3,7 @@
  *
  * for JavaSundries (https://github.com/hansi-b/JavaSundries)
  *
- * Copyright (c) 2022-2023 Hans Bering
+ * Copyright (c) 2022-2024 Hans Bering
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.l10n.yaml.errors;
+package org.hansib.sundries.l10n.yaml;
 
-@SuppressWarnings("rawtypes")
-public sealed interface L10nFormatError permits //
-		ParseError, //
-		EnumYamlNotFound, EnumYamlLoadError, //
-		UnknownEnumKey, DuplicateEnumValue, MissingEnumKey, //
-		DuplicateLocaleValue, MissingLocaleValue //
-{
-	String description();
+record Entry<V>(String key, V value) {
 }

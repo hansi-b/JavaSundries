@@ -25,86 +25,53 @@
  */
 package org.hansib.sundries.l10n.yaml;
 
-import java.util.EnumMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 import java.util.function.Consumer;
 
+import org.hansib.sundries.l10n.Domain;
 import org.hansib.sundries.l10n.FormatKey;
 import org.hansib.sundries.l10n.L10n;
-import org.hansib.sundries.l10n.yaml.MappingsReader.Mapping;
-import org.hansib.sundries.l10n.yaml.MappingsReader.KeyValueList;
-import org.hansib.sundries.l10n.yaml.errors.DuplicateEnum;
-import org.hansib.sundries.l10n.yaml.errors.DuplicateEnumValue;
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
 import org.hansib.sundries.l10n.yaml.errors.ParseError;
-import org.hansib.sundries.l10n.yaml.errors.UnknownEnum;
-import org.hansib.sundries.l10n.yaml.errors.UnknownEnumKey;
+import org.hansib.sundries.testing.VisibleForTesting;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class L10nReader {
 
 	private final L10n l10n;
+	private final EnumMapper enumMapper;
+	private final Consumer<L10nFormatError> errorHandler;
 
-	public L10nReader(L10n l10n) {
+	public L10nReader(L10n l10n, String locale, Consumer<L10nFormatError> errorHandler) {
 		this.l10n = l10n;
+		this.errorHandler = errorHandler;
+		this.enumMapper = new EnumMapper(errorHandler, locale);
 	}
 
-	public <K extends Enum<K> & FormatKey> void read(String yaml, Consumer<L10nFormatError> errorHandler) {
-		Objects.requireNonNull(errorHandler);
+	public <K extends Enum<K> & FormatKey, L extends Enum<L>> void loadEnums(String resourcesPath) {
+		L10nResourcesLoader loader = new L10nResourcesLoader(resourcesPath, errorHandler);
+		Domain domain = l10n.domain();
+		for (String clzName : domain.classNames()) {
+			String enumYaml = loader.load(clzName);
+			if (enumYaml == null)
+				continue;
+			Class<K> keysClass = domain.getKeysClass(clzName);
+			readEnum(enumYaml, keysClass);
+		}
+	}
 
-		List<Mapping> records;
+	@VisibleForTesting
+	<K extends Enum<K> & FormatKey> void readEnum(String enumYaml, Class<K> keysClass) {
+
+		List<Entry<List<Entry<String>>>> mapping;
 		try {
-			records = new MappingsReader().read(yaml);
+			mapping = new MappingReader().read(enumYaml);
 		} catch (JsonProcessingException ex) {
-			errorHandler.accept(new ParseError(yaml, ex));
+			errorHandler.accept(new ParseError(enumYaml, ex));
 			return;
 		}
-		Set<String> foundEnumNames = new HashSet<>();
-		records.forEach(r -> {
-			Class<K> enumClz = resolveEnumClz(r.name(), foundEnumNames, errorHandler);
-			if (enumClz == null)
-				return;
 
-			l10n.withFormats(readEnumValues(enumClz, r.values(), errorHandler));
-		});
-	}
-
-	private <K extends Enum<K> & FormatKey> Class<K> resolveEnumClz(final String enumName, Set<String> foundEnumNames,
-			Consumer<L10nFormatError> errorHandler) {
-		final Class<K> enumClz = l10n.getKeysClass(enumName);
-		if (enumClz == null) {
-			errorHandler.accept(new UnknownEnum(enumName));
-			return null;
-		} else if (foundEnumNames.contains(enumName)) {
-			errorHandler.accept(new DuplicateEnum(enumName));
-			return null;
-		}
-
-		foundEnumNames.add(enumName);
-		return enumClz;
-	}
-
-	static <K extends Enum<K> & FormatKey> EnumMap<K, String> readEnumValues(Class<K> enumClz, KeyValueList kvList,
-			Consumer<L10nFormatError> errorHandler) {
-		final EnumMap<K, String> result = new EnumMap<>(enumClz);
-
-		kvList.elements.forEach(p -> {
-			final String keyStr = p.key();
-			try {
-				K l10nKey = Enum.valueOf(enumClz, keyStr);
-				String l10nVal = p.value();
-				if (result.containsKey(l10nKey))
-					errorHandler.accept(new DuplicateEnumValue<K>(l10nKey, result.get(l10nKey), l10nVal));
-				else
-					result.put(l10nKey, l10nVal);
-			} catch (IllegalArgumentException ex) {
-				errorHandler.accept(new UnknownEnumKey<>(enumClz, keyStr));
-			}
-		});
-		return result;
+		l10n.withFormats(enumMapper.loadMapping(mapping, keysClass));
 	}
 }

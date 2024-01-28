@@ -25,10 +25,10 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-public record UnknownEnum(String enumName) implements L10nFormatError {
+public record MissingLocaleValue<C extends Enum<C>>(C enumkey, String localeKey) implements L10nFormatError {
 
 	@Override
 	public String description() {
-		return "Unknown enum name '%s'".formatted(enumName);
+		return "No entry for locale '%s' of enum %s".formatted(localeKey, enumkey);
 	}
 }

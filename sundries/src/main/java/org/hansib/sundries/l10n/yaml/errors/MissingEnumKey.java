@@ -25,12 +25,10 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-@SuppressWarnings("rawtypes")
-public sealed interface L10nFormatError permits //
-		ParseError, //
-		EnumYamlNotFound, EnumYamlLoadError, //
-		UnknownEnumKey, DuplicateEnumValue, MissingEnumKey, //
-		DuplicateLocaleValue, MissingLocaleValue //
-{
-	String description();
+public record MissingEnumKey<C extends Enum<C>>(C key) implements L10nFormatError {
+
+	@Override
+	public String description() {
+		return "Missing key '%s' for enum %s".formatted(key, key.getClass());
+	}
 }

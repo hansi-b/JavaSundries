@@ -25,12 +25,12 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-@SuppressWarnings("rawtypes")
-public sealed interface L10nFormatError permits //
-		ParseError, //
-		EnumYamlNotFound, EnumYamlLoadError, //
-		UnknownEnumKey, DuplicateEnumValue, MissingEnumKey, //
-		DuplicateLocaleValue, MissingLocaleValue //
-{
-	String description();
+public record DuplicateLocaleValue<C extends Enum<C>>(C enumkey, String localeKey, String activeValue,
+		String duplicateValue) implements L10nFormatError {
+
+	@Override
+	public String description() {
+		return "Ignoring duplicate entry '%s' for locale key %s (keeping value '%s')".formatted(duplicateValue,
+				localeKey, activeValue);
+	}
 }

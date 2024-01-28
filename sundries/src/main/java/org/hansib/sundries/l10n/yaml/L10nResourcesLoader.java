@@ -3,7 +3,7 @@
  *
  * for JavaSundries (https://github.com/hansi-b/JavaSundries)
  *
- * Copyright (c) 2022-2023 Hans Bering
+ * Copyright (c) 2022-2024 Hans Bering
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,12 +23,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.l10n.yaml.errors;
+package org.hansib.sundries.l10n.yaml;
 
-public record DuplicateEnum(String enumName) implements L10nFormatError {
+import java.io.IOException;
+import java.nio.file.Path;
+import java.util.function.Consumer;
 
-	@Override
-	public String description() {
-		return "Duplicate enum name '%s'".formatted(enumName);
+import org.hansib.sundries.ResourceLoader;
+import org.hansib.sundries.l10n.yaml.errors.EnumYamlLoadError;
+import org.hansib.sundries.l10n.yaml.errors.EnumYamlNotFound;
+import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
+
+class L10nResourcesLoader {
+
+	private final String resourcesPath;
+	private final Consumer<L10nFormatError> errorHandler;
+
+	L10nResourcesLoader(String resourcesPath, Consumer<L10nFormatError> errorHandler) {
+		this.resourcesPath = resourcesPath;
+		this.errorHandler = errorHandler;
+	}
+
+	String load(String clzName) {
+		try {
+			return new ResourceLoader()
+					.getResourceAsString(Path.of(resourcesPath, "%s.yaml".formatted(clzName)).toString());
+		} catch (IllegalStateException ex) {
+			errorHandler.accept(new EnumYamlNotFound(clzName));
+			return null;
+		} catch (IOException ex) {
+			errorHandler.accept(new EnumYamlLoadError(clzName, ex));
+			return null;
+		}
 	}
 }
