@@ -43,14 +43,16 @@ public class ResourceLoader {
 	}
 
 	/**
-	 * @param resourceName the name of the required resource
+	 * @param resourcePath the full path of the required resource; note
+	 *                     {@link java.lang.ClassLoader#getResource(String)}: the
+	 *                     path uses forward slashes
 	 * @return a non-null InputStream of the resource
 	 * @throws IllegalStateException if the classloader returns a null stream
 	 */
-	public InputStream getResourceStream(String resourceName) {
-		InputStream resStream = getClass().getClassLoader().getResourceAsStream(resourceName);
+	public InputStream getResourceStream(String resourcePath) {
+		InputStream resStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
 		if (resStream == null)
-			throw Errors.illegalState("Could not find resource stream '%s'", resourceName);
+			throw Errors.illegalState("Could not find resource stream '%s'", resourcePath);
 		return resStream;
 	}
 
