@@ -26,7 +26,6 @@
 package org.hansib.sundries.l10n.yaml;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.function.Consumer;
 
 import org.hansib.sundries.ResourceLoader;
@@ -45,11 +44,11 @@ class L10nResourcesLoader {
 	}
 
 	String load(String clzName) {
+		String fullPath = "%s/%s.yaml".formatted(resourcesPath, clzName);
 		try {
-			return new ResourceLoader()
-					.getResourceAsString(Path.of(resourcesPath, "%s.yaml".formatted(clzName)).toString());
+			return new ResourceLoader().getResourceAsString(fullPath);
 		} catch (IllegalStateException ex) {
-			errorHandler.accept(new EnumYamlNotFound(clzName));
+			errorHandler.accept(new EnumYamlNotFound(clzName, fullPath));
 			return null;
 		} catch (IOException ex) {
 			errorHandler.accept(new EnumYamlLoadError(clzName, ex));

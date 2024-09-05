@@ -34,6 +34,7 @@ public class L10nResourcesLoaderSpec extends Specification {
 		yaml == null
 		1 * errHandler.accept(_) >> { L10nFormatError err ->
 			assert err instanceof EnumYamlNotFound
+			assert err.description() == """Found no yaml resource for enum 'YmlNotFound' under path 'l10n/YmlNotFound.yaml'"""
 		}
 	}
 }

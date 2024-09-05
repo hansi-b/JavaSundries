@@ -25,10 +25,10 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-public record EnumYamlNotFound(String enumName) implements L10nFormatError {
+public record EnumYamlNotFound(String enumName, String resourcePath) implements L10nFormatError {
 
 	@Override
 	public String description() {
-		return "Found no yaml resource for enum '%s'".formatted(enumName);
+		return "Found no yaml resource for enum '%s' under path '%s'".formatted(enumName, resourcePath);
 	}
 }
