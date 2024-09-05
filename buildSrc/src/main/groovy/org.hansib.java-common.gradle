@@ -13,7 +13,7 @@ repositories {
 }
 
 def isStable = {
-	!(it =~ /(?i)\b(alpha|beta)[0-9]*\b/)
+	!(it =~ /(?i)\b(alpha|beta|rc)[0-9]*\b/)
 }
 
 tasks.named('dependencyUpdates').configure {
