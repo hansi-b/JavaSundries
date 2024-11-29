@@ -1,4 +1,4 @@
-/**
+/*-
  * MIT License
  *
  * for JavaSundries (https://github.com/hansi-b/JavaSundries)
