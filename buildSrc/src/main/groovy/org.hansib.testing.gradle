@@ -8,9 +8,9 @@ repositories {
 }
 
 dependencies {
-	testImplementation 'org.apache.groovy:groovy-all:4.0.22'
+	testImplementation 'org.apache.groovy:groovy-all:4.0.24'
 
-	testImplementation 'net.bytebuddy:byte-buddy:1.15.1'
+	testImplementation 'net.bytebuddy:byte-buddy:1.15.10'
 	testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
 }
 
