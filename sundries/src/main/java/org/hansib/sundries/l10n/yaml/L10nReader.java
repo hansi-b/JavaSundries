@@ -28,14 +28,14 @@ package org.hansib.sundries.l10n.yaml;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import org.hansib.sundries.l10n.Domain;
 import org.hansib.sundries.l10n.FormatKey;
 import org.hansib.sundries.l10n.L10n;
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
 import org.hansib.sundries.l10n.yaml.errors.ParseError;
 import org.hansib.sundries.testing.VisibleForTesting;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class L10nReader {
 
