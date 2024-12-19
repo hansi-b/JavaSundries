@@ -1,14 +1,15 @@
-package org.hansib.sundries;
-
-import java.util.function.BiPredicate
-import java.util.function.Function
+package org.hansib.sundries
 
 import spock.lang.Specification
 import spock.lang.Unroll
 
+import java.util.function.BiPredicate
+import java.util.function.Function
+
 public class CollectUtilsSpec extends Specification {
 
-	@Unroll def"get empty combinations for size #size"() {
+	@Unroll
+	def "get empty combinations for size #size"() {
 		given:
 		def x = CollectUtils.combinations([1, 2, 3] as SortedSet, size)
 
@@ -19,36 +20,36 @@ public class CollectUtilsSpec extends Specification {
 		size << [-1, 0]
 	}
 
-	def"get sole combination"() {
+	def "get sole combination"() {
 
 		expect:
 		CollectUtils.combinations([1, 2, 3] as SortedSet, 3).toList() == sortedTreeSets([[1, 2, 3]])
 	}
 
-	def"get combinations 1 from 3"() {
+	def "get combinations 1 from 3"() {
 
 		expect:
 		CollectUtils.combinations([1, 2, 3] as SortedSet, 1).toList() == sortedTreeSets([[1], [2], [3]])
 	}
 
-	def"get more combinations"() {
+	def "get more combinations"() {
 
 		expect:
 		CollectUtils.combinations([1, 2, 3, 4, 5] as SortedSet, 3).toList() == sortedTreeSets([
-			[1, 2, 3],
-			[1, 2, 4],
-			[1, 3, 4],
-			[2, 3, 4],
-			[1, 2, 5],
-			[1, 3, 5],
-			[2, 3, 5],
-			[1, 4, 5],
-			[2, 4, 5],
-			[3, 4, 5]
+				[1, 2, 3],
+				[1, 2, 4],
+				[1, 3, 4],
+				[2, 3, 4],
+				[1, 2, 5],
+				[1, 3, 5],
+				[2, 3, 5],
+				[1, 4, 5],
+				[2, 4, 5],
+				[3, 4, 5]
 		])
 	}
 
-	def"get combinations for custom comparator"() {
+	def "get combinations for custom comparator"() {
 
 		given:
 		def c1 = "c1"
@@ -57,9 +58,9 @@ public class CollectUtilsSpec extends Specification {
 
 		expect:
 		CollectUtils.combinations([c1, c2, c3] as SortedSet, 2).toList() == sortedTreeSets([
-			[c1, c2],
-			[c1, c3],
-			[c2, c3]
+				[c1, c2],
+				[c1, c3],
+				[c2, c3]
 		])
 	}
 
@@ -76,12 +77,12 @@ public class CollectUtilsSpec extends Specification {
 		CollectUtils.pairCombinations(2).toList() == [[0, 1]]
 		CollectUtils.pairCombinations(3).toList() == [[0, 1], [0, 2], [1, 2]]
 		CollectUtils.pairCombinations(4).toList() == [
-			[0, 1],
-			[0, 2],
-			[0, 3],
-			[1, 2],
-			[1, 3],
-			[2, 3]
+				[0, 1],
+				[0, 2],
+				[0, 3],
+				[1, 2],
+				[1, 3],
+				[2, 3]
 		]
 	}
 
@@ -107,7 +108,7 @@ public class CollectUtilsSpec extends Specification {
 
 	def "intersection for three collections"() {
 		given:
-		def a = 1 .. 4 as Set
+		def a = 1..4 as Set
 		def b = [1, 2, 2]
 		def c = [2, 3] as Set
 
@@ -117,7 +118,7 @@ public class CollectUtilsSpec extends Specification {
 
 	def "intersection for three collections with shortcut"() {
 		given:
-		def a = 1 .. 4 as Set
+		def a = 1..4 as Set
 		def b = [5, 6]
 		def c = [2, 3] as Set
 
@@ -137,7 +138,7 @@ public class CollectUtilsSpec extends Specification {
 
 	def "union for three collections"() {
 		given:
-		def a = 1 .. 4 as Set
+		def a = 1..4 as Set
 		def b = [2, 1, 2]
 		def c = [22, 3] as Set
 
@@ -156,8 +157,8 @@ public class CollectUtilsSpec extends Specification {
 
 	def "simple flatten check"() {
 		given:
-		def values =  [
-			1: ["a", "b"], 2: ["x", "y"]
+		def values = [
+				1: ["a", "b"], 2: ["x", "y"]
 		]
 		def valLookup = { k ->
 			values[k].stream()
@@ -174,14 +175,14 @@ public class CollectUtilsSpec extends Specification {
 		} as Function
 
 		expect:
-		CollectUtils.invertMap([7: 2, 1: 2, 3 : 4], newSet, new HashMap()) == [2:[1, 7] as Set, 4:[3] as Set]
+		CollectUtils.invertMap([7: 2, 1: 2, 3: 4], newSet, new HashMap()) == [2: [1, 7] as Set, 4: [3] as Set]
 	}
 
 	def "filterMap"() {
 		given:
-		def keepEvenNumbers = { k, v ->	(k + v) % 2 == 0 } as BiPredicate
+		def keepEvenNumbers = { k, v -> (k + v) % 2 == 0 } as BiPredicate
 
 		expect:
-		CollectUtils.filterMap([7: 7, 2: 2, 3 : 4], keepEvenNumbers, () -> new TreeMap()) == [2:2, 7:7]
+		CollectUtils.filterMap([7: 7, 2: 2, 3: 4], keepEvenNumbers, () -> new TreeMap()) == [2: 2, 7: 7]
 	}
 }

@@ -1,21 +1,21 @@
 package org.hansib.sundries.prefs
 
-import org.hansib.sundries.prefs.store.PrefsStore
-
 import spock.lang.Specification
+
+import org.hansib.sundries.prefs.store.PrefsStore
 
 public class ReqStringSpec extends Specification {
 
 	PrefsStore store = Mock()
 	ReqString p = new ReqString('str', store)
 
-	def 'defaults to initial value'(){
+	def 'defaults to initial value'() {
 
 		expect:
 		p.get() == null
 	}
 
-	def 'can set value'(){
+	def 'can set value'() {
 
 		when:
 		p.set('aaa')
@@ -23,9 +23,8 @@ public class ReqStringSpec extends Specification {
 		then:
 		1 * store.put(p.key(), 'aaa')
 	}
-	
-	
-	def 'throws exception on setting to null'(){
+
+	def 'throws exception on setting to null'() {
 
 		when:
 		p.set(null)
@@ -33,9 +32,8 @@ public class ReqStringSpec extends Specification {
 		then:
 		thrown IllegalArgumentException
 	}
-
-
-	def 'can get given value'(){
+	
+	def 'can get given value'() {
 
 		given:
 		store.get(p.key()) >> 'abc'

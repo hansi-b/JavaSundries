@@ -1,4 +1,6 @@
-package org.hansib.sundries.l10n.yaml;
+package org.hansib.sundries.l10n.yaml
+
+import spock.lang.Specification
 
 import java.util.function.Consumer
 
@@ -8,13 +10,12 @@ import org.hansib.sundries.l10n.yaml.errors.L10nFormatError
 import org.hansib.sundries.l10n.yaml.errors.MissingLocaleValue
 import org.hansib.sundries.l10n.yaml.errors.UnknownEnumKey
 
-import spock.lang.Specification
-
 public class EnumMapperSpec extends Specification {
 
 	enum TwoItems {
 		First, Second
 	}
+
 	enum Items {
 		Abc
 	}
@@ -27,17 +28,17 @@ public class EnumMapperSpec extends Specification {
 
 		when:
 		def res = mapper.loadMapping([
-			new Entry('First', [
-				new Entry('en', 'anglais'),
-				new Entry('fr', 'francais')
-			]),
-			new Entry('Second', [
-				new Entry('en', '42'),
-				new Entry('fr', '35')
-			])
+				new Entry('First', [
+						new Entry('en', 'anglais'),
+						new Entry('fr', 'francais')
+				]),
+				new Entry('Second', [
+						new Entry('en', '42'),
+						new Entry('fr', '35')
+				])
 		], TwoItems)
 		then:
-		res == [(TwoItems.First):'anglais', (TwoItems.Second): '42']
+		res == [(TwoItems.First): 'anglais', (TwoItems.Second): '42']
 		0 * errHandler.accept(_)
 	}
 
@@ -49,15 +50,15 @@ public class EnumMapperSpec extends Specification {
 
 		when:
 		def res = mapper.loadMapping([
-			new Entry('Abc', [
-				new Entry('en', 'anglais'),
-			]),
-			new Entry('Abc', [
-				new Entry('de', 'entirely different'),
-			])
+				new Entry('Abc', [
+						new Entry('en', 'anglais'),
+				]),
+				new Entry('Abc', [
+						new Entry('de', 'entirely different'),
+				])
 		], Items)
 		then:
-		res == [(Items.Abc):'anglais']
+		res == [(Items.Abc): 'anglais']
 		1 * errHandler.accept(_) >> { L10nFormatError obj ->
 			assert obj instanceof DuplicateEnumValue
 			def err = ((DuplicateEnumValue) obj)
@@ -74,15 +75,15 @@ public class EnumMapperSpec extends Specification {
 
 		when:
 		def res = mapper.loadMapping([
-			new Entry('Unknown', [
-				new Entry('en', 'nope'),
-			]),
-			new Entry('Abc', [
-				new Entry('en', 'anglais'),
-			])
+				new Entry('Unknown', [
+						new Entry('en', 'nope'),
+				]),
+				new Entry('Abc', [
+						new Entry('en', 'anglais'),
+				])
 		], Items)
 		then:
-		res == [(Items.Abc):'anglais']
+		res == [(Items.Abc): 'anglais']
 		1 * errHandler.accept(_) >> { L10nFormatError obj ->
 			assert obj instanceof UnknownEnumKey
 			def err = ((UnknownEnumKey) obj)
@@ -99,9 +100,9 @@ public class EnumMapperSpec extends Specification {
 
 		when:
 		def res = mapper.loadMapping([
-			new Entry('Abc', [
-				new Entry('fr', 'anglais'),
-			])
+				new Entry('Abc', [
+						new Entry('fr', 'anglais'),
+				])
 		], Items)
 		then:
 		res.isEmpty()
@@ -121,13 +122,13 @@ public class EnumMapperSpec extends Specification {
 
 		when:
 		def res = mapper.loadMapping([
-			new Entry('Abc', [
-				new Entry('en', 'anglais'),
-				new Entry('en', 'another'),
-			])
+				new Entry('Abc', [
+						new Entry('en', 'anglais'),
+						new Entry('en', 'another'),
+				])
 		], Items)
 		then:
-		res == [(Items.Abc):'anglais']
+		res == [(Items.Abc): 'anglais']
 		1 * errHandler.accept(_) >> { L10nFormatError obj ->
 			assert obj instanceof DuplicateLocaleValue
 			def err = ((DuplicateLocaleValue) obj)

@@ -1,21 +1,21 @@
 package org.hansib.sundries.prefs
 
-import org.hansib.sundries.prefs.store.PrefsStore
-
 import spock.lang.Specification
+
+import org.hansib.sundries.prefs.store.PrefsStore
 
 public class OptStringSpec extends Specification {
 
 	PrefsStore store = Mock()
 	OptString p = new OptString('str', store)
 
-	def 'defaults to empty value'(){
+	def 'defaults to empty value'() {
 
 		expect:
 		p.get() == Optional.empty()
 	}
 
-	def 'can set value'(){
+	def 'can set value'() {
 
 		when:
 		p.set('xyz')
@@ -24,7 +24,7 @@ public class OptStringSpec extends Specification {
 		1 * store.put(p.key(), 'xyz')
 	}
 
-	def 'can get given value'(){
+	def 'can get given value'() {
 
 		given:
 		store.get(p.key()) >> 'abc'
@@ -34,7 +34,7 @@ public class OptStringSpec extends Specification {
 		p.isSet() == true
 	}
 
-	def 'can remove value'(){
+	def 'can remove value'() {
 
 		when:
 		p.unset()

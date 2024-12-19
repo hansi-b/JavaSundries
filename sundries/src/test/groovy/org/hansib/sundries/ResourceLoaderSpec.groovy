@@ -1,8 +1,8 @@
-package org.hansib.sundries;
-
-import java.util.function.Function
+package org.hansib.sundries
 
 import spock.lang.Specification
+
+import java.util.function.Function
 
 public class ResourceLoaderSpec extends Specification {
 
@@ -30,9 +30,9 @@ public class ResourceLoaderSpec extends Specification {
 
 	def 'can transform resource'() {
 		given:
-		Function<InputStream, Integer> firstChar =  s -> s.read();
+		Function<InputStream, Integer> firstChar = s -> s.read();
 
 		expect:
-		new ResourceLoader().loadResourceStream('resourceLoader_test.txt', firstChar) == (int)'c'
+		new ResourceLoader().loadResourceStream('resourceLoader_test.txt', firstChar) == (int) 'c'
 	}
 }

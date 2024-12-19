@@ -1,8 +1,8 @@
-package org.hansib.sundries.prefs.store;
-
-import java.util.prefs.Preferences
+package org.hansib.sundries.prefs.store
 
 import spock.lang.Specification
+
+import java.util.prefs.Preferences
 
 public class UserNodePrefsStoreSpec extends Specification {
 

@@ -1,21 +1,21 @@
 package org.hansib.sundries.prefs
 
-import org.hansib.sundries.prefs.store.PrefsStore
-
 import spock.lang.Specification
+
+import org.hansib.sundries.prefs.store.PrefsStore
 
 public class OptIntegerSpec extends Specification {
 
 	PrefsStore store = Mock()
 	OptInteger p = new OptInteger('integer', store)
 
-	def 'defaults to empty value'(){
+	def 'defaults to empty value'() {
 
 		expect:
 		p.get() == Optional.empty()
 	}
 
-	def 'empty value throws NPE for intValue'(){
+	def 'empty value throws NPE for intValue'() {
 
 		when:
 		p.intValue()
@@ -23,7 +23,7 @@ public class OptIntegerSpec extends Specification {
 		thrown NullPointerException
 	}
 
-	def 'can set value'(){
+	def 'can set value'() {
 
 		when:
 		p.set(34)
@@ -32,7 +32,7 @@ public class OptIntegerSpec extends Specification {
 		1 * store.put(p.key(), '34')
 	}
 
-	def 'can get given value'(){
+	def 'can get given value'() {
 
 		given:
 		store.get(p.key()) >> '78'

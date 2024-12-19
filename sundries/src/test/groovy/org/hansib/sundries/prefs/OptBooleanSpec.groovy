@@ -1,21 +1,21 @@
 package org.hansib.sundries.prefs
 
-import org.hansib.sundries.prefs.store.PrefsStore
-
 import spock.lang.Specification
+
+import org.hansib.sundries.prefs.store.PrefsStore
 
 public class OptBooleanSpec extends Specification {
 
 	PrefsStore store = Mock()
 	OptBoolean p = new OptBoolean('bool', store)
 
-	def 'defaults to empty value'(){
+	def 'defaults to empty value'() {
 
 		expect:
 		p.get() == Optional.empty()
 	}
 
-	def 'can set value'(){
+	def 'can set value'() {
 
 		when:
 		p.set(true)
@@ -24,7 +24,7 @@ public class OptBooleanSpec extends Specification {
 		1 * store.put(p.key(), 'true')
 	}
 
-	def 'can get given value'(){
+	def 'can get given value'() {
 
 		given:
 		store.get(p.key()) >> 'false'

@@ -1,11 +1,11 @@
-package org.hansib.sundries.l10n.yaml;
+package org.hansib.sundries.l10n.yaml
+
+import spock.lang.Specification
 
 import java.util.function.Consumer
 
 import org.hansib.sundries.l10n.yaml.errors.EnumYamlNotFound
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError
-
-import spock.lang.Specification
 
 public class L10nResourcesLoaderSpec extends Specification {
 

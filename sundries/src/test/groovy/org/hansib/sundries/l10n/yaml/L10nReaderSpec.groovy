@@ -1,5 +1,7 @@
 package org.hansib.sundries.l10n.yaml
 
+import spock.lang.Specification
+
 import java.util.function.Consumer
 
 import org.hansib.sundries.l10n.L10n
@@ -7,8 +9,6 @@ import org.hansib.sundries.l10n.L10nCheckerSpec.MenuItems
 import org.hansib.sundries.l10n.L10nCheckerSpec.OtherItems
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError
 import org.hansib.sundries.l10n.yaml.errors.ParseError
-
-import spock.lang.Specification
 
 public class L10nReaderSpec extends Specification {
 
@@ -33,7 +33,7 @@ public class L10nReaderSpec extends Specification {
 		then:
 		1 * errHandler.accept(_) >> { L10nFormatError err ->
 			assert err instanceof ParseError
-			def loc = ((ParseError)err).error.location
+			def loc = ((ParseError) err).error.location
 			assert loc.lineNr == 2
 			assert loc.columnNr == 3
 		}
@@ -57,7 +57,7 @@ public class L10nReaderSpec extends Specification {
 		then:
 		1 * errHandler.accept(_) >> { L10nFormatError err ->
 			assert err instanceof ParseError
-			def loc = ((ParseError)err).error.location
+			def loc = ((ParseError) err).error.location
 			assert loc.lineNr == 3
 			assert loc.columnNr == 16
 		}
@@ -82,7 +82,7 @@ public class L10nReaderSpec extends Specification {
 
 		then:
 		1 * l10n.withFormats(_) >> { EnumMap map ->
-			assert map == [(Items.Alpha):'1st key', (Items.Beta): '2nd key']
+			assert map == [(Items.Alpha): '1st key', (Items.Beta): '2nd key']
 		}
 		0 * errHandler.accept(_)
 	}

@@ -1,8 +1,8 @@
 package org.hansib.sundries.prefs
 
-import org.hansib.sundries.prefs.store.InMemoryPrefsStore
-
 import spock.lang.Specification
+
+import org.hansib.sundries.prefs.store.InMemoryPrefsStore
 
 public class PrefsSpec extends Specification {
 

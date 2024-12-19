@@ -1,8 +1,8 @@
 package org.hansib.sundries.prefs
 
-import org.hansib.sundries.prefs.store.PrefsStore
-
 import spock.lang.Specification
+
+import org.hansib.sundries.prefs.store.PrefsStore
 
 public class ReqBooleanSpec extends Specification {
 

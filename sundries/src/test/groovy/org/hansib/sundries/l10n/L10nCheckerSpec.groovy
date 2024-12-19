@@ -1,12 +1,12 @@
-package org.hansib.sundries.l10n;
+package org.hansib.sundries.l10n
+
+import spock.lang.Specification
 
 import java.util.function.Consumer
 
 import org.hansib.sundries.Strings
 import org.hansib.sundries.l10n.L10nChecker.MissingKeys
 import org.hansib.sundries.l10n.L10nChecker.MissingKeysHandleMode
-
-import spock.lang.Specification
 
 public class L10nCheckerSpec extends Specification {
 
@@ -76,8 +76,8 @@ public class L10nCheckerSpec extends Specification {
 		1 * handler.accept(_) >> { MissingKeys<?> m ->
 			assert m.enumClz == OtherItems
 			assert m.missing == [
-				OtherItems.Alpha,
-				OtherItems.Beta
+					OtherItems.Alpha,
+					OtherItems.Beta
 			] as Set
 		}
 	}
