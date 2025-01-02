@@ -37,9 +37,9 @@ public class Prefs<K extends Enum<K>> {
 
 	public static class Builder<K extends Enum<K>> {
 
-		private PrefsStore store;
-		private EnumMap<K, Pref<?>> mapped;
-		private EnumSet<K> required;
+		private final PrefsStore store;
+		private final EnumMap<K, Pref<?>> mapped;
+		private final EnumSet<K> required;
 
 		public Builder(Class<K> keysClass, PrefsStore store) {
 			this.store = store;

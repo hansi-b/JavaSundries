@@ -38,12 +38,12 @@ interface Converter<T> {
 interface StringConverter extends Converter<String> {
 
 	@Override
-	public default String str2val(String val) {
+	default String str2val(String val) {
 		return val;
 	}
 
 	@Override
-	public default String val2str(String val) {
+	default String val2str(String val) {
 		return val;
 	}
 }
@@ -51,12 +51,12 @@ interface StringConverter extends Converter<String> {
 interface BooleanConverter extends Converter<Boolean> {
 
 	@Override
-	public default Boolean str2val(String val) {
+	default Boolean str2val(String val) {
 		return Boolean.valueOf(val);
 	}
 
 	@Override
-	public default String val2str(Boolean val) {
+	default String val2str(Boolean val) {
 		return Boolean.toString(val);
 	}
 }
@@ -64,12 +64,12 @@ interface BooleanConverter extends Converter<Boolean> {
 interface IntegerConverter extends Converter<Integer> {
 
 	@Override
-	public default Integer str2val(String val) {
+	default Integer str2val(String val) {
 		return Integer.valueOf(val);
 	}
 
 	@Override
-	public default String val2str(Integer val) {
+	default String val2str(Integer val) {
 		return Integer.toString(val);
 	}
 }
@@ -77,12 +77,12 @@ interface IntegerConverter extends Converter<Integer> {
 interface BigDecimalConverter extends Converter<BigDecimal> {
 
 	@Override
-	public default BigDecimal str2val(String val) {
+	default BigDecimal str2val(String val) {
 		return new BigDecimal(val);
 	}
 
 	@Override
-	public default String val2str(BigDecimal val) {
+	default String val2str(BigDecimal val) {
 		return val.toString();
 	}
 }
@@ -92,12 +92,12 @@ interface EnumConverter<L extends Enum<L>> extends Converter<L> {
 	Class<L> valueClass();
 
 	@Override
-	public default L str2val(String val) {
+	default L str2val(String val) {
 		return Enum.valueOf(valueClass(), val);
 	}
 
 	@Override
-	public default String val2str(L val) {
+	default String val2str(L val) {
 		return val.name();
 	}
 }
@@ -105,12 +105,12 @@ interface EnumConverter<L extends Enum<L>> extends Converter<L> {
 interface FileConverter extends Converter<File> {
 
 	@Override
-	public default File str2val(String val) {
+	default File str2val(String val) {
 		return new File(val);
 	}
 
 	@Override
-	public default String val2str(File val) {
+	default String val2str(File val) {
 		return val.getPath();
 	}
 }
