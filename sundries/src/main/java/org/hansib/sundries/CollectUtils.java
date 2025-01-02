@@ -57,13 +57,7 @@ public class CollectUtils {
 	 * then the next two, etc.) according to the iteration order of the respective
 	 * sets. If one set is a "prefix" of the other, it is considered smaller.
 	 */
-	private static final class SortedSetComparator<E> implements Comparator<SortedSet<E>> {
-
-		private final Comparator<E> elementComparator;
-
-		public SortedSetComparator(final Comparator<E> elementComparator) {
-			this.elementComparator = elementComparator;
-		}
+	private record SortedSetComparator<E>(Comparator<E> elementComparator) implements Comparator<SortedSet<E>> {
 
 		@Override
 		public int compare(final SortedSet<E> s1, final SortedSet<E> s2) {
@@ -107,10 +101,7 @@ public class CollectUtils {
 			});
 		}
 
-		return elements.stream().flatMap(e -> combinations(elements.headSet(e), count - 1).map(s -> {
-			s.add(e);
-			return s;
-		}));
+		return elements.stream().flatMap(e -> combinations(elements.headSet(e), count - 1).peek(s -> s.add(e)));
 	}
 
 	/**
@@ -133,7 +124,8 @@ public class CollectUtils {
 
 	/**
 	 * This seems to work, but it's black magic. See
-	 * https://stackoverflow.com/a/530289/1016514
+	 * <a href="https://stackoverflow.com/a/530289/1016514">details on
+	 * Stackoverflow</a>
 	 */
 	@SuppressWarnings("unchecked")
 	private static <T> T[] genericArray(final T... es) {
@@ -191,35 +183,7 @@ public class CollectUtils {
 	}
 
 	public static <E extends Comparable<E>> Comparator<SortedSet<E>> sortedSetComparator() {
-		return new SortedSetComparator<>((e1, e2) -> e1.compareTo(e2));
-	}
-
-	/**
-	 * Convenience method for nested streaming: Streams, maps, and flatMaps back.
-	 * Uses {@link #flatten(Stream, Function)}
-	 *
-	 * @param <I>     the type of elements in the streamed collection
-	 * @param <O>     the type of the resulting elements
-	 * @param in      the collection to stream, map and flatMap
-	 * @param mapFunc the output element generator
-	 * @return a Stream of the flatMapped elements
-	 */
-	public static <I, O> Stream<O> flatten(final Collection<I> in,
-			final Function<? super I, ? extends Stream<O>> mapFunc) {
-		return flatten(in.stream(), mapFunc);
-	}
-
-	/**
-	 * Convenience method for nested streaming: Maps, and flatMaps back.
-	 *
-	 * @param <I>     the type of elements in the incoming stream
-	 * @param <O>     the type of the resulting elements
-	 * @param in      the stream to map and flatMap
-	 * @param mapFunc
-	 * @return a Stream of the flatMapped elements
-	 */
-	public static <I, O> Stream<O> flatten(final Stream<I> in, final Function<? super I, ? extends Stream<O>> mapFunc) {
-		return in.map(mapFunc).flatMap(Function.identity());
+		return new SortedSetComparator<>(Comparable::compareTo);
 	}
 
 	/**
@@ -231,7 +195,7 @@ public class CollectUtils {
 	 * @param <V>          the type of the values in the map
 	 * @param <M>          the type of the input map
 	 * @param <R>          the type of elements in the resulting stream
-	 * @param map          the map to map to a list - sorted so that
+	 * @param map          the map to be mapped to a list
 	 * @param keyValueFunc the transformation to call on the map
 	 * @return a stream resulting from mapping the function on the argument map
 	 */
@@ -249,7 +213,7 @@ public class CollectUtils {
 	 * @param map        the map to be filtered
 	 * @param filter     the BiPredicate applied on keys and values
 	 * @param mapFactory the initializer for the result map
-	 * @return a map created by the mapfactory filled with those values from the
+	 * @return a map created by the mapFactory filled with those values from the
 	 *         input that match the filter
 	 */
 	public static <M extends Map<K, V>, K, V> M filterMap(final M map, final BiPredicate<? super K, ? super V> filter,
@@ -259,7 +223,6 @@ public class CollectUtils {
 	}
 
 	/**
-	 *
 	 * Fills the argument <code>result</code> map with an aggregated inverse mapping
 	 * of the argument <code>map</code>, where each value in <code>map</code> is
 	 * mapped to a collection of the keys that mapped to it.

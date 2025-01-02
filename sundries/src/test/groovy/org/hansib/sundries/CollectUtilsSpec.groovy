@@ -155,19 +155,6 @@ public class CollectUtilsSpec extends Specification {
 		s == [1, 2, 3] as SortedSet
 	}
 
-	def "simple flatten check"() {
-		given:
-		def values = [
-				1: ["a", "b"], 2: ["x", "y"]
-		]
-		def valLookup = { k ->
-			values[k].stream()
-		} as Function
-
-		expect:
-		CollectUtils.flatten([1, 2, 1].stream(), valLookup).toList() == ["a", "b", "x", "y", "a", "b"]
-	}
-
 	def "invert simple numbers map"() {
 		given:
 		def newSet = { k ->
