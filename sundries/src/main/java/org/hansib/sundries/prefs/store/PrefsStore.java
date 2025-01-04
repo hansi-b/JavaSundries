@@ -26,17 +26,15 @@
 package org.hansib.sundries.prefs.store;
 
 /**
- * a String-based store for enum prefs
- *
- * @param <K> the key enum
+ * a String-based store used for enum prefs
  */
 public interface PrefsStore {
 
-	public void put(final String key, final String value);
+	void put(final String key, final String value);
 
-	public String get(final String key);
+	String get(final String key);
 
-	public boolean contains(final String key);
+	boolean contains(final String key);
 
-	public void remove(final String key);
+	void remove(final String key);
 }

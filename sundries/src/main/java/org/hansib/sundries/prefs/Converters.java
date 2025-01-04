@@ -28,6 +28,9 @@ package org.hansib.sundries.prefs;
 import java.io.File;
 import java.math.BigDecimal;
 
+/**
+ * A prerequisite for a preference in order to be able to (de)serialize it.
+ */
 interface Converter<T> {
 
 	T str2val(String val);

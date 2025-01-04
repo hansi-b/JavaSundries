@@ -33,6 +33,11 @@ import java.util.EnumSet;
 import org.hansib.sundries.Errors;
 import org.hansib.sundries.prefs.store.PrefsStore;
 
+/**
+ * A collection of typed preferences sharing the same key enum.
+ *
+ * @param <K> the preferences keys enum
+ */
 public class Prefs<K extends Enum<K>> {
 
 	public static class Builder<K extends Enum<K>> {

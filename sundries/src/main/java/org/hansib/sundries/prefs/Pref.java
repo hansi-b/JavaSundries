@@ -31,7 +31,7 @@ import org.hansib.sundries.Errors;
 import org.hansib.sundries.prefs.store.PrefsStore;
 
 /**
- * a preference tied to an enum with a typed value
+ * a preference with a typed value
  */
 public interface Pref<V> extends Converter<V> {
 
@@ -73,6 +73,9 @@ abstract class PrefClz<V> implements Pref<V> {
 	}
 }
 
+/**
+ * abstract base class for required preferences
+ */
 abstract class ReqPrefClz<V> extends PrefClz<V> implements RequiredPref<V> {
 
 	ReqPrefClz(String key, PrefsStore store) {
@@ -80,6 +83,9 @@ abstract class ReqPrefClz<V> extends PrefClz<V> implements RequiredPref<V> {
 	}
 }
 
+/**
+ * abstract base class for optional preferences
+ */
 abstract class OptPrefClz<V> extends PrefClz<V> implements OptionalPref<V> {
 
 	OptPrefClz(String key, PrefsStore store) {
