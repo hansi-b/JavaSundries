@@ -25,7 +25,7 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-public record DuplicateLocaleValue<C extends Enum<C>>(C enumkey, String localeKey, String activeValue,
+public record DuplicateLocaleValue<C extends Enum<C>>(C key, String localeKey, String activeValue,
 		String duplicateValue) implements L10nFormatError {
 
 	@Override

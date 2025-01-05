@@ -61,7 +61,7 @@ class EnumMapper {
 				K enumKey = Enum.valueOf(enumClz, keyStr);
 				missingKeys.remove(enumKey);
 				if (result.containsKey(enumKey))
-					errorHandler.accept(new DuplicateEnumValue<K>(enumKey, result.get(enumKey)));
+					errorHandler.accept(new DuplicateEnumValue<>(enumKey, result.get(enumKey)));
 				else
 					readLocale(result, enumKey, enumEntry.value());
 			} catch (IllegalArgumentException ex) {
@@ -74,15 +74,15 @@ class EnumMapper {
 
 	private <K extends Enum<K> & FormatKey> void readLocale(final EnumMap<K, String> foundEntries, K enumKey,
 			List<Entry<String>> localeEntries) {
-		List<String> localeValues = localeEntries.stream().filter(e -> locale.equals(e.key())).map(Entry<String>::value)
+		List<String> localeValues = localeEntries.stream().filter(e -> locale.equals(e.key())).map(Entry::value)
 				.toList();
 		if (localeValues.isEmpty())
 			errorHandler.accept(new MissingLocaleValue<>(enumKey, locale));
 		else {
-			foundEntries.put(enumKey, localeValues.get(0));
+			foundEntries.put(enumKey, localeValues.getFirst());
 			for (int i = 1; i < localeValues.size(); i++)
-				errorHandler
-						.accept(new DuplicateLocaleValue<>(enumKey, locale, localeValues.get(0), localeValues.get(i)));
+				errorHandler.accept(
+						new DuplicateLocaleValue<>(enumKey, locale, localeValues.getFirst(), localeValues.get(i)));
 
 		}
 	}

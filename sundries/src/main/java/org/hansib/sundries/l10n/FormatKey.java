@@ -32,13 +32,11 @@ public interface FormatKey {
 
 	/**
 	 * Formats this key using the active localiser.
-	 * 
-	 * @param args the arguments required to format this key as defined by the key's
-	 *             format
-	 * @return the key's formatted representation according to the active
-	 *         {@link Localiser}
+	 *
+	 * @param args the arguments required to format this key as defined by the key's format
+	 * @return the key's formatted representation according to the active {@link Localiser}
 	 */
-	public default String fmt(Object... args) {
+	default String fmt(Object... args) {
 		return L10n.active().fmt(this, args);
 	}
 }

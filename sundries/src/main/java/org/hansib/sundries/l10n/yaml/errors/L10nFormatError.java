@@ -25,7 +25,6 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-@SuppressWarnings("rawtypes")
 public sealed interface L10nFormatError permits //
 		ParseError, //
 		EnumYamlNotFound, EnumYamlLoadError, //

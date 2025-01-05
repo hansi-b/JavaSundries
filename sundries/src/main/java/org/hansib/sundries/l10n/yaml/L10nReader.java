@@ -49,7 +49,7 @@ public class L10nReader {
 		this.enumMapper = new EnumMapper(errorHandler, locale);
 	}
 
-	public <K extends Enum<K> & FormatKey, L extends Enum<L>> void loadEnums(String resourcesPath) {
+	public <K extends Enum<K> & FormatKey> void loadEnums(String resourcesPath) {
 		L10nResourcesLoader loader = new L10nResourcesLoader(resourcesPath, errorHandler);
 		Domain domain = l10n.domain();
 		for (String clzName : domain.classNames()) {

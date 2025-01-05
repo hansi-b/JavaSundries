@@ -1,7 +1,5 @@
 package org.hansib.sundries.l10n.yaml
 
-import spock.lang.Specification
-
 import java.util.function.Consumer
 
 import org.hansib.sundries.l10n.yaml.errors.DuplicateEnumValue
@@ -9,6 +7,7 @@ import org.hansib.sundries.l10n.yaml.errors.DuplicateLocaleValue
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError
 import org.hansib.sundries.l10n.yaml.errors.MissingLocaleValue
 import org.hansib.sundries.l10n.yaml.errors.UnknownEnumKey
+import spock.lang.Specification
 
 public class EnumMapperSpec extends Specification {
 
@@ -109,7 +108,7 @@ public class EnumMapperSpec extends Specification {
 		1 * errHandler.accept(_) >> { L10nFormatError obj ->
 			assert obj instanceof MissingLocaleValue
 			def err = ((MissingLocaleValue) obj)
-			assert err.enumkey == Items.Abc
+			assert err.key == Items.Abc
 			assert err.localeKey == 'en'
 		}
 	}
@@ -132,7 +131,7 @@ public class EnumMapperSpec extends Specification {
 		1 * errHandler.accept(_) >> { L10nFormatError obj ->
 			assert obj instanceof DuplicateLocaleValue
 			def err = ((DuplicateLocaleValue) obj)
-			assert err.enumkey == Items.Abc
+			assert err.key == Items.Abc
 			assert err.localeKey == 'en'
 			assert err.activeValue == 'anglais'
 			assert err.duplicateValue == 'another'

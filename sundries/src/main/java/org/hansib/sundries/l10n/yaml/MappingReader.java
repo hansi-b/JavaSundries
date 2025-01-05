@@ -39,7 +39,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 class MappingReader {
 	private static class EntryList<V> {
 
-		private List<Entry<V>> entries;
+		private final List<Entry<V>> entries;
 
 		@SuppressWarnings("unused")
 		EntryList() {
@@ -53,7 +53,7 @@ class MappingReader {
 	}
 
 	private static class MappingList {
-		private List<Entry<EntryList<String>>> mappings;
+		private final List<Entry<EntryList<String>>> mappings;
 
 		@SuppressWarnings("unused")
 		MappingList() {
@@ -62,20 +62,21 @@ class MappingReader {
 
 		@JsonAnySetter
 		public void mapping(String key, EntryList<String> entries) {
-			this.mappings.add(new Entry<>(key, entries));
+			mappings.add(new Entry<>(key, entries));
+		}
+
+		private List<Entry<List<Entry<String>>>> toListOfEntries() {
+			return mappings.stream().map(e -> new Entry<>(e.key(), e.value().entries)).toList();
 		}
 	}
 
 	private final ObjectMapper om;
 
 	MappingReader() {
-		this.om = new ObjectMapper(new YAMLFactory());
+		om = new ObjectMapper(new YAMLFactory());
 	}
 
 	List<Entry<List<Entry<String>>>> read(String yaml) throws JsonProcessingException {
-		MappingList mappingList = om.readValue(yaml, MappingList.class);
-		List<Entry<List<Entry<String>>>> result = new ArrayList<>();
-		mappingList.mappings.forEach(e -> result.add(new Entry<>(e.key(), e.value().entries)));
-		return result;
+		return om.readValue(yaml, MappingList.class).toListOfEntries();
 	}
 }

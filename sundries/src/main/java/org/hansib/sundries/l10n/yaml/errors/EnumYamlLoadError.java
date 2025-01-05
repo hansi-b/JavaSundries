@@ -31,6 +31,6 @@ public record EnumYamlLoadError(String enumName, IOException cause) implements L
 
 	@Override
 	public String description() {
-		return "Could not laod yaml resource for enum '%s': %s".formatted(enumName, cause);
+		return "Could not load yaml resource for enum '%s': %s".formatted(enumName, cause);
 	}
 }

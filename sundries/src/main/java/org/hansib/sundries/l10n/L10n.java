@@ -55,9 +55,7 @@ public class L10n {
 
 	/**
 	 * Shorthand constructor for a single format class.
-	 * 
-	 * @return an L10n for a single domain enum
-	 * 
+	 *
 	 * @param formatKeyClazz the class of the domain enum for this L10n
 	 */
 	public <T extends Enum<T> & FormatKey> L10n(Class<T> formatKeyClazz) {
@@ -94,7 +92,7 @@ public class L10n {
 	}
 
 	public <K extends Enum<K> & FormatKey> L10n withFormats(Map<K, String> vals) {
-		vals.entrySet().forEach(e -> withFormat(e.getKey(), e.getValue()));
+		vals.forEach(this::withFormat);
 		return this;
 	}
 

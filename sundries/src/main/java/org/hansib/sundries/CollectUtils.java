@@ -101,7 +101,10 @@ public class CollectUtils {
 			});
 		}
 
-		return elements.stream().flatMap(e -> combinations(elements.headSet(e), count - 1).peek(s -> s.add(e)));
+		return elements.stream().flatMap(e -> combinations(elements.headSet(e), count - 1).map(s -> {
+			s.add(e);
+			return s;
+		}));
 	}
 
 	/**
