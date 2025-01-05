@@ -23,20 +23,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.prefs;
+package org.hansib.sundries.typedprefs;
 
-import org.hansib.sundries.prefs.store.PrefsStore;
+public final class BooleanPref extends TypedPref<Boolean> {
 
-public class ReqEnum<L extends Enum<L>> extends ReqPrefClz<L> implements EnumConverter<L> {
-	private final Class<L> clazz;
-
-	ReqEnum(String key, Class<L> clazz, PrefsStore store) {
-		super(key, store);
-		this.clazz = clazz;
+	public boolean isTrue() {
+		return value != null && value;
 	}
 
-	@Override
-	public Class<L> valueClass() {
-		return clazz;
+	public boolean isFalse() {
+		return value != null && !value;
 	}
 }

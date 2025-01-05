@@ -23,13 +23,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.prefs;
+package org.hansib.sundries.typedprefs;
 
-import org.hansib.sundries.prefs.store.PrefsStore;
+/**
+ * A preference with a typed value
+ */
+public sealed class TypedPref<V> permits EnumPref, StringPref, BooleanPref, PrefsPref {
+	protected V value;
 
-public class OptBoolean extends OptPrefClz<Boolean>
-		implements PrimitiveBooleanPref, BooleanConverter {
-	OptBoolean(String key, PrefsStore store) {
-		super(key, store);
+	public void set(V newValue) {
+		value = newValue;
+	}
+
+	public V get() {
+		return value;
+	}
+
+	public boolean isSet() {
+		return value != null;
 	}
 }

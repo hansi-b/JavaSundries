@@ -1,6 +1,5 @@
-package org.hansib.sundries.prefs.store
+package org.hansib.sundries.preferences
 
-import org.hansib.sundries.preferences.InMemoryPreferences
 import spock.lang.Specification
 
 class InMemoryPreferencesTest extends Specification {

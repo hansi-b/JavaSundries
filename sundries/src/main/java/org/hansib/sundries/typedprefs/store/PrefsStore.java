@@ -23,14 +23,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.prefs;
+package org.hansib.sundries.typedprefs.store;
 
-import java.io.File;
+import org.hansib.sundries.typedprefs.TypedPrefs;
 
-import org.hansib.sundries.prefs.store.PrefsStore;
+/**
+ * A store used for saving and loading enum prefs
+ */
+public interface PrefsStore<K extends Enum<K>> {
 
-public class OptFile extends OptPrefClz<File> implements FileConverter {
-	OptFile(String key, PrefsStore store) {
-		super(key, store);
-	}
+	/**
+	 * Save the argument preferences to whatever backend this store provides. This
+	 * overwrites all values previously saved in the same store.
+	 */
+	void save(TypedPrefs<K> prefs);
+
+	/**
+	 * Fill the argument preferences with values from whatever backend this store
+	 * uses. This overwrites all values previously set in the preferences.
+	 */
+	void load(TypedPrefs<K> prefs);
 }

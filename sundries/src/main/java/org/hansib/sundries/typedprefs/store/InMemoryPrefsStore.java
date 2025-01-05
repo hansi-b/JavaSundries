@@ -23,14 +23,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.hansib.sundries.prefs;
+package org.hansib.sundries.typedprefs.store;
 
-import java.io.File;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.hansib.sundries.prefs.store.PrefsStore;
+import org.hansib.sundries.typedprefs.TypedPrefs;
 
-public class ReqFile extends ReqPrefClz<File> implements FileConverter {
-	ReqFile(String key, PrefsStore store) {
-		super(key, store);
+/**
+ * Keeps preferences in a simple map; mainly useful for tests
+ */
+public class InMemoryPrefsStore<K extends Enum<K>> implements PrefsStore<K> {
+
+	private final Map<K, Object> prefsMap;
+
+	public InMemoryPrefsStore() {
+		this.prefsMap = new ConcurrentHashMap<>();
+	}
+
+	@Override
+	public void save(TypedPrefs<K> prefs) {
+		EnumSet.allOf(prefs.keysClass()).forEach(k -> save(k, prefs));
+	}
+
+	private void save(K k, TypedPrefs<K> prefs) {
+		Object value = prefs.get(k);
+		if (value == null)
+			prefsMap.remove(k);
+		else
+			prefsMap.put(k, value);
+	}
+
+	@Override
+	public void load(TypedPrefs<K> prefs) {
+		EnumSet.allOf(prefs.keysClass()).forEach(k -> prefs.pref(k).set(prefsMap.getOrDefault(k, null)));
 	}
 }
