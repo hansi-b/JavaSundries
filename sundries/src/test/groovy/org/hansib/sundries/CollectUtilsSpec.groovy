@@ -167,9 +167,9 @@ public class CollectUtilsSpec extends Specification {
 
 	def "filterMap"() {
 		given:
-		def keepEvenNumbers = { k, v -> (k + v) % 2 == 0 } as BiPredicate
+		def keepEvenSums = { k, v -> (k + v) % 2 == 0 } as BiPredicate
 
 		expect:
-		CollectUtils.filterMap([7: 7, 2: 2, 3: 4], keepEvenNumbers, () -> new TreeMap()) == [2: 2, 7: 7]
+		CollectUtils.filterMap([7: 7, 2: 2, 3: 4], keepEvenSums, { _ -> new TreeMap() }) == [2: 2, 7: 7]
 	}
 }

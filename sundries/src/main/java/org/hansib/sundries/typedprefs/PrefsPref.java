@@ -2,6 +2,9 @@ package org.hansib.sundries.typedprefs;
 
 import java.util.Objects;
 
+/**
+ * @param <K> the enum class of the value preferences
+ */
 public final class PrefsPref<K extends Enum<K>> extends TypedPref<TypedPrefs<K>> {
 
 	PrefsPref(TypedPrefs<K> prefs) {

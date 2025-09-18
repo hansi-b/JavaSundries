@@ -18,7 +18,7 @@ public class TypedPrefsSpec extends Specification {
 	def 'can build with strings'() {
 
 		given:
-		def builder = new TypedPrefs.Builder<>(SingleKey.class)
+		def builder = new TypedPrefs.Builder(SingleKey.class)
 
 		when:
 		def prefs = builder.stringPref(SingleKey.onlyOne, 'xyz').build()
@@ -31,7 +31,7 @@ public class TypedPrefsSpec extends Specification {
 	def 'throws exception on duplicate key'() {
 
 		given:
-		def builder = new TypedPrefs.Builder<>(SingleKey.class)
+		def builder = new TypedPrefs.Builder(SingleKey.class)
 
 		when:
 		def prefs = builder.stringPref(SingleKey.onlyOne, 'xyz').stringPref(SingleKey.onlyOne, 'abc').build()
@@ -43,7 +43,7 @@ public class TypedPrefsSpec extends Specification {
 	def 'throws exception on missing key'() {
 
 		given:
-		def builder = new TypedPrefs.Builder<>(TwoKeys.class)
+		def builder = new TypedPrefs.Builder(TwoKeys.class)
 
 		when:
 		def prefs = builder.stringPref(TwoKeys.one, 'xyz').build()

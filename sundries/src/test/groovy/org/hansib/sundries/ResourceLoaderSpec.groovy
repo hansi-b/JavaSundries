@@ -30,7 +30,7 @@ public class ResourceLoaderSpec extends Specification {
 
 	def 'can transform resource'() {
 		given:
-		Function<InputStream, Integer> firstChar = s -> s.read();
+		Function<InputStream, Integer> firstChar = { s -> s.read() }
 
 		expect:
 		new ResourceLoader().loadResourceStream('resourceLoader_test.txt', firstChar) == (int) 'c'
