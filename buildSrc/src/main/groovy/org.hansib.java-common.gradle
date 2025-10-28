@@ -5,8 +5,8 @@ plugins {
 	id 'com.github.ben-manes.versions'
 }
 
-group 'org.hansib'
-version gitVersion()
+group = 'org.hansib'
+version = gitVersion()
 
 repositories {
 	mavenCentral()
