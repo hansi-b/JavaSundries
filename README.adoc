@@ -1,6 +1,6 @@
 = JavaSundries
 
-image:https://github.com/hansi-b/JavaSundries/actions/workflows/gradle.yml/badge.svg[link="https://github.com/hansi-b/JavaSundries/actions/workflows/gradle.yml"]
+image:https://github.com/hansi-b/JavaSundries/actions/workflows/unit_tests.yml/badge.svg[link="https://github.com/hansi-b/JavaSundries/actions/workflows/unit_tests.yml"]
 image:https://codecov.io/gh/hansi-b/javasundries/branch/main/graph/badge.svg[link="https://codecov.io/gh/hansi-b/javasundries"]
 
 Simple stuff I often need in other projects.
