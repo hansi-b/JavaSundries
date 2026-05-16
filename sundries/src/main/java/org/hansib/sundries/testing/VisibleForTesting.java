@@ -31,14 +31,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Marks an element as having increased visibility so it can be referenced from
- * tests.
+ * Marks an element as having increased visibility so it can be referenced from tests.
  *
- * Duplicated from countless other VisibleForTesting's so I would not have to
- * drag in an extra dependency just for this.
+ * <p>Duplicated from countless other VisibleForTesting's so I would not have to drag in an extra
+ * dependency just for this.
  */
-@Target({ ElementType.METHOD, ElementType.CONSTRUCTOR })
+@Target({ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.SOURCE)
 public @interface VisibleForTesting {
-	// empty
+  // empty
 }

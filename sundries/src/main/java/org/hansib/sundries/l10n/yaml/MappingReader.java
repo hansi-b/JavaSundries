@@ -33,50 +33,48 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
-/**
- * Reads YAML into a nested structure of two mappings.
- */
+/** Reads YAML into a nested structure of two mappings. */
 class MappingReader {
-	private static class EntryList<V> {
+  private static class EntryList<V> {
 
-		private final List<Entry<V>> entries;
+    private final List<Entry<V>> entries;
 
-		@SuppressWarnings("unused")
-		EntryList() {
-			entries = new ArrayList<>();
-		}
+    @SuppressWarnings("unused")
+    EntryList() {
+      entries = new ArrayList<>();
+    }
 
-		@JsonAnySetter
-		public void entry(String key, V value) {
-			entries.add(new Entry<>(key, value));
-		}
-	}
+    @JsonAnySetter
+    public void entry(String key, V value) {
+      entries.add(new Entry<>(key, value));
+    }
+  }
 
-	private static class MappingList {
-		private final List<Entry<EntryList<String>>> mappings;
+  private static class MappingList {
+    private final List<Entry<EntryList<String>>> mappings;
 
-		@SuppressWarnings("unused")
-		MappingList() {
-			mappings = new ArrayList<>();
-		}
+    @SuppressWarnings("unused")
+    MappingList() {
+      mappings = new ArrayList<>();
+    }
 
-		@JsonAnySetter
-		public void mapping(String key, EntryList<String> entries) {
-			mappings.add(new Entry<>(key, entries));
-		}
+    @JsonAnySetter
+    public void mapping(String key, EntryList<String> entries) {
+      mappings.add(new Entry<>(key, entries));
+    }
 
-		private List<Entry<List<Entry<String>>>> toListOfEntries() {
-			return mappings.stream().map(e -> new Entry<>(e.key(), e.value().entries)).toList();
-		}
-	}
+    private List<Entry<List<Entry<String>>>> toListOfEntries() {
+      return mappings.stream().map(e -> new Entry<>(e.key(), e.value().entries)).toList();
+    }
+  }
 
-	private final ObjectMapper om;
+  private final ObjectMapper om;
 
-	MappingReader() {
-		om = new ObjectMapper(new YAMLFactory());
-	}
+  MappingReader() {
+    om = new ObjectMapper(new YAMLFactory());
+  }
 
-	List<Entry<List<Entry<String>>>> read(String yaml) throws JsonProcessingException {
-		return om.readValue(yaml, MappingList.class).toListOfEntries();
-	}
+  List<Entry<List<Entry<String>>>> read(String yaml) throws JsonProcessingException {
+    return om.readValue(yaml, MappingList.class).toListOfEntries();
+  }
 }

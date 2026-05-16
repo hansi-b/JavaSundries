@@ -25,5 +25,4 @@
  */
 package org.hansib.sundries.l10n.yaml;
 
-record Entry<V>(String key, V value) {
-}
+record Entry<V>(String key, V value) {}

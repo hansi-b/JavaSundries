@@ -31,46 +31,43 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.function.Function;
 
-/**
- * A thin wrapper around the class loader's resource streaming.
- */
+/** A thin wrapper around the class loader's resource streaming. */
 public class ResourceLoader {
 
-	public String getResourceAsString(final String resourceName) throws IOException {
-		try (InputStream resStream = getResourceStream(resourceName)) {
-			return new String(resStream.readAllBytes(), StandardCharsets.UTF_8);
-		}
-	}
+  public String getResourceAsString(final String resourceName) throws IOException {
+    try (InputStream resStream = getResourceStream(resourceName)) {
+      return new String(resStream.readAllBytes(), StandardCharsets.UTF_8);
+    }
+  }
 
-	/**
-	 * @param resourcePath the full path of the required resource; note
-	 *                     {@link java.lang.ClassLoader#getResource(String)}: the
-	 *                     path uses forward slashes
-	 * @return a non-null InputStream of the resource
-	 * @throws IllegalStateException if the classloader returns a null stream
-	 */
-	public InputStream getResourceStream(String resourcePath) {
-		InputStream resStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
-		if (resStream == null)
-			throw Errors.illegalState("Could not find resource stream '%s'", resourcePath);
-		return resStream;
-	}
+  /**
+   * @param resourcePath the full path of the required resource; note {@link
+   *     java.lang.ClassLoader#getResource(String)}: the path uses forward slashes
+   * @return a non-null InputStream of the resource
+   * @throws IllegalStateException if the classloader returns a null stream
+   */
+  public InputStream getResourceStream(String resourcePath) {
+    InputStream resStream = getClass().getClassLoader().getResourceAsStream(resourcePath);
+    if (resStream == null)
+      throw Errors.illegalState("Could not find resource stream '%s'", resourcePath);
+    return resStream;
+  }
 
-	/**
-	 * @param resourceName the name of the required resource
-	 * @return a non-null InputStream of the resource
-	 * @throws IllegalStateException if the classloader returns a null stream
-	 */
-	public <R> R loadResourceStream(String resourceName, Function<InputStream, R> streamLoader) {
+  /**
+   * @param resourceName the name of the required resource
+   * @return a non-null InputStream of the resource
+   * @throws IllegalStateException if the classloader returns a null stream
+   */
+  public <R> R loadResourceStream(String resourceName, Function<InputStream, R> streamLoader) {
 
-		try (InputStream resStream = getResourceStream(resourceName)) {
-			return streamLoader.apply(resStream);
-		} catch (IOException e) {
-			throw Errors.illegalState("Could not close resource stream '%s'", resourceName);
-		}
-	}
+    try (InputStream resStream = getResourceStream(resourceName)) {
+      return streamLoader.apply(resStream);
+    } catch (IOException e) {
+      throw Errors.illegalState("Could not close resource stream '%s'", resourceName);
+    }
+  }
 
-	public URL getResourceUrl(String resName) {
-		return getClass().getClassLoader().getResource(resName);
-	}
+  public URL getResourceUrl(String resName) {
+    return getClass().getClassLoader().getResource(resName);
+  }
 }

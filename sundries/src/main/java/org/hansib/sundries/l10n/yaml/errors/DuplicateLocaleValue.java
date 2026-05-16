@@ -25,12 +25,12 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-public record DuplicateLocaleValue<C extends Enum<C>>(C key, String localeKey, String activeValue,
-		String duplicateValue) implements L10nFormatError {
+public record DuplicateLocaleValue<C extends Enum<C>>(
+    C key, String localeKey, String activeValue, String duplicateValue) implements L10nFormatError {
 
-	@Override
-	public String description() {
-		return "Ignoring duplicate entry '%s' for locale key %s (keeping value '%s')".formatted(duplicateValue,
-				localeKey, activeValue);
-	}
+  @Override
+  public String description() {
+    return "Ignoring duplicate entry '%s' for locale key %s (keeping value '%s')"
+        .formatted(duplicateValue, localeKey, activeValue);
+  }
 }

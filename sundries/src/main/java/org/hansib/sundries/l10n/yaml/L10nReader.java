@@ -39,39 +39,38 @@ import org.hansib.sundries.testing.VisibleForTesting;
 
 public class L10nReader {
 
-	private final L10n l10n;
-	private final EnumMapper enumMapper;
-	private final Consumer<L10nFormatError> errorHandler;
+  private final L10n l10n;
+  private final EnumMapper enumMapper;
+  private final Consumer<L10nFormatError> errorHandler;
 
-	public L10nReader(L10n l10n, String locale, Consumer<L10nFormatError> errorHandler) {
-		this.l10n = l10n;
-		this.errorHandler = errorHandler;
-		this.enumMapper = new EnumMapper(errorHandler, locale);
-	}
+  public L10nReader(L10n l10n, String locale, Consumer<L10nFormatError> errorHandler) {
+    this.l10n = l10n;
+    this.errorHandler = errorHandler;
+    this.enumMapper = new EnumMapper(errorHandler, locale);
+  }
 
-	public <K extends Enum<K> & FormatKey> void loadEnums(String resourcesPath) {
-		L10nResourcesLoader loader = new L10nResourcesLoader(resourcesPath, errorHandler);
-		Domain domain = l10n.domain();
-		for (String clzName : domain.classNames()) {
-			String enumYaml = loader.load(clzName);
-			if (enumYaml == null)
-				continue;
-			Class<K> keysClass = domain.getKeysClass(clzName);
-			readEnum(enumYaml, keysClass);
-		}
-	}
+  public <K extends Enum<K> & FormatKey> void loadEnums(String resourcesPath) {
+    L10nResourcesLoader loader = new L10nResourcesLoader(resourcesPath, errorHandler);
+    Domain domain = l10n.domain();
+    for (String clzName : domain.classNames()) {
+      String enumYaml = loader.load(clzName);
+      if (enumYaml == null) continue;
+      Class<K> keysClass = domain.getKeysClass(clzName);
+      readEnum(enumYaml, keysClass);
+    }
+  }
 
-	@VisibleForTesting
-	<K extends Enum<K> & FormatKey> void readEnum(String enumYaml, Class<K> keysClass) {
+  @VisibleForTesting
+  <K extends Enum<K> & FormatKey> void readEnum(String enumYaml, Class<K> keysClass) {
 
-		List<Entry<List<Entry<String>>>> mapping;
-		try {
-			mapping = new MappingReader().read(enumYaml);
-		} catch (JsonProcessingException ex) {
-			errorHandler.accept(new ParseError(enumYaml, ex));
-			return;
-		}
+    List<Entry<List<Entry<String>>>> mapping;
+    try {
+      mapping = new MappingReader().read(enumYaml);
+    } catch (JsonProcessingException ex) {
+      errorHandler.accept(new ParseError(enumYaml, ex));
+      return;
+    }
 
-		l10n.withFormats(enumMapper.loadMapping(mapping, keysClass));
-	}
+    l10n.withFormats(enumMapper.loadMapping(mapping, keysClass));
+  }
 }

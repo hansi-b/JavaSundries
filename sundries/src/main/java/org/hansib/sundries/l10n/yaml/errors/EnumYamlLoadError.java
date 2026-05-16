@@ -29,8 +29,8 @@ import java.io.IOException;
 
 public record EnumYamlLoadError(String enumName, IOException cause) implements L10nFormatError {
 
-	@Override
-	public String description() {
-		return "Could not load yaml resource for enum '%s': %s".formatted(enumName, cause);
-	}
+  @Override
+  public String description() {
+    return "Could not load yaml resource for enum '%s': %s".formatted(enumName, cause);
+  }
 }

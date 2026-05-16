@@ -29,33 +29,31 @@ import java.util.stream.IntStream;
 
 public class Strings {
 
-	private Strings() {
-		// instantiation prevention
-	}
+  private Strings() {
+    // instantiation prevention
+  }
 
-	/**
-	 * @param id some semantic identifier of the object
-	 * @return a canonical representation in the format
-	 *         [className]@[objectHexHash](id)
-	 */
-	public static <T> String idStr(T o, String id) {
-		return "%s@%08X(%s)".formatted(o.getClass().getSimpleName(), o.hashCode(), id);
-	}
+  /**
+   * @param id some semantic identifier of the object
+   * @return a canonical representation in the format [className]@[objectHexHash](id)
+   */
+  public static <T> String idStr(T o, String id) {
+    return "%s@%08X(%s)".formatted(o.getClass().getSimpleName(), o.hashCode(), id);
+  }
 
-	public static String join(String joiner, String[] arr, int beginIncl, int endExcl) {
-		return String.join(joiner, IntStream.range(beginIncl, endExcl).boxed().map(i -> arr[i]).toList());
-	}
+  public static String join(String joiner, String[] arr, int beginIncl, int endExcl) {
+    return String.join(
+        joiner, IntStream.range(beginIncl, endExcl).boxed().map(i -> arr[i]).toList());
+  }
 
-	/**
-	 * Canonicalises \n in the argument string to the system line separator. Needed,
-	 * e.g., for Groovy multilines which always use \n. NB: Will also replace \n
-	 * when present within a system line separator, so only use when you know your
-	 * string is not already canonicalised.
-	 * 
-	 * @return the argument string with all occurrences of \n replaced by the System
-	 *         line separator
-	 */
-	public static String toSystemEol(String str) {
-		return str.replace("\n", System.lineSeparator());
-	}
+  /**
+   * Canonicalises \n in the argument string to the system line separator. Needed, e.g., for Groovy
+   * multilines which always use \n. NB: Will also replace \n when present within a system line
+   * separator, so only use when you know your string is not already canonicalised.
+   *
+   * @return the argument string with all occurrences of \n replaced by the System line separator
+   */
+  public static String toSystemEol(String str) {
+    return str.replace("\n", System.lineSeparator());
+  }
 }

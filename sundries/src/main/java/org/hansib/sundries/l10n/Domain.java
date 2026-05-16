@@ -32,44 +32,42 @@ import java.util.Set;
 
 import org.hansib.sundries.Errors;
 
-/**
- * Groups the key classes known in an {@link L10n}
- */
+/** Groups the key classes known in an {@link L10n} */
 public class Domain {
 
-	private final Map<String, Class<? extends Enum<?>>> enumClzByName;
+  private final Map<String, Class<? extends Enum<?>>> enumClzByName;
 
-	Domain() {
-		enumClzByName = new LinkedHashMap<>();
-	}
+  Domain() {
+    enumClzByName = new LinkedHashMap<>();
+  }
 
-	<K extends Enum<K> & FormatKey> Domain add(Class<K> formatClz) {
-		String classMapKey = formatClz.getSimpleName();
-		if (getKeysClass(classMapKey) != null)
-			throw Errors.illegalArg("Duplicate mapper class name '%s': old %s, new %s", classMapKey,
-					getKeysClass(classMapKey), formatClz.getName());
-		enumClzByName.put(classMapKey, formatClz);
-		return this;
-	}
+  <K extends Enum<K> & FormatKey> Domain add(Class<K> formatClz) {
+    String classMapKey = formatClz.getSimpleName();
+    if (getKeysClass(classMapKey) != null)
+      throw Errors.illegalArg(
+          "Duplicate mapper class name '%s': old %s, new %s",
+          classMapKey, getKeysClass(classMapKey), formatClz.getName());
+    enumClzByName.put(classMapKey, formatClz);
+    return this;
+  }
 
-	<K extends Enum<K> & FormatKey> boolean contains(K key) {
-		return enumClzByName.containsValue(key.getClass());
-	}
+  <K extends Enum<K> & FormatKey> boolean contains(K key) {
+    return enumClzByName.containsValue(key.getClass());
+  }
 
-	/**
-	 * @return the enum class names known in this domain, sorted by addition to the
-	 *         domain
-	 */
-	public Set<String> classNames() {
-		return Collections.unmodifiableSet(enumClzByName.keySet());
-	}
+  /**
+   * @return the enum class names known in this domain, sorted by addition to the domain
+   */
+  public Set<String> classNames() {
+    return Collections.unmodifiableSet(enumClzByName.keySet());
+  }
 
-	/**
-	 * @return the enum class for the argument class name; null if the name is not
-	 *         known in this domain
-	 */
-	@SuppressWarnings("unchecked")
-	public <K extends Enum<K> & FormatKey> Class<K> getKeysClass(String formatClassName) {
-		return (Class<K>) enumClzByName.getOrDefault(formatClassName, null);
-	}
+  /**
+   * @return the enum class for the argument class name; null if the name is not known in this
+   *     domain
+   */
+  @SuppressWarnings("unchecked")
+  public <K extends Enum<K> & FormatKey> Class<K> getKeysClass(String formatClassName) {
+    return (Class<K>) enumClzByName.getOrDefault(formatClassName, null);
+  }
 }

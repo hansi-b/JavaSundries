@@ -25,18 +25,16 @@
  */
 package org.hansib.sundries.l10n;
 
-/**
- * Formats a key given a localisation.
- */
+/** Formats a key given a localisation. */
 public interface FormatKey {
 
-	/**
-	 * Formats this key using the active localiser.
-	 *
-	 * @param args the arguments required to format this key as defined by the key's format
-	 * @return the key's formatted representation according to the active {@link Localiser}
-	 */
-	default String fmt(Object... args) {
-		return L10n.active().fmt(this, args);
-	}
+  /**
+   * Formats this key using the active localiser.
+   *
+   * @param args the arguments required to format this key as defined by the key's format
+   * @return the key's formatted representation according to the active {@link Localiser}
+   */
+  default String fmt(Object... args) {
+    return L10n.active().fmt(this, args);
+  }
 }

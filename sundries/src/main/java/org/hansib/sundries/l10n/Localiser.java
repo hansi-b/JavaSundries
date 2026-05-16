@@ -33,36 +33,37 @@ import java.util.Map;
 import org.hansib.sundries.Errors;
 
 /**
- * A mapping of format keys to their respective message formats. Ensures
- * constraints such as uniqueness of keys.
+ * A mapping of format keys to their respective message formats. Ensures constraints such as
+ * uniqueness of keys.
  */
 class Localiser {
 
-	private final Map<FormatKey, MessageFormat> formats;
+  private final Map<FormatKey, MessageFormat> formats;
 
-	Localiser() {
-		formats = new HashMap<>();
-	}
+  Localiser() {
+    formats = new HashMap<>();
+  }
 
-	/**
-	 * Formats the argument key with the (optional arguments) according to the rules
-	 * of {@link MessageFormat}
-	 */
-	String fmt(FormatKey key, Object... args) {
-		MessageFormat fmt = formats.get(key);
-		if (fmt == null)
-			return "%s:%s%s".formatted(key.getClass().getSimpleName(), key, Arrays.toString(args));
-		return fmt.format(args);
-	}
+  /**
+   * Formats the argument key with the (optional arguments) according to the rules of {@link
+   * MessageFormat}
+   */
+  String fmt(FormatKey key, Object... args) {
+    MessageFormat fmt = formats.get(key);
+    if (fmt == null)
+      return "%s:%s%s".formatted(key.getClass().getSimpleName(), key, Arrays.toString(args));
+    return fmt.format(args);
+  }
 
-	<K extends FormatKey> boolean hasFormat(K key) {
-		return formats.containsKey(key);
-	}
+  <K extends FormatKey> boolean hasFormat(K key) {
+    return formats.containsKey(key);
+  }
 
-	<K extends FormatKey> void setFormat(K key, String fmt) {
-		if (hasFormat(key))
-			throw Errors.illegalArg("Duplicate format mapping for '%s' ('%s') in %s: new '%s', old '%s'", key,
-					key.getClass().getSimpleName(), this.getClass(), formats.get(key).toPattern(), fmt);
-		formats.put(key, new MessageFormat(fmt));
-	}
+  <K extends FormatKey> void setFormat(K key, String fmt) {
+    if (hasFormat(key))
+      throw Errors.illegalArg(
+          "Duplicate format mapping for '%s' ('%s') in %s: new '%s', old '%s'",
+          key, key.getClass().getSimpleName(), this.getClass(), formats.get(key).toPattern(), fmt);
+    formats.put(key, new MessageFormat(fmt));
+  }
 }

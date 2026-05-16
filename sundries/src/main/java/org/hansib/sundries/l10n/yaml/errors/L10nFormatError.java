@@ -25,11 +25,14 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-public sealed interface L10nFormatError permits //
-		ParseError, //
-		EnumYamlNotFound, EnumYamlLoadError, //
-		UnknownEnumKey, DuplicateEnumValue, MissingEnumKey, //
-		DuplicateLocaleValue, MissingLocaleValue //
-{
-	String description();
+public sealed interface L10nFormatError
+    permits ParseError,
+        EnumYamlNotFound,
+        EnumYamlLoadError,
+        UnknownEnumKey,
+        DuplicateEnumValue,
+        MissingEnumKey,
+        DuplicateLocaleValue,
+        MissingLocaleValue {
+  String description();
 }

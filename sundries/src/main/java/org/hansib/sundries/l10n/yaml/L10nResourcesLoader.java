@@ -35,24 +35,24 @@ import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
 
 class L10nResourcesLoader {
 
-	private final String resourcesPath;
-	private final Consumer<L10nFormatError> errorHandler;
+  private final String resourcesPath;
+  private final Consumer<L10nFormatError> errorHandler;
 
-	L10nResourcesLoader(String resourcesPath, Consumer<L10nFormatError> errorHandler) {
-		this.resourcesPath = resourcesPath;
-		this.errorHandler = errorHandler;
-	}
+  L10nResourcesLoader(String resourcesPath, Consumer<L10nFormatError> errorHandler) {
+    this.resourcesPath = resourcesPath;
+    this.errorHandler = errorHandler;
+  }
 
-	String load(String clzName) {
-		String fullPath = "%s/%s.yaml".formatted(resourcesPath, clzName);
-		try {
-			return new ResourceLoader().getResourceAsString(fullPath);
-		} catch (IllegalStateException ex) {
-			errorHandler.accept(new EnumYamlNotFound(clzName, fullPath));
-			return null;
-		} catch (IOException ex) {
-			errorHandler.accept(new EnumYamlLoadError(clzName, ex));
-			return null;
-		}
-	}
+  String load(String clzName) {
+    String fullPath = "%s/%s.yaml".formatted(resourcesPath, clzName);
+    try {
+      return new ResourceLoader().getResourceAsString(fullPath);
+    } catch (IllegalStateException ex) {
+      errorHandler.accept(new EnumYamlNotFound(clzName, fullPath));
+      return null;
+    } catch (IOException ex) {
+      errorHandler.accept(new EnumYamlLoadError(clzName, ex));
+      return null;
+    }
+  }
 }

@@ -33,74 +33,73 @@ import org.hansib.sundries.l10n.yaml.L10nReader;
 import org.hansib.sundries.l10n.yaml.errors.L10nFormatError;
 import org.hansib.sundries.testing.VisibleForTesting;
 
-/**
- * Bundles a domain with a specific localiser.
- */
+/** Bundles a domain with a specific localiser. */
 public class L10n {
 
-	private static Localiser activeLocaliser;
+  private static Localiser activeLocaliser;
 
-	private final Domain domain;
-	private final Localiser localiser;
+  private final Domain domain;
+  private final Localiser localiser;
 
-	@VisibleForTesting
-	L10n(Domain domain, Localiser localiser) {
-		this.domain = domain;
-		this.localiser = localiser;
-	}
+  @VisibleForTesting
+  L10n(Domain domain, Localiser localiser) {
+    this.domain = domain;
+    this.localiser = localiser;
+  }
 
-	public L10n() {
-		this(new Domain(), new Localiser());
-	}
+  public L10n() {
+    this(new Domain(), new Localiser());
+  }
 
-	/**
-	 * Shorthand constructor for a single format class.
-	 *
-	 * @param formatKeyClazz the class of the domain enum for this L10n
-	 */
-	public <T extends Enum<T> & FormatKey> L10n(Class<T> formatKeyClazz) {
-		this();
-		with(formatKeyClazz);
-	}
+  /**
+   * Shorthand constructor for a single format class.
+   *
+   * @param formatKeyClazz the class of the domain enum for this L10n
+   */
+  public <T extends Enum<T> & FormatKey> L10n(Class<T> formatKeyClazz) {
+    this();
+    with(formatKeyClazz);
+  }
 
-	public <T extends Enum<T> & FormatKey> L10n with(Class<T> formatKeyClazz) {
-		domain.add(formatKeyClazz);
-		return this;
-	}
+  public <T extends Enum<T> & FormatKey> L10n with(Class<T> formatKeyClazz) {
+    domain.add(formatKeyClazz);
+    return this;
+  }
 
-	public Domain domain() {
-		return domain;
-	}
+  public Domain domain() {
+    return domain;
+  }
 
-	<K extends FormatKey> boolean hasFormat(K key) {
-		return localiser.hasFormat(key);
-	}
+  <K extends FormatKey> boolean hasFormat(K key) {
+    return localiser.hasFormat(key);
+  }
 
-	static synchronized Localiser active() {
-		if (activeLocaliser == null)
-			throw Errors.nullPointer("No activated localiser available");
+  static synchronized Localiser active() {
+    if (activeLocaliser == null) throw Errors.nullPointer("No activated localiser available");
 
-		return activeLocaliser;
-	}
+    return activeLocaliser;
+  }
 
-	public synchronized void activate() {
-		activeLocaliser = localiser;
-	}
+  public synchronized void activate() {
+    activeLocaliser = localiser;
+  }
 
-	public <L extends Enum<L>> void load(String resourcesPath, L locale, Consumer<L10nFormatError> errorHandler) {
-		new L10nReader(this, locale.name(), errorHandler).loadEnums(resourcesPath);
-	}
+  public <L extends Enum<L>> void load(
+      String resourcesPath, L locale, Consumer<L10nFormatError> errorHandler) {
+    new L10nReader(this, locale.name(), errorHandler).loadEnums(resourcesPath);
+  }
 
-	public <K extends Enum<K> & FormatKey> L10n withFormats(Map<K, String> vals) {
-		vals.forEach(this::withFormat);
-		return this;
-	}
+  public <K extends Enum<K> & FormatKey> L10n withFormats(Map<K, String> vals) {
+    vals.forEach(this::withFormat);
+    return this;
+  }
 
-	public <K extends Enum<K> & FormatKey> L10n withFormat(K key, String fmtString) {
-		if (!domain.contains(key))
-			throw Errors.illegalArg("Domain '%s' does not map class '%s' of key '%s'", this.getClass().getSimpleName(),
-					key.getClass().getSimpleName(), key);
-		localiser.setFormat(key, fmtString);
-		return this;
-	}
+  public <K extends Enum<K> & FormatKey> L10n withFormat(K key, String fmtString) {
+    if (!domain.contains(key))
+      throw Errors.illegalArg(
+          "Domain '%s' does not map class '%s' of key '%s'",
+          this.getClass().getSimpleName(), key.getClass().getSimpleName(), key);
+    localiser.setFormat(key, fmtString);
+    return this;
+  }
 }

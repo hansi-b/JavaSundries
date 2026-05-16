@@ -41,49 +41,47 @@ import org.hansib.sundries.l10n.yaml.errors.UnknownEnumKey;
 
 class EnumMapper {
 
-	private final Consumer<L10nFormatError> errorHandler;
-	private final String locale;
+  private final Consumer<L10nFormatError> errorHandler;
+  private final String locale;
 
-	EnumMapper(Consumer<L10nFormatError> errorHandler, String locale) {
-		this.errorHandler = errorHandler;
-		this.locale = locale;
-	}
+  EnumMapper(Consumer<L10nFormatError> errorHandler, String locale) {
+    this.errorHandler = errorHandler;
+    this.locale = locale;
+  }
 
-	<K extends Enum<K> & FormatKey> Map<K, String> loadMapping(List<Entry<List<Entry<String>>>> mapping,
-			Class<K> enumClz) {
+  <K extends Enum<K> & FormatKey> Map<K, String> loadMapping(
+      List<Entry<List<Entry<String>>>> mapping, Class<K> enumClz) {
 
-		final EnumMap<K, String> result = new EnumMap<>(enumClz);
-		final EnumSet<K> missingKeys = EnumSet.allOf(enumClz);
+    final EnumMap<K, String> result = new EnumMap<>(enumClz);
+    final EnumSet<K> missingKeys = EnumSet.allOf(enumClz);
 
-		for (Entry<List<Entry<String>>> enumEntry : mapping) {
-			String keyStr = enumEntry.key();
-			try {
-				K enumKey = Enum.valueOf(enumClz, keyStr);
-				missingKeys.remove(enumKey);
-				if (result.containsKey(enumKey))
-					errorHandler.accept(new DuplicateEnumValue<>(enumKey, result.get(enumKey)));
-				else
-					readLocale(result, enumKey, enumEntry.value());
-			} catch (IllegalArgumentException ex) {
-				errorHandler.accept(new UnknownEnumKey<>(enumClz, keyStr));
-			}
-		}
-		missingKeys.forEach(k -> errorHandler.accept(new MissingEnumKey<>(k)));
-		return result;
-	}
+    for (Entry<List<Entry<String>>> enumEntry : mapping) {
+      String keyStr = enumEntry.key();
+      try {
+        K enumKey = Enum.valueOf(enumClz, keyStr);
+        missingKeys.remove(enumKey);
+        if (result.containsKey(enumKey))
+          errorHandler.accept(new DuplicateEnumValue<>(enumKey, result.get(enumKey)));
+        else readLocale(result, enumKey, enumEntry.value());
+      } catch (IllegalArgumentException ex) {
+        errorHandler.accept(new UnknownEnumKey<>(enumClz, keyStr));
+      }
+    }
+    missingKeys.forEach(k -> errorHandler.accept(new MissingEnumKey<>(k)));
+    return result;
+  }
 
-	private <K extends Enum<K> & FormatKey> void readLocale(final EnumMap<K, String> foundEntries, K enumKey,
-			List<Entry<String>> localeEntries) {
-		List<String> localeValues = localeEntries.stream().filter(e -> locale.equals(e.key())).map(Entry::value)
-				.toList();
-		if (localeValues.isEmpty())
-			errorHandler.accept(new MissingLocaleValue<>(enumKey, locale));
-		else {
-			foundEntries.put(enumKey, localeValues.getFirst());
-			for (int i = 1; i < localeValues.size(); i++)
-				errorHandler.accept(
-						new DuplicateLocaleValue<>(enumKey, locale, localeValues.getFirst(), localeValues.get(i)));
-
-		}
-	}
+  private <K extends Enum<K> & FormatKey> void readLocale(
+      final EnumMap<K, String> foundEntries, K enumKey, List<Entry<String>> localeEntries) {
+    List<String> localeValues =
+        localeEntries.stream().filter(e -> locale.equals(e.key())).map(Entry::value).toList();
+    if (localeValues.isEmpty()) errorHandler.accept(new MissingLocaleValue<>(enumKey, locale));
+    else {
+      foundEntries.put(enumKey, localeValues.getFirst());
+      for (int i = 1; i < localeValues.size(); i++)
+        errorHandler.accept(
+            new DuplicateLocaleValue<>(
+                enumKey, locale, localeValues.getFirst(), localeValues.get(i)));
+    }
+  }
 }

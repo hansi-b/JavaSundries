@@ -29,55 +29,54 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-/**
- * Checks whether the localiser of the given {@link L10n} has values for all
- * format keys.
- */
+/** Checks whether the localiser of the given {@link L10n} has values for all format keys. */
 public class L10nChecker {
 
-	public record MissingKeys<K extends Enum<K> & FormatKey>(Class<K> enumClz, Set<K> missing) {
-		public MissingKeys {
-			missing = Set.copyOf(missing);
-		}
+  public record MissingKeys<K extends Enum<K> & FormatKey>(Class<K> enumClz, Set<K> missing) {
+    public MissingKeys {
+      missing = Set.copyOf(missing);
+    }
 
-		public String description() {
-			return "%s:%n\t%s%n".formatted(enumClz.getSimpleName(), //
-					String.join("%n\t".formatted(), EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
-		}
-	}
+    public String description() {
+      return "%s:%n\t%s%n"
+          .formatted(
+              enumClz.getSimpleName(),
+              String.join(
+                  "%n\t".formatted(), EnumSet.copyOf(missing).stream().map(Enum::name).toList()));
+    }
+  }
 
-	/**
-	 * Whether to call the missing keys handler only when at least one missing key
-	 * has been found, or to call it also when no missing keys have been found (with
-	 * an empty set of missing keys).
-	 */
-	public enum MissingKeysHandleMode {
-		OnlyWithMissingKeys, AlsoWithoutMissingKeys
-	}
+  /**
+   * Whether to call the missing keys handler only when at least one missing key has been found, or
+   * to call it also when no missing keys have been found (with an empty set of missing keys).
+   */
+  public enum MissingKeysHandleMode {
+    OnlyWithMissingKeys,
+    AlsoWithoutMissingKeys
+  }
 
-	private final L10n l10n;
+  private final L10n l10n;
 
-	public L10nChecker(L10n l10n) {
-		this.l10n = l10n;
-	}
+  public L10nChecker(L10n l10n) {
+    this.l10n = l10n;
+  }
 
-	public <K extends Enum<K> & FormatKey> void checkCompleteness(Consumer<MissingKeys<K>> handler,
-			MissingKeysHandleMode handleMode) {
-		Domain domain = l10n.domain();
-		for (String s : domain.classNames()) {
-			Class<K> enumClz = domain.getKeysClass(s);
-			checkEnumClz(enumClz, handler, handleMode);
-		}
-	}
+  public <K extends Enum<K> & FormatKey> void checkCompleteness(
+      Consumer<MissingKeys<K>> handler, MissingKeysHandleMode handleMode) {
+    Domain domain = l10n.domain();
+    for (String s : domain.classNames()) {
+      Class<K> enumClz = domain.getKeysClass(s);
+      checkEnumClz(enumClz, handler, handleMode);
+    }
+  }
 
-	private <K extends Enum<K> & FormatKey> void checkEnumClz(Class<K> enumClz, Consumer<MissingKeys<K>> handler,
-			MissingKeysHandleMode handleMode) {
-		EnumSet<K> missing = EnumSet.allOf(enumClz);
-		for (K key : EnumSet.allOf(enumClz)) {
-			if (l10n.hasFormat(key))
-				missing.remove(key);
-		}
-		if (!missing.isEmpty() || handleMode == MissingKeysHandleMode.AlsoWithoutMissingKeys)
-			handler.accept(new MissingKeys<>(enumClz, missing));
-	}
+  private <K extends Enum<K> & FormatKey> void checkEnumClz(
+      Class<K> enumClz, Consumer<MissingKeys<K>> handler, MissingKeysHandleMode handleMode) {
+    EnumSet<K> missing = EnumSet.allOf(enumClz);
+    for (K key : EnumSet.allOf(enumClz)) {
+      if (l10n.hasFormat(key)) missing.remove(key);
+    }
+    if (!missing.isEmpty() || handleMode == MissingKeysHandleMode.AlsoWithoutMissingKeys)
+      handler.accept(new MissingKeys<>(enumClz, missing));
+  }
 }

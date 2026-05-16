@@ -25,10 +25,11 @@
  */
 package org.hansib.sundries.l10n.yaml.errors;
 
-public record UnknownEnumKey<C extends Enum<C>>(Class<C> enumClz, String keyStr) implements L10nFormatError {
+public record UnknownEnumKey<C extends Enum<C>>(Class<C> enumClz, String keyStr)
+    implements L10nFormatError {
 
-	@Override
-	public String description() {
-		return "Unknown key '%s' for enum %s".formatted(keyStr, enumClz.getName());
-	}
+  @Override
+  public String description() {
+    return "Unknown key '%s' for enum %s".formatted(keyStr, enumClz.getName());
+  }
 }

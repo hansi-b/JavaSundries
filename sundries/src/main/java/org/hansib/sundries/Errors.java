@@ -27,23 +27,24 @@ package org.hansib.sundries;
 
 public class Errors {
 
-	private Errors() {
-		// instantiation prevention
-	}
+  private Errors() {
+    // instantiation prevention
+  }
 
-	public static IllegalArgumentException illegalArg(final String fmt, final Object... args) {
-		return new IllegalArgumentException(fmt.formatted(args));
-	}
+  public static IllegalArgumentException illegalArg(final String fmt, final Object... args) {
+    return new IllegalArgumentException(fmt.formatted(args));
+  }
 
-	public static IllegalStateException illegalState(final String fmt, final Object... args) {
-		return new IllegalStateException(fmt.formatted(args));
-	}
+  public static IllegalStateException illegalState(final String fmt, final Object... args) {
+    return new IllegalStateException(fmt.formatted(args));
+  }
 
-	public static IllegalStateException illegalState(final Throwable cause, final String fmt, final Object... args) {
-		return new IllegalStateException(fmt.formatted(args), cause);
-	}
+  public static IllegalStateException illegalState(
+      final Throwable cause, final String fmt, final Object... args) {
+    return new IllegalStateException(fmt.formatted(args), cause);
+  }
 
-	public static NullPointerException nullPointer(final String fmt, final Object... args) {
-		return new NullPointerException(fmt.formatted(args));
-	}
+  public static NullPointerException nullPointer(final String fmt, final Object... args) {
+    return new NullPointerException(fmt.formatted(args));
+  }
 }

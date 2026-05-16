@@ -27,8 +27,8 @@ package org.hansib.sundries.l10n.yaml.errors;
 
 public record MissingEnumKey<C extends Enum<C>>(C key) implements L10nFormatError {
 
-	@Override
-	public String description() {
-		return "Missing key '%s' for enum %s".formatted(key, key.getClass());
-	}
+  @Override
+  public String description() {
+    return "Missing key '%s' for enum %s".formatted(key, key.getClass());
+  }
 }
